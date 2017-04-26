@@ -1,0 +1,50 @@
+body { font: 9pt Segoe UI,Tahoma,Arial,Sans-serif; }
+
+/* LAYOUT PANELS */
+.gantt-container { overflow: hidden !important; background: repeat-x }
+.gantt {}
+
+.gantt-modal-overlay { display:none; position: absolute; top:0px; left:0px;  width:100%; height:2000px; z-index:9999; background:gray; cursor:wait; opacity:.2; }
+
+.gantt-left { float:left; background:white; width: 450px; overflow:hidden; } /* should never scroll y */
+.gantt-toolbar{ white-space:nowrap; background: #007DC6; font-size:10px; border-bottom:1px solid #D5D5D5; overflow:hidden; padding: 2px;}
+.gantt-items-h-scroller { overflow:auto; width: 250px; }
+.gantt-items-header { white-space:nowrap; background: #f5f5f5 url('./gantt/col.png') repeat-x; font-size:9pt; border-bottom:1px solid #D5D5D5; }
+.gantt-items-v-scroller { overflow:hidden;}
+.gantt-items {background:white; padding:2px 0px 20px 0px;}
+.gantt-item { white-space:nowrap; margin: 4px 2px; border:1px solid transparent; font-size:8.9pt; border-radius: 3px; }
+.gantt-item-hilite {background: #f0f5ff url('./gantt/row-hilite.png') repeat-x; border:1px solid #B9D7FC }
+.gantt-item-select {background: #f0f5ff url('./gantt/row-select.png') repeat-x; border:1px solid #7DA2CE }
+.gantt-item-col { padding:0px 14px 1px 3px;;  display:inline-block; overflow: hidden; vertical-align:top;}
+.gantt-item-col-header { padding:3px 12px 3px 5px; display:inline-block; overflow: hidden; border-right:1px solid #d5d5d5; vertical-align:top;}
+
+.gantt-right { margin-left: 450px;}
+.gantt-canvas-header { overflow:hidden; background: #ddd;}
+.gantt-time-scroller {overflow:hidden; border-right: 0px solid #ddd;}
+.gantt-canvas-scroller { overflow:scroll; }
+.gantt-canvas {background:white; position:initial; overflow: hidden;}
+.gantt-bar { position:absolute; border:1px solid orange; background: #ffb660 url('./gantt/bar-bg.png') repeat-x; }
+
+.gantt-splitter { position:absolute; width:2px; background:#D5D5D5; top:0px; cursor:e-resize; }
+
+.gantt-time-tier { white-space:nowrap; background: #f5f5f5 url('./gantt/col.png') repeat-x; font-size:8.9pt; border-bottom:1px solid #D5D5D5; overflow:hidden;}
+.gantt-time-unit {vertical-align:top; text-align:center; display:inline-block; border-right:1px solid #D5D5D5; overflow:hidden;}
+/*.gantt-time-unit-hilite { background: #f0f5ff url('./gantt/col-hilite.png') repeat-x; }*/
+.gantt-time-unit.gantt-offtime { background: #eee url('./gantt/col-off.png') repeat-x;  }
+.gantt-time-unit.gantt-time-unit-hilite { background-image:url('./gantt/row-hilite.png'); }
+.gantt-time-unit.gantt-time-unit-select { background-image:url('./gantt/row-select.png'); border-right-color: #ffa800; }
+
+a.gantt-icon { display:inline-block; vertical-align:top; cursor:default !important; margin:1px 4px 1px 4px; padding: 1px; border:1px solid transparent; color:white; text-decoration:none;}
+/* a.gantt-icon:hover { border:1px solid white; } */
+a.gantt-icon>img { border:0px; margin:0px; vertical-align:top;}
+a.gantt-icon>span { padding-left: 3px; }
+
+.gantt-header { padding: 1px 3px;border-color: #eeeeee;border-style:solid;border-width: 0px 1px 0px 1px; background: #dddddd url('./gantt/col.png') repeat-x; font-weight: normal; }
+
+/* override some default mflist settings */
+.gantt .mflist { overflow: scroll; background: url('./gantt/gantt-logo.png') 85% 85% no-repeat;}
+.gantt .mflist-items {margin-top:1px;}
+.gantt .mflist-items li{ padding: 0px; margin:0px}
+.gantt .mflist-item { padding: 1px 0px 1px 0px; margin-bottom:1px; }
+svg { display:inline-block; vertical-align:top; margin:0px; padding:0px;}
+

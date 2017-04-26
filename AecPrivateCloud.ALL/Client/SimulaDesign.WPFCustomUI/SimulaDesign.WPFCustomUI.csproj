@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{00F06DC6-944F-4A7C-8C20-49E0F011E0B2}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SimulaDesign.WPFCustomUI</RootNamespace>
+    <AssemblyName>SimulaDesign.WPFCustomUI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Debug\Client\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\AdornedControl.cs" />
+    <Compile Include="Common\AdornerPlacement.cs" />
+    <Compile Include="Common\AeroChrome.cs" />
+    <Compile Include="Common\AnimationDecorator.cs" />
+    <Compile Include="Common\FrameworkElementAdorner.cs" />
+    <Compile Include="Controls\MetroMessageBox.cs" />
+    <Compile Include="Controls\MessageBoxView.xaml.cs">
+      <DependentUpon>MessageBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AeroExpander.cs" />
+    <Compile Include="Controls\AeroExpanderHeader.cs" />
+    <Compile Include="Controls\AeroExplorerBar.cs" />
+    <Compile Include="Controls\BindableWebBrowser.cs" />
+    <Compile Include="Controls\BreadcrumbBar\ApplyPropertiesEventArgs.cs" />
+    <Compile Include="Controls\BreadcrumbBar\BreadcrumbBar.cs" />
+    <Compile Include="Controls\BreadcrumbBar\BreadcrumbButton.cs" />
+    <Compile Include="Controls\BreadcrumbBar\BreadcrumbItem.cs" />
+    <Compile Include="Controls\BreadcrumbBar\BreadcrumbItemEventArgs.cs" />
+    <Compile Include="Controls\BreadcrumbBar\PathConversionEventArgs.cs" />
+    <Compile Include="Controls\EllipseButton.cs" />
+    <Compile Include="Controls\FlatButton.cs" />
+    <Compile Include="Controls\FourStatusButton.cs" />
+    <Compile Include="Controls\ImageButton.cs" />
+    <Compile Include="Controls\ImgTabControl.cs" />
+    <Compile Include="Controls\ImgTabItem.cs" />
+    <Compile Include="Controls\LinkLabelBlock.cs" />
+    <Compile Include="Controls\LoadingWait.xaml.cs">
+      <DependentUpon>LoadingWait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MetroProgressBar.cs" />
+    <Compile Include="Controls\MetroWindow.cs" />
+    <Compile Include="Controls\RelativeAnimatingContentControl.cs" />
+    <Compile Include="Controls\ResizeGrip.cs" />
+    <Compile Include="Controls\SplitButton.cs" />
+    <Compile Include="Controls\WindowButton.cs" />
+    <Compile Include="Controls\ZoomButton.cs" />
+    <Compile Include="Converters\BytesToImageSourceConverter.cs" />
+    <Compile Include="Converters\MaxLengthStringConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\PercentageConverter.cs" />
+    <Compile Include="Converters\ShadowConverter.cs" />
+    <Compile Include="Converters\StringToUriConverter.cs" />
+    <Compile Include="Converters\VisibilityConverter.cs" />
+    <Compile Include="Converters\WindowStateToVisibilityConverter.cs" />
+    <Compile Include="GlowingWindow\Behaviors\MetroChromeBehavior.cs" />
+    <Compile Include="GlowingWindow\Dpi.cs" />
+    <Compile Include="GlowingWindow\Extensions.cs" />
+    <Compile Include="GlowingWindow\Glowing\GlowWindow.cs" />
+    <Compile Include="GlowingWindow\Glowing\GlowWindowProcessor.cs" />
+    <Compile Include="GlowingWindow\Glowing\GlowWindowProcessorBottom.cs" />
+    <Compile Include="GlowingWindow\Glowing\GlowWindowProcessorLeft.cs" />
+    <Compile Include="GlowingWindow\Glowing\GlowWindowProcessorRight.cs" />
+    <Compile Include="GlowingWindow\Glowing\GlowWindowProcessorTop.cs" />
+    <Compile Include="GlowingWindow\Models\ChromeMode.cs" />
+    <Compile Include="GlowingWindow\MonitorDpiType.cs" />
+    <Compile Include="GlowingWindow\PerMonitorDpi.cs" />
+    <Compile Include="GlowingWindow\Win32\ClassLongFlags.cs" />
+    <Compile Include="GlowingWindow\Win32\ClassStyles.cs" />
+    <Compile Include="GlowingWindow\Win32\GWL.cs" />
+    <Compile Include="GlowingWindow\Win32\HitTestValues.cs" />
+    <Compile Include="GlowingWindow\Win32\MonitorDefaultTo.cs" />
+    <Compile Include="GlowingWindow\Win32\NativeExtensions.cs" />
+    <Compile Include="GlowingWindow\Win32\NativeMethods.cs" />
+    <Compile Include="GlowingWindow\Win32\SW.cs" />
+    <Compile Include="GlowingWindow\Win32\SWP.cs" />
+    <Compile Include="GlowingWindow\Win32\WINDOWPLACEMENT.cs" />
+    <Compile Include="GlowingWindow\Win32\WM.cs" />
+    <Compile Include="GlowingWindow\Win32\WS.cs" />
+    <Compile Include="GlowingWindow\Win32\WSEX.cs" />
+    <Compile Include="Util\EnterKeyHelpers.cs" />
+    <Compile Include="Util\InternalExtensions.cs" />
+    <Compile Include="Util\IWindowSettings.cs" />
+    <Compile Include="Util\Ripple.cs" />
+    <Compile Include="Util\RippleAssist.cs" />
+    <Compile Include="Util\ShadowAssist.cs" />
+    <Compile Include="Util\WebBrowserUtility.cs" />
+    <Compile Include="Util\WindowAction.cs" />
+    <Page Include="Assets\ModernUI.Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ModernUI.Light.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MessageBoxView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LoadingWait.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Controls.CheckBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.ComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.ContextMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.FlatTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.LTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.MaterialButtons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.MaterialShadows.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.NavigationButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.NavigationListBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Controls.FlatProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.LToggleExpander.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.RToggleExpander.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.LTabItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Styles\Controls.ScrollBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
+    <Page Include="Themes\Accents\Blue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\AeroExpander.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\AeroExpandHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\AeroExploerBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\BreadcrumbBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\EllipseButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\FlatButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\FourStatusButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\GlowWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ImageButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\ImgTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\ImgTabItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Light.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\LinkLabelBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\MetroProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\MetroWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ResizeGrip.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\SplitButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\WindowButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\ZoomButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\TabCtrlTitle\f_enter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\openfolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\bg_search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\bg_navigate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\back_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\back_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\back_n.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\back_p.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\forward_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\forward_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\forward_n.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\forward_p.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\home_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\home_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\home_n.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\home_p.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\refresh_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\refresh_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\refresh_n.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\refresh_p.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\close_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\close_e.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\close_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\min_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\min_e.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\min_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\MsgBox\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\MsgBox\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\MsgBox\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\MsgBox\title.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\MsgBox\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\TabCtrlTitle\f_mover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\max_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\max_e.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\max_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\menu_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\menu_e.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\menu_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\msg_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\msg_e.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\msg_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\nor_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\nor_e.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\nor_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\skin_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\skin_e.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\CaptionBtn\skin_m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\NavigateBar\newhome_d.png" />
+    <Resource Include="Resource\NavigateBar\newhome_m.png" />
+    <Resource Include="Resource\NavigateBar\newhome_n.png" />
+    <Resource Include="Resource\NavigateBar\newhome_p.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\MsgBox\none.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Tray\tray_about.ico" />
+    <Resource Include="Resource\Tray\tray_accout.ico" />
+    <Resource Include="Resource\Tray\tray_exit.ico" />
+    <Resource Include="Resource\Tray\tray_setting.ico" />
+    <Resource Include="Resource\Tray\tray_show.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

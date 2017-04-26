@@ -1,0 +1,175 @@
+﻿/*-模型浏览界面-样式*/
+body {
+    background-color: #FFF;
+}
+
+/*#viewer-container-pad {
+    top: 5px;
+    bottom: 5px;
+    left: 21%; 
+    right: 1%;  
+}*/
+
+div#viewer-container-toolbar {
+
+     position : absolute;
+     /*right: 20px;*/
+     top : 8px;
+     /*background-color:  orange;*/
+     width : 50%;
+     height : 35px;
+    /*margin-top: 5px;
+    margin-bottom: 5px; 
+    margin-left: 5%;  
+    width: 60%;
+    height: 60px;
+    background: #008ad2;*/
+}
+div#viewer-container-toolbar-zoom {
+
+     position : absolute;
+     right: 5px;
+     bottom : 25px;
+     background : silver;
+     width : 100px;
+     height : 35%;
+    /*margin-top: 5px;
+    margin-bottom: 5px; 
+    margin-left: 5%;  
+    width: 60%;
+    height: 60px;
+    background: #008ad2;*/
+}
+div#viewer-container-toolbar-over-left {
+    position : absolute;
+    left: 2px;
+    top: 8px;
+    width: 35px; /*410px;*/
+    height:32px; /*410px;*/
+    background : silver;
+    color:white;
+    font-weight:bold;
+    font-size: 16px;
+    vertical-align:middle;
+    text-align:center  
+}
+div#viewer-container-toolbar-over-right {
+    position : absolute;
+    right: 2px;
+    top: 8px;
+    width: 35px; /*410px;*/
+    height: 32px; /*410px;*/
+    background : silver;
+    color:white;
+    font-weight:bold;
+    font-size: 16px;
+    vertical-align:middle;
+    text-align:center  
+}
+
+input#view-toolbar-bnt1 {
+    margin-left: 8px;
+    width: 80px; /*410px;*/
+    height: 36px; /*410px;*/
+    background : #008ad2;
+    color:white;
+    font-weight:bold;
+    font-size: 16px;
+    vertical-align:middle;
+    text-align:center
+     
+}
+input#view-toolbar-bnt2 {
+    margin-left: 8px;
+    width: 80px; /*410px;*/
+    height: 36px; /*410px;*/
+    background : #008ad2;
+    color:white;
+    font-weight:bold;
+    font-size: 16px;
+    vertical-align:middle;
+   text-align:center
+     
+}
+input#view-toolbar-bnt3 {
+    margin-left: 8px;
+    width: 80px; /*410px;*/
+    height: 36px; /*410px;*/
+    background :  #008ad2;
+    color:white;
+    font-weight:bold;
+    font-size: 16px;
+    vertical-align:middle;
+    text-align:center
+     
+}
+
+input#view-toolbar-bnt-over-left {
+    position : absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%; /*410px;*/
+    height: 100%; /*410px;*/
+    background : #008ad2;
+    color:white;
+    font-weight:bold;
+    font-size: 16px;
+    vertical-align:middle;
+    text-align:center
+     
+}
+input#view-toolbar-bnt-over-right {
+    position : absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%; /*410px;*/
+    height: 100%; /*410px;*/
+    background : #008ad2;
+    color:white;
+    font-weight:bold;
+    font-size: 16px;
+    vertical-align:middle;
+    text-align:center
+     
+}
+
+select#view-toolbar-select {
+    margin-left: 8px;
+    padding-right: 4px;
+    width: 210px; /*410px;*/
+    height: 38px; /*410px;*/
+    background : #008ad2;
+    color:white;
+    font-weight:bold;
+    font-size: 16px; 
+    vertical-align:middle;
+    text-align:left
+}
+#view-toolbar-select-option {
+    background : #008ad2;
+    color:white;
+    font-weight:bold;
+    font-size: 16px;   
+}
+ 
+   div #viewer-container-toolbar {
+        background: inherit;
+        border-width: 0;
+    }
+
+    #viewer-container-toolbar select {
+         margin: 0 0 0 8px;
+         width: 95px;
+         height: 38px;
+         background-color: #008ad2;
+         color: white;
+         border: rgb(238, 235, 235) 2px solid;
+         font-weight:bold;
+         font-size: 16px;
+         vertical-align: middle;
+         cursor: pointer;
+         outline: none;
+    }
+ 
+
+ 

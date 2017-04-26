@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="style/SelectParticipants.css" />
+        <!--<link rel="stylesheet" type="text/css" href="scripts/jquery-ui-1.11.4.custom/jquery-ui.css" />-->
+        <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+        <!--<script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>-->
+        <style type="text/css">
+            #wrap {
+                background: #ffffff;
+                border: 1px solid #666;
+                height: 300px;
+                width: 420px;
+                overflow: hidden;
+            }
+            .title_wrap {
+                margin-bottom: 40px;
+            }
+            .desc {
+                margin-top: 20px;
+            }
+            .desc >label {
+                margin: 5px 0 10px 30px;
+                font-weight: bold;
+            }
+            .desc >input {
+                margin-left: 10px;
+                width: 240px;
+            }
+            .desc >select {
+                margin-left: 10px;
+                width: 200px;
+            }
+            .btn {
+                margin-top: 45px;
+            }
+        </style>
+        <script type="text/javascript">
+            function OnNewDashboard(dashboard) {
+                dashboard.Window.SetDefaultSize(422.5, 302.5, true); //设置默认大小
+                dashboard.Window.Resizable = false;
+                dashboard.Window.Maximizable = false;
+                dashboard.Window.Minimizable = false;
+
+                var data = dashboard.CustomData;
+                var plans = data.Plans;
+                var disciplineTitle = data.DisciplineTitle;
+                var drawingTitle = data.DrawingTitle;
+
+                if (plans && plans.length > 0) {
+                    $('#fileTitle').val(drawingTitle);
+                    $('#planDisci').val(disciplineTitle);
+                    for (var i = 0; i < plans.length; i++) {
+                        var item = plans[i];
+                        var option = $('<option></option>').val(item.ID).text(item.Title);
+                        $("#selectmenu").append(option);
+                    }
+                }
+
+                $('#btnSure').click(function () {
+                    var sId = $("#selectmenu option:selected").val();
+                    var sTitle = $("#selectmenu option:selected").text();
+
+                    data.SelectedPlan = {ID: sId, Title: sTitle};
+                    if (!data.SelectedPlan) {
+                        alert("请选择您要共享的参与方.");
+                    } else {
+                        data.Cancelled = false;
+                        dashboard.Window.close();
+                    }
+                });
+                $('#btnCancel').click(function () {
+                    data.Cancelled = true;
+                    dashboard.Window.close();
+                });
+            }
+        </script>
+        <script>
+            /* //for text
+            var plans = [
+                { 'ID': 1, Title: "策划001" },
+                { 'ID': 7, Title: "策划002" },
+                { 'ID': 3, Title: "策划003" }
+            ];
+            var disciplineTitle = "专业001";
+            var drawingTitle = "图纸001.pdf";
+            $(function () {
+                //$("#selectmenu").selectmenu();
+                if (plans && plans.length > 0) {
+                    $('#fileTitle').val(drawingTitle);
+                    $('#planDisci').val(disciplineTitle);
+                    for (var i = 0; i < plans.length; i++) {
+                        var item = plans[i];
+                        var option = $('<option></option>').val(item.ID).text(item.Title);
+                        $("#selectmenu").append(option);
+                    }
+                }
+
+                $('#btnSure').click(function () {
+                    var sId = $("#selectmenu option:selected").val();
+                    var sTitle = $("#selectmenu option:selected").text();
+
+                    //data.selectedPlan = {ID: sId, Title: sTitle};
+                    //if (!data.selectedPlan) {
+                    //    alert("请选择您要共享的参与方.");
+                    //} else {
+                    //    //data.Cancelled = false;
+                    //    //dashboard.Window.close();
+                    //}
+                });
+                $('#btnCancel').click(function () {
+                    //data.Cancelled = true;
+                    //dashboard.Window.close();
+                });
+            });
+            */
+        </script>
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="title_wrap">上传到校审区</div>
+            <div class="desc">
+                <label>文件名称: </label>
+                <input id="fileTitle" type="text" readonly="readonly" />
+            </div>
+            <div class="desc">
+                <label>策划专业: </label>
+                <input id="planDisci" type="text" readonly="readonly" />
+            </div>
+            <div class="desc">
+                <label>请选择设计策划: </label>
+                <select id="selectmenu">
+                    <!--<option>Slower</option>-->
+                </select>
+            </div>
+            <div class="btn">
+                <input id="btnSure" type="button" value="确定" />
+                <input id="btnCancel" type="button" value="取消" />
+            </div>
+        </div>
+    </body>
+</html>

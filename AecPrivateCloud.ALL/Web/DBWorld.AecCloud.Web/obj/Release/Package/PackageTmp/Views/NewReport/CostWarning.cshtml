@@ -1,0 +1,323 @@
+﻿
+    @{
+        ViewBag.Title = "成本预警";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+<style>
+    #content {
+        min-height: 628px !important;
+        border: 1px solid silver;
+        overflow: hidden;
+    }
+
+    #sidebar2 {
+        float: right;
+        width: 400px;
+        height: 220px;
+        padding-top: 20px;
+        margin-top: 90px;
+    }
+
+    div#apie {
+        float: left;
+        width: 490px;
+        height: 220px;
+        padding-left: 130px;
+        padding-top: 50px;
+    }
+</style>
+
+<script type="text/javascript">
+    var resData = null;
+    var page = 0;
+    var alllines = 0;
+    var maxlines = 10;
+    var allpage = 0;
+    $(document).ready(function () {
+
+
+
+        loadflipSelect();
+        $("#apply").click(function () {
+            console.log("button click");
+            var company = $("#selectCorporation option:selected").text();
+            var projLevel = $("#selectLevel option:selected").text();
+            var selectStatus = $("#selectStatus option:selected").text();
+            var selectRegion = $("#selectRegion option:selected").text();
+            var searchStr = $("#SearchString").val();
+            $.ajax({
+                url: "/newreport/GetcostWarningData",
+                data: { selectCorporation: company, selectLevel: projLevel, SearchString: searchStr, selectRegion: selectRegion, selectStatus: selectStatus },
+                success: function (res) {
+                    console.log("success");
+                    resData = JSON.parse(res);
+                    alllines = resData.length;
+
+                    var normalCount = 0;
+                    var moreCount = 0;
+                    var shortCount = 0;
+                    $.each(resData, function (i, item) {
+                        var statusid = resData[i].CostId;
+                        switch (statusid) {
+                            case 1:
+                                normalCount++;
+                                break;
+                            case 2:
+                                moreCount++;
+                                break;
+                            default:
+                                shortCount++;
+                                break;
+                        }
+                    });
+
+                    var piedata = [];
+                    var radomColor = function () {
+                        return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+                    }
+                    piedata.push({
+                        value: normalCount, color: "blueviolet",
+                        highlight: radomColor(),
+                        label: "正常"
+                    });
+                    piedata.push({
+                        value: moreCount, color: "greenyellow",
+                        highlight: radomColor(),
+                        label: "结余"
+                    });
+                    piedata.push({
+                        value: shortCount, color: "red",
+                        highlight: radomColor(),
+                        label: "超支"
+                    });
+
+                    var myPie = new Chart(document.getElementById("myChart").getContext("2d")).Pie(piedata);
+                    document.getElementById("divnormal").innerHTML = "正常: " + (normalCount * 100 / alllines).toFixed(2) + "%";
+                    document.getElementById("divmore").innerHTML = "结余: " + (moreCount * 100 / alllines).toFixed(2) + "%";
+                    document.getElementById("divshort").innerHTML = "超支: " + (shortCount * 100 / alllines).toFixed(2) + "%";
+
+
+                    console.log(alllines);
+                    allpage = Math.ceil(alllines / maxlines);
+                    if (allpage > 0)
+                        page = page < 1 ? 1 : page;
+                    loadPage(page);
+                    synctabletaildata();
+                },
+                error: function (xmlHttpRequest, textStatus, errorThrown) {
+                    console.log("error");
+                    console.log("获取失败：(status:" + xmlHttpRequest.status + ", readyState:" + xmlHttpRequest.readyState +
+                            ", textStatus:" + textStatus + ", errorThrown: " + errorThrown + ")");
+                }
+            });
+        });
+        $("#pageNum").change(function () {
+            console.log("in page change");
+            page = $("#pageNum").val();
+            loadPage(page);
+        });
+        //下拉框翻页
+        $("#flipSelect").change(function () {
+            maxlines = $("#flipSelect option:selected").text();
+            synctabletaildata();
+            allpage = Math.ceil(alllines / maxlines);
+            page = page > allpage ? allpage : page;
+
+            loadPage(page);
+            synctabletaildata();
+            $("#pageNum").val(page);
+        });
+        //转跳第一页
+        $("#firstPage").click(function () {
+            if (allpage > 0) {
+                page = 1;
+                loadPage(1);
+            }
+        });
+        //转跳最后一页
+        $("#lastPage").click(function () {
+            if (allpage > 0) {
+                page = allpage;
+                loadPage(allpage);
+            }
+        });
+        //前一页
+        $("#prevPage").click(function () {
+            console.log("in previous page=" + page);
+            if (page > 1) {
+                page--;
+                $("#pageNum").val(page);
+                loadPage(page);
+            }
+        });
+        //后一页
+        $("#nextPage").click(function () {
+            console.log("in next page=" + page);
+            if (page < allpage) {
+                page++;
+                $("#pageNum").val(page);
+                loadPage(page);
+            }
+        });
+    });
+    function synctabletaildata() {
+        $("#summary").text("每页" + maxlines + "条，共" + alllines + "条数据信息");
+        $("#totalPages").text("/" + allpage);
+    }
+
+    //载入下拉框翻页数据
+    function loadflipSelect() {
+        $("#flipSelect option").remove();
+        var option = "<option>" + 10 + "</option>";
+        option += "<option>" + 20 + "</option>";
+        option += "<option>" + 30 + "</option>";
+        option += "<option>" + 40 + "</option>";
+        option += "<option>" + 50 + "</option>";
+        option += "<option>" + 60 + "</option>";
+        $("#flipSelect").append(option);
+    }
+    //翻页
+    function loadPage(page) {
+        if (page < 1) page = 1;
+        if (page > allpage) page = allpage;
+        $("#mainTable tr").remove();
+        if (allpage < 1) return;
+
+        for (var i = 0; i < maxlines; i++) {
+            var item = (page - 1) * maxlines + i;
+            if (item < resData.length) {
+                var tr = "<tr>";
+                //    tr += "<td>" + resData[item] + "</td>";
+                tr += "<td>" + resData[item].Id + "</td>";
+                tr += "<td> <a href='" + resData[item].Url + "'>" + resData[item].Name + "</a></td>";
+                tr += "<td>" + resData[item].OwnerName + "</td>";
+                tr += "<td>" + resData[item].OwnerContact + "</td>";
+
+            //    tr += "<td>" + resData[item].Cost + "</td>";
+                switch (resData[item].CostId) {
+                    case 1:
+                        tr += "<td style='background-color: blueviolet'>" + resData[item].Cost + "</td>";
+                        break;
+                    case 2:
+                        tr += "<td style='background-color: greenyellow'>" + resData[item].Cost + "</td>";
+                        break;
+                    default:
+                        tr += "<td style='background-color: red'>" + resData[item].Cost + "</td>";
+                        break;
+                }
+
+                tr += "<td>" + resData[item].PlanCost + "</td>";
+                tr += "<td>" + resData[item].ActualCost + "</td>";
+                tr += "<td>" + resData[item].Deviation + "</td>";
+                tr += "</tr>";
+                $("#mainTable").append(tr);
+            } else {
+                $("#mainTable").append("<tr><td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>  </tr>");
+            }
+        }
+        $("#pageNum").val(page);
+    }
+    function prevent(e) {
+        e.preventDefault ? e.preventDefault() : e.returnValue = false;
+    }
+    function digitInput(e) {
+        var c = e.charCode || e.keyCode; //FF、Chrome IE下获取键盘码
+        if ((c != 8 && c != 46 && // 8 - Backspace, 46 - Delete
+                (c < 37 || c > 40) && // 37 (38) (39) (40) - Left (Up) (Right) (Down) Arrow
+                (c < 48 || c > 57) && // 48~57 - 主键盘上的0~9
+                (c < 96 || c > 105)) // 96~105 - 小键盘的0~9
+                || e.shiftKey) { // Shift键，对应的code为16
+            prevent(e); // 阻止事件传播到keypress
+        }
+    }
+    $(function () {
+        $("#pageNum").keydown(function (e) {
+            digitInput(e);
+        });
+    });
+</script>
+
+<!-- 当前位置 -->
+    <div id="currentWrap">
+        @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+        <span>>></span>
+        <a title="项目中心">项目中心</a>
+    </div>
+    <!-- 主要内容部分 -->
+    <div id="content" class="clearfix">
+        <!-- 左边导航 -->
+        @Html.Partial("_LeftNavBIM")
+        <!-- 右边内容 -->
+        <section class="right">
+            <script src="\Scripts\chart\chart.js"></script>
+            <script src="\Scripts\chart\legend.js"></script>
+            <div class="section-header"> <div class="corbar"></div> 项目报表 <img src="/Content/Images/mdd/副级导航.png" /> 成本预警</div>
+          @*  <div class="section-header">项目报表 <img src="~/Content/Images/mdd/副级导航.png" alt="" /> 成本预警</div>*@
+
+            @using (Html.BeginForm("CostWarning", "NewReport", System.Web.Mvc.FormMethod.Get))
+            {
+                <p>
+
+                    @Html.DropDownList("selectRegion", "地区")
+                    @Html.DropDownList("selectLevel", "项目级别")
+                    @Html.DropDownList("selectCorporation", "公司")
+                    @Html.DropDownList("selectStatus", "状态级别")
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { maxlength = 192, placeholder = "请输入项目名称关键字" })
+                   
+                    <input type="button" id="apply" value="筛选" />
+                </p>
+            }
+            <div id="apie">
+                <canvas id="myChart" width="200" height="200"></canvas>
+
+            </div>
+            <div id="sidebar2">
+                <div><span style="background-color: blueviolet; color: blueviolet; ">......</span><span id="divnormal" style="margin-left: 20px;">正常</span></div>
+                <div><span style="background-color: greenyellow; color: greenyellow; ">......</span><span id="divmore" style="margin-left: 20px;">结余</span></div>
+                <div><span style="background-color: red; color: red; ">......</span><span id="divshort" style="margin-left: 20px;">超支</span></div>
+            </div>
+          
+
+            <div style="margin-right: 20px;">
+
+                <table class="table">
+                    <thead style="background-color: #1a83cb;color: white;">
+                        <tr>
+                            <th>序号</th>
+                            <th>名称
+                               
+                            </th>
+
+                            <th>负责人</th>
+                            <th>联系方式</th>
+                            <th>成本预警状态
+                               
+                            </th>
+                            <th>预期费用</th>
+                            <th>实际费用</th>
+                            <th>误差百分比</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mainTable"></tbody>
+
+                </table>
+                <div id="flipArea" style="margin-left: 0">
+                    <select id="flipSelect"></select>
+                    <div id="flipButtons">
+                        <img id="firstPage" title="第一页" src="/Content/Images/mdd/左1.png" />
+                        <img id="prevPage" title="前一页" src="/Content/Images/mdd/左2.png" />
+                        <input type="text" id="pageNum" value="0" />
+                        <div id="totalPages">/0</div>
+                        <img id="nextPage" title="后一页" src="/Content/Images/mdd/右2.png" />
+                        <img id="lastPage" title="最后一页" src="/Content/Images/mdd/右1.png" />
+                    </div>
+                    <div id="summary">每页 10 条， 共 0 条数据信息</div>
+                </div>
+
+
+            </div>
+        </section>
+    </div>
+
+

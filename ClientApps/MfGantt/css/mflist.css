@@ -1,0 +1,38 @@
+body {margin:0px;}
+
+.mflist-container {overflow:hidden;}
+.mflist { font: 9pt Segoe UI,Tahoma,Arial,Sans-serif; position:relative; overflow:auto;} /* vertical & horizontal scroll if needed */
+
+.mflist-head-scroller {position:fixed; overflow: hidden; top:0; left:0; height:23px; z-index:3;} /* width dynamially set to viewport_width - (scrollbar), height may be overridden */
+.mflist-header { position:relative; white-space:nowrap; font-size:9pt; cursor:default;} /* width dynamially set to MAX( viewport_width - (scrollbar), SUM(colWidth) + endCap) dynamically scrolled with items */
+
+.mflist-bg {position:absolute; z-index:1;}
+.mflist-bg-col {position:absolute; display:inline-block; border-right:1px solid #EFF7FF; vertical-align:top;}
+.mflist-bg-col.mflist-sorted {background-color: #F9F9F9;}
+
+.mflist-items {position:relative; top:23px; left:0px; z-index:2;}
+
+.mflist ul {list-style-type: none; padding: 0px; margin: 0px;}
+.mflist li {padding: 0px;}
+.mflist-item { white-space:nowrap; margin: 1px 2px; border:1px solid transparent; font-size:8.9pt; border-radius: 3px; }
+.mflist-item-hilite {background: transparent url('./gantt/row-hilite.png') repeat-x; border:1px solid /*#B9D7FC*/ #ffd585; }
+.mflist-item-select {background: transparent url('./gantt/row-select.png') repeat-x; border:1px solid /*#7DA2CE*/ #ffa800; }
+.mflist-col { padding:0px 14px 1px 3px; display:inline-block; overflow: hidden; vertical-align:top; text-overflow: ellipsis}
+.mflist-col-header { display:inline-block; vertical-align:top; overflow: hidden; background: #f5f5f5 url('./gantt/col.png') repeat-x; border-right:1px solid #d5d5d5; border-bottom:1px solid #D5D5D5;}
+.mflist-col-header-hilite {background: #BDEBFF url('./gantt/col-header-hilite.png') repeat-x; border-right:1px solid #6BBAE7; border-bottom:1px solid #6BBAE7;}
+.mflist-col-header-label { padding: 3px 6px; border-left:1px solid white; border-right:1px solid white; vertical-align:middle;}
+.mflist-col-header-hilite .mflist-col-header-label {border-left:1px solid #6BBAE7; border-right:1px solid transparent;}
+.mflist-col-sizer {opacity:1 !important; background:black !important; width:1px !important; top:0px; z-index:20;}
+
+.mflist-sorted .mflist-col-header-label{ background:url('./mflist/up.png') no-repeat right center;}
+.mflist-sorted.mflist-desc .mflist-col-header-label{ background:url('./mflist/down.png') no-repeat right center;}
+
+.mflist-icon-container {position:relative; display:inline-block; vertical-align:top; margin-right:4px;}
+.mflist-icon {vertical-align:top;}
+.mflist-icon-overlay { position: absolute; top:0px; left:0px; vertical-align:top;}
+
+.mflist-treepart {position:relative; width:16px; height:16; display:inline-block; vertical-align:top; background: url('./mflist/space.png')}
+.mflist-tree-open {background: url('./mflist/open.png')}
+.mflist-tree-open.mflist-tree-hilite {background: url('./mflist/open-hilite.png')}
+.mflist-tree-closed {background: url('./mflist/closed.png')}
+.mflist-tree-closed.mflist-tree-hilite{background: url('./mflist/closed-hilite.png')}

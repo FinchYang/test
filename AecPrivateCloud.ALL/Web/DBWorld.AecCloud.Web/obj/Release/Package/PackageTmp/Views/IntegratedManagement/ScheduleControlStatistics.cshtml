@@ -1,0 +1,545 @@
+﻿@*@model PagedList.IPagedList<AecCloud.Service.Vaults.ScheduleNode>*@
+@using AecCloud.Service.Vaults
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "工期节点偏差分析";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var homeUrl = AecCloud.BaseCore.Utility.GetHost(Request.Url);
+}
+
+<style>
+    #divTitle {
+        margin-top: 5px;
+        margin-right: 20px;
+        background-color: #FFFFFF;
+        width: 1000px;
+        height: 30px;
+    }
+
+    #corbar {
+        float: left;
+        margin-left: 8px;
+        margin-top: 3px;
+        width: 6px;
+        height: 24px;
+        background-color: #017EC1;
+    }
+
+    #title {
+        margin-top: 2px;
+        margin-left: 8px;
+        float: left;
+        font-weight: 500;
+        vertical-align: middle;
+        font-size: 16px;
+    }
+
+    #filter {
+        width: 1000px;
+        height: 30px;
+        margin-top: 8px;
+    }
+
+    #selectCompany {
+        margin-left: 25px;
+        /*background: url("/Content/Images/mdd/所属单位.png") no-repeat scroll right center;*/
+        background: url('/Content/Images/mdd/所属单位.png') no-repeat scroll right center #008ad2;
+        width: 140px;
+        height: 26px;
+        background-color: #008AD4;
+        color: #FFFFFF;
+    }
+    #selectCompany::-ms-expand { display: none; }
+
+    #selectProj {
+        margin-left: 5px;
+        background: url("/Content/Images/mdd/项目.png") no-repeat scroll right center;
+        width: 140px;
+        height: 26px;
+        background-color: #008AD4;
+        color: #FFFFFF;
+    }
+    #selectProj::-ms-expand { display: none; }
+
+    #selectClass {
+        margin-left: 5px;
+        background: url("/Content/Images/mdd/项目类别.png") no-repeat scroll right center;
+        width: 140px;
+        height: 26px;
+        background-color: #008AD4;
+        color: #FFFFFF;
+    }
+    #selectClass::-ms-expand { display: none; }
+
+    #selectLevel0 {
+        margin-left: 5px;
+        background: url("/Content/Images/mdd/项目级别.png") no-repeat scroll right center;
+        width: 140px;
+        height: 26px;
+        background-color: #008AD4;
+        color: #FFFFFF;
+    }
+    #selectLevel0::-ms-expand { display: none; }
+
+    #selectCompany, #selectProj,  #selectClass, #selectLevel0 {
+         appearance:none;
+        -moz-appearance:none;
+        -webkit-appearance:none; 
+        padding-right: 24px;
+   }
+
+    #filterStr {
+        margin-left: 5px;
+        width: 190px;
+        height: 26px;
+        color: #D8DAD9;
+    }
+
+    #apply {
+        margin-left: 5px;
+        width: 70px;
+        height: 26px;
+        background-color: #008AD2;
+        color: #FFFFFF;
+        border-radius: 3px;
+        border: none;
+    }
+
+    #mainContent {
+        margin-top: 5px;
+        width: 1000px;
+        height: 1000px;
+        background-color: #FFFFFF;
+    }
+
+    #placeHolder1 {
+        margin-left: 15px;
+        width: 969px;
+        height: 5px;
+    }
+
+    #mainTable {
+        margin-left: 15px;
+        width: 969px;
+        height: 396px;
+        border: 2px solid #DADADA;
+    }
+    #loading{
+        width: 969px;
+        height: 350px;
+        text-align:center;
+        vertical-align:middle;
+        font-size:24px;
+    }
+
+    #flipArea {
+        margin-top: 6px;
+        margin-left: 15px;
+        width: 969px;
+        height: 40px;
+        border: 2px solid #F5F5F5;
+    }
+
+    th {
+        background-color: #008AD2;
+        text-align: center;
+        border-color: #FFFFFF;
+        color: #FFFFFF;
+        height: 50px;
+        line-height: 18px;
+    }
+
+    td {
+        border-color: #F0F0F0;
+        height: 28px;
+        text-align: center;
+        word-break: break-all;
+        line-height: 18px;
+    }
+
+    #showNum {
+        float: left;
+        border: 2px solid #DADADA;
+        margin-left: 50px;
+        margin-top: 5px;
+        width: 60px;
+        height: 26px;
+    }
+
+        #flipSelect option {
+            text-align: center;
+        }
+
+    #flipButtons {
+        float: left;
+        margin-top: 5px;
+        margin-left: 100px;
+    }
+
+    #summary {
+        float: left;
+        margin-top: 5px;
+        margin-left: 300px;
+    }
+
+    #pageNum {
+        border: 2px solid #DADADA;
+        width: 80px;
+        text-align: center;
+        float: left;
+        margin-left: 20px;
+    }
+
+    #firstPage, #prevPage, #nextPage, #lastPage {
+        margin-top: 7px;
+        float: left;
+        margin-left: 20px;
+    }
+
+    #totalPages {
+        margin-top: 0px;
+        float: left;
+        margin-left: 4px;
+    }
+        .body-container{
+        min-height:1000px;
+    }
+     
+</style>
+<script type="text/javascript">
+    var resData = null;
+
+    $(document).ready(function () {
+        $("#filterStr").click(function () {
+            if (this.value == "请输入节点名称关键词...") this.value = "";
+        });
+        //初始化公司
+        var companiesStr = "@ViewBag.Companies";
+        var companyArr = companiesStr.split("$");
+        for (var i = 0; i < companyArr.length; i++) {
+            if (companyArr[i] != "总部机关") {
+                var option = "<option>" + companyArr[i] + "</option>";
+                $("#selectCompany").append(option);
+            }
+        }
+        //初始化类别
+        var classStr = "@ViewBag.Projclass";
+        var classArr = classStr.split("$");
+        for (var i = 0; i < classArr.length; i++) {
+            var option = "<option>" + classArr[i] + "</option>";
+            $("#selectClass").append(option);
+        }
+        //初始化项目级别
+        var levelStr = "@ViewBag.projLevel";
+        var levelArr = levelStr.split("$");
+        for (var i = 0; i < levelArr.length; i++) {
+            var option = "<option>" + levelArr[i] + "</option>";
+            $("#selectLevel0").append(option);
+        }
+        //申请项目
+        $("#selectCompany").change(function () {
+            $.ajax({
+                type: "GET",
+                url: "/IntegratedManagement/GetProjsByCompany",
+                contentType: "application/json",
+                data: { "companyName": $("#selectCompany option:selected").text() },
+                success: function (res) {
+                    //去掉项目列表中原有option
+                    $('#selectProj').empty();
+                    //添加option
+                    $('#selectProj').append("<option value =''>项目</option>");
+                    var objs = JSON.parse(res);
+                    for (var item in objs) {
+                        $('#selectProj').append("<option value = '" + objs[item] + "'>" + objs[item] + "</option>");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                    alert(XMLHttpRequest.readyState);
+                    alert(textStatus);
+                }
+            });
+        });
+        $("#selectCompany").change();
+        //申请数据
+        $("#apply").click(function () {
+            var company = $("#selectCompany option:selected").text();
+            var proj = $("#selectProj option:selected").text();
+            var projClass = $("#selectClass option:selected").text();
+            var projLevel = $("#selectLevel0 option:selected").text();
+            var searchStr = $("#filterStr").val();
+            if (searchStr == "请输入节点名称关键词...") {
+                searchStr = "";
+            }
+            $.ajax({
+                type: "GET",
+                //url: "/IntegratedManagement/GetScheduleControlData?company=" + company + "&proj=" + proj + "&projClass=" + projClass + "&projLevel=" + projLevel + "&searchStr=" + searchStr,
+                url:"/IntegratedManagement/GetScheduleControlData",
+                contentType: "application/json",
+                data: { "company": company, "proj": proj, "projClass": projClass, "projLevel": projLevel, "searchStr": searchStr },
+                beforeSend: function () {
+                    $("#mainTable tr").eq(0).nextAll().remove();
+                    $("#mainTable, #flipArea").css("display", "none");
+                    $("#mainContent").append("<div id='loading'>加载中 请稍后... ...</div>")
+
+                },
+                complete: function () {
+                    $("#loading").remove();
+                    $("#mainTable, #flipArea").css("display", "inline");
+                },
+                success: function (res) {
+                    resData = JSON.parse(res);
+                    var length = resData.length;
+                    var showNum = $('#showNum').val();
+                    loadPage(1, showNum);
+                    //loadflipSelect();                    
+                    $("#summary").text("每页" + showNum + "条，共" + resData.length + "条数据信息");
+                    $("#totalPages").text("/" + Math.ceil(length / showNum));
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                    alert(XMLHttpRequest.readyState);
+                    alert(textStatus);
+                }
+
+            });
+        });
+        //下拉框翻页
+        //$("#flipSelect").change(function () {
+        //    var page = $("#flipSelect option:selected").text();
+        //    loadPage(page);
+        //    $("#pageNum").val(page);
+        //});
+        //转跳第一页
+        $("#firstPage").click(function () {
+            if (resData.length > 0) {
+                var showNum = $('#showNum').val();
+                loadPage(1, showNum);
+            }
+        });
+        //转跳最后一页
+        $("#lastPage").click(function () {
+            var length = resData.length;
+            if (length > 0) {
+                var showNum = $('#showNum').val();
+                var page = Math.ceil(length / showNum);
+                loadPage(page, showNum);
+            }
+        });
+        //前一页
+        $("#prevPage").click(function () {
+            var showNum = $('#showNum').val();
+            var length = resData.length;
+            if (length > 0) {
+                var currentPage = $("#pageNum").val();
+                page = currentPage - 1;
+                if (page < 1) {
+                    page = 1;
+                }
+                loadPage(page, showNum);
+            }
+        });
+        //后一页
+        $("#nextPage").click(function () {
+            var showNum = $('#showNum').val();
+            var length = resData.length;
+            var pages = Math.ceil(length / showNum);
+            if (pages > 0) {
+                var currentPage = $("#pageNum").val();
+                page = parseInt(currentPage) + 1;
+                if (page > pages) {
+                    page = pages;
+
+                }
+                loadPage(page, showNum);
+            }
+        });
+        //页数改变
+        $("#showNum").change(function () {
+            var length = resData.length;
+            var showNum = $('#showNum').val();
+            loadPage(1, showNum);                   
+            $("#summary").text("每页" + showNum + "条，共" + resData.length + "条数据信息");
+            $("#totalPages").text("/" + Math.ceil(length / showNum));
+        });
+        $('#apply').click();
+    });
+    //载入下拉框翻页数据
+    function loadflipSelect() {
+        $("#flipSelect option").remove();
+        var length = resData.length;
+        var pages = Math.ceil(length / 10);
+        for (var i = 1; i <= pages; i++) {
+            var option = "<option>" + i + "</option>";
+            $("#flipSelect").append(option);
+        }
+    }
+    //翻页
+    function loadPage(page, showNum) {
+        $("#mainTable tr").eq(0).nextAll().remove();
+        for (var i = 0; i <= showNum-1; i++) {
+            var item = (page - 1) * showNum + i;
+            if (item < resData.length) {
+                var tr = "<tr>";
+                tr += "<td>" + resData[item].Sn + "</td>";
+                var name = resData[item].Name;
+                var length = name.length;
+                if (length > 14) {
+                    tr += "<td title='" + name + "'>" + name.substring(0, 14) + "..</td>";
+                } else {
+                    tr += "<td>" + name + "</td>";
+                }
+
+                tr += "<td>" + resData[item].DevMax + "</td>";
+                tr += "<td>" + resData[item].DevMini + "</td>";
+                tr += "<td>" + resData[item].DevAvg + "</td>";
+                tr += "<td>" + resData[item].DevAvgRate + "%</td>";
+                tr += "</tr>";
+                $("#mainTable").append(tr);
+            } else {
+               // $("#mainTable").append("<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>");
+            }
+        }
+        $("#pageNum").val(page);
+
+        //$("#flipSelect option").each(function () {
+        //    $(this).removeAttr("selected");
+        //});
+        //$("#flipSelect option").each(function () {
+        //    if ($(this).text() == page) {
+        //        $(this).prop("selected", true);
+        //    }
+        //});
+    }
+</script>
+
+
+<!-- 主要内容部分 -->
+<div id="content">
+    @* 左边导航 *@
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section class="right">
+        @*标题*@
+        <div id="divTitle">
+            <div id="corbar"></div>
+            <div id="title">项目报表 <img src="/Content/Images/mdd/副级导航.png" /> 工期节点偏差分析</div>
+        </div>
+        @*帅选条件*@
+        <div id="filter">
+            <select id="selectCompany"><option>所属单位</option></select>
+            <select id="selectClass"><option>项目类别</option></select>
+            <select id="selectLevel0"><option>项目级别</option></select>
+            <select id="selectProj"><option>项目</option></select>
+            <input id="filterStr" value="请输入节点名称关键词..." />
+            <button id="apply">确定</button>
+        </div>
+        @*主表区*@
+        <div id="mainContent">
+            <div id="placeHolder1"></div>
+            <table id="mainTable">
+                <tr>
+                    <th width="64">编号</th>
+                    <th width="225">节点名称</th>
+                    <th width="170">实际工期与初次计划工期偏差最小值(天)</th>
+                    <th width="170">实际工期与初次计划工期偏差最大值(天)</th>
+                    <th width="170">实际工期与初次计划工期偏差平均值(天)</th>
+                    <th width="170">实际工期与初次计划工期偏差平均比例(%)</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <div id="flipArea">
+                <select id="showNum"><option value="10" selected="selected">10条</option><option value="20">20条</option><option value="30">30条</option><option value="40">40条</option><option value="50">50条</option></select>
+                <div id="flipButtons">
+                    <img id="firstPage" title="第一页" src="/Content/Images/mdd/左1.png" />
+                    <img id="prevPage" title="前一页" src="/Content/Images/mdd/左2.png" />
+                    <input type="text" id="pageNum" value="0" readonly="true" />
+                    <div id="totalPages">/0</div>
+                    <img id="nextPage" title="后一页" src="/Content/Images/mdd/右2.png" />
+                    <img id="lastPage" title="最后一页" src="/Content/Images/mdd/右1.png" />
+                </div>
+                <div id="summary"></div>
+            </div>
+        </div>
+
+    </section>
+</div>

@@ -1,0 +1,190 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>指派给我的任务</title>  
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <!-- Styles used on the dashboard -->
+    <link href="style/main.css" rel="stylesheet" />
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <!-- Helper scripts -->
+    <script type="text/javascript" src="scripts/home_common.js"></script>
+    <script type="text/javascript" src="scripts/listing_common.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/utilities.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/localization.js"></script>
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/cc/tasks.js"></script>
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+    <script type="text/javascript" src="scripts/mf/objectOps.js"></script>
+    <script type="text/javascript" src="scripts/md/base.js"></script>
+    <script type="text/javascript" src="scripts/cc/public.js"></script>
+    <!-- Dashboard implementation -->
+    <script type="text/javascript">
+
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+            //var cd = dashboard.CustomData;
+            //alert(cd.objsAndProps.Count);
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+
+                var viewIds = dashboard.CustomData.viewIds;
+
+                var loc = new localization();
+                // Shortcuts.
+                var shellFrame = dashboard.Parent;
+
+                initializeLayout(dashboard, shellFrame);
+                 
+                var additionalSectionShown = false;
+                // Bind to the main listing window.
+                //bindToMainListing( shellFrame, loc, $( "#listing_main" ) );
+                
+                // Create the "Assigned to" listing.
+                var listing = createListing(shellFrame, loc, $("#listing_assigned"), MFiles.MFBuiltInView.AssignedToMe,
+                    function (container, objectsCount) {
+
+                        // Specify the relative height of this listing.
+                        var heightNumber = 20;
+                        if (objectsCount <= 2)
+                            heightNumber = 15;
+                        if (objectsCount <= 1)
+                            heightNumber = 10;
+                        if (objectsCount > 20)
+                            heightNumber = 30;
+                        container.data("heightNumber", heightNumber);
+
+                        //// Hide the section if it has no content.
+                        //if( objectsCount == 0 )
+                        //    container.hide();
+                        //else
+                        additionalSectionShown = true;
+                    });
+
+
+                if (listing) CC.SetCommTheme(listing);
+
+                var divIds = ["divMyTask"];
+                //设置listing中 Header Div 的宽度
+                for (var item in divIds) {
+                    publicUtils.SetDivWidth(divIds[item]);
+                }
+
+                //获取vault对象
+                var vault = shellFrame.ShellUI.Vault;
+                //获取取出metadataAlias.js 中ClassDesignProgress 所有值
+                var temp = CC.task.GetArray(vault);
+
+                try {
+                    for (var i = 0; i < viewIds.length; i++) {
+                        CC.task.SetListingHeader(shellFrame, viewIds[i], temp);
+                    }
+                } catch (e) {
+                   
+                }
+
+                // Listen to the ActiveListingChanged event.
+                shellFrame.Events.Register(MFiles.Event.ActiveListingChanged, getActiveListingChangedHandler(shellFrame));
+
+                // Resize panes.
+                $(window).resize(resizedWithHeight($("#newTask").height()));
+                resizedWithHeight($("#newTask").height())();
+                 
+                //新建任务
+                $('#newTask').click(function () { 
+                    var objTypeID = 10;
+                    var classId = -100; 
+                    createNewObjectShowWindow(shellFrame, objTypeID, { type: MFBuiltInPropertyDefClass, value: classId });
+                });
+
+                //导出任务列表
+                $('#deriveTask').click(function () {
+                    shellFrame.Commands.ExecuteCommand(BuiltinCommand_ExportObjects,null);
+                });
+ 
+            };
+        }
+
+        function createNewObjectShowWindow(shellFrame, objTypeID, classID, propertyValues, templateObjVer) {
+            ///<param name="classID" type="{type:##, value:##}"></param>
+            ///<param name="templateObjVer" type="ObjVer">ObjVer for template</param>
+            var oVault = shellFrame.ShellUI.Vault;
+            var pvs = MFiles.CreateInstance("PropertyValues");
+            if (classID) {
+                if (classID.value || classID.value === 0) {
+                    var pvClass = createProperty(classID.type, MFDatatypeLookup, classID.value);
+                    pvs.Add(-1, pvClass);
+                }
+            }
+            if (propertyValues && propertyValues.Count > 0) {
+                for (var i = 1; i <= propertyValues.Count; i++) {
+                    pvs.Add(-1, propertyValues.Item(i));
+                }
+            }
+            var objectCreationInfo = MFiles.CreateInstance("ObjectCreationInfo");
+            if (objTypeID || objTypeID === 0) {
+                objectCreationInfo.SetObjectType(objTypeID, false);
+            }
+            if (objTypeID === 0) {
+                objectCreationInfo.SetSingleFileDocument(true, true);
+            }
+            if (templateObjVer) {
+                objectCreationInfo.SetTemplate(templateObjVer);
+            }
+            var accessControlList = MFiles.CreateInstance("AccessControlList");
+
+            return oVault.ObjectOperations.ShowPrefilledNewObjectWindow(0, MFObjectWindowModeInsert, objectCreationInfo, pvs, accessControlList);
+        }
+
+        function createProperty(propId, valueType, value) {
+            ///<summary>生成M-Files中的PropertyValue</summary>
+            var pv = MFiles.CreateInstance('PropertyValue');
+            pv.PropertyDef = propId;
+            pv.Value.SetValue(valueType, value);
+            return pv;
+        }
+    </script> 
+</head>
+<!-- The dashboard content -->
+<body id="pageBody">
+
+    <div id="fullareadiv" style="width: 100%; height: 90%; padding: 0px; margin: 0px; border: 0px;">
+        <div id="listings" class="mf-panel-container" style="width: 100%; height: 100%; padding: 0px;margin: 0px; border: 0px;"> 
+            <div id="listing_assigned" class="mf-panel" style="width: 100%; height: 50%; padding: 0px;margin: 0px; border: 0px; overflow: hidden;">
+                <div id="divMyTask" class="mf-listing-header">
+                </div>
+                <div class="mf-listing-content">
+                </div>
+            </div> 
+        </div>
+    </div>
+
+
+    <div class="sdHeaderDiv" id="newTask">
+        <a href="#" class="sdHeaderDivA">
+            <img src="images/buttons/新建任务.png" width="22" height="22" />
+            新建任务
+        </a> 
+    </div>
+    
+    <div class="sdHeaderDiv" id="deriveTask" style="margin-left: 120px; ">
+        <a href="#" class="sdHeaderDivA">
+            <img src="images/buttons/导出任务列表.png" width="22" height="22" />
+            导出任务列表
+        </a> 
+    </div>
+</body>
+</html>

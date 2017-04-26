@@ -1,0 +1,661 @@
+﻿@model ProjectCreateModel
+
+@{
+    ViewBag.Title = "创建项目";
+    //Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var homeUrl = AecCloud.BaseCore.Utility.GetHost(Request.Url);
+}
+
+<link href="~/Content/oldstyles/loading.css" rel="stylesheet" type="text/css" />
+@*<link href="~/Content/oldstyles/header.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/base.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/layout.css" rel="stylesheet" type="text/css" />*@
+<link href="~/Content/oldstyles/second.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/oldstyles/footer.css" rel="stylesheet" type="text/css" />
+@*<link href="~/Content/oldstyles/login.css" rel="stylesheet" type="text/css" />*@
+<script src="~/Scripts/oldscripts/Mfile.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/jquery.flexslider-min.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/commonMethod.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/kefu.js"></script>
+<link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-datetimepicker.js"></script>
+@*<link href="~/Content/bootstrap.css" rel="stylesheet" />*@
+<script src="~/Scripts/bootstrap-datetimepicker.zh-CN.js"></script>
+
+@*<script src="~/Scripts/oldscripts/commonMethod.js"></script>*@
+<script src="~/Scripts/oldscripts/JuqeryCookie.js"></script>
+<script src="~/Scripts/oldscripts/BIMIndex.js"></script>
+<script src="~/Scripts/oldscripts/BIM.js"></script>
+<link href="~/Content/oldstyles/BIMClient.css" rel="stylesheet" />
+<link href="~/Content/oldstyles/BIMMaster.css" rel="stylesheet" />
+<link href="~/Content/oldstyles/BIMPopup.css" rel="stylesheet" />
+<link href="~/Content/Site.css" rel="stylesheet" />
+<style type="text/css">
+        /*数据加载时候动画样式表*/
+    .overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 998;
+        width: 100%;
+        height: 100%;
+        _padding: 0 20px 0 0;
+        background: #f6f4f5;
+        display: none;
+    }
+    .labelalign {
+        padding-right: 1.2em;
+    }
+
+    #AjaxLoading11 {
+        border: 1px solid #8CBEDA;
+        color: #37a;
+        font-size: 12px;
+        font-weight: bold;
+        position: absolute;
+        z-index: 9999;
+        display: none;
+        left: 50%;
+        top: 50%;
+    }
+
+    #AjaxLoading11 div.loadingWord11 {
+        width: 180px;
+        height: 50px;
+        line-height: 50px;
+        border: 2px solid #D6E7F2;
+        background: #fff;
+    }
+
+    #AjaxLoading11 img {
+        margin: 10px 15px;
+        float: left;
+        display: inline;
+    }
+
+    .create-proj-label-select {
+        padding-left: 118px;
+        padding-right:10px;
+        font-size:14px;
+        float: left;
+    }
+
+    .columnRight select {
+        height:29px;
+        border-color:#9a9a9a;
+    }
+
+    .preview-img table td {
+        border: none;
+    }
+
+    .newProjectContent {
+        background-color:white;
+        margin-bottom:10px;
+        padding-top:0px;
+    }
+
+    .newProjectContent .date-info {
+        width: 235px;
+    }
+
+    #InviteCancel {
+        background-color: #ececec;
+        border-color:#dcdcdc;
+        color: black;
+    }
+
+    #InviteCancel:hover {
+        background-color: #969696;
+    }
+
+    .InvitateBtn {
+        text-align: left;
+        padding-left: 180px;
+    }
+
+    .InvitateBtn input {
+        width:113px;
+        height:41px;
+        margin: 6px 0 0 6px;
+        -ms-border-radius: 4px;
+        border-radius: 4px;
+    }
+
+    
+
+    #creatProjectForAllBackup {
+        background-color:#f8f8f8;
+    }
+
+    .inputEdit {
+        height:37px;
+        border-color:#a3a1a1;
+        background-color:#f9f8f8;
+    }
+    .textareaEdit {
+        border-color:#a3a1a1;
+        background-color:#f9f8f8;
+        height:112px;
+        margin-bottom:10px;
+    }
+
+    .projectTitle {
+        margin:0;
+    }
+
+    .section-header {
+        margin-right: 50px !important;
+    }
+
+    #content {
+        background-color: #ececec;
+        max-height: inherit  !important;
+    }
+
+    .body-container {
+        background-color: white;
+    }
+
+    .project-info-edit {
+        padding-right:50px;
+        padding-top:15px;
+        background-color: #ececec;
+    }
+
+    .model-unit .inputEdit {
+        height:37px;
+        border-color:#a3a1a1;
+        background-color:#f9f8f8;
+        width: 570px;
+    }
+      .multiinputadd {
+        background-image: url(/Content/Images/projects/addModelUnit.png);
+        width:28px;
+        height:28px;
+        -ms-border-radius:2px;
+        border-radius:2px;
+        border:none;
+        vertical-align: middle;
+        margin-left:5px;
+    }
+
+    .multiinputdel {
+        background-image: url(/Content/Images/projects/delModelUnit.png);
+        width:28px;
+        height:28px;
+        -ms-border-radius:2px;
+        border-radius:2px;
+        border:none;
+        vertical-align: middle;
+        margin-left:5px;
+    }
+    .model-unit input.model-unit-add {
+        background-image: url(/Content/Images/projects/addModelUnit.png);
+        width:28px;
+        height:28px;
+        -ms-border-radius:2px;
+        border-radius:2px;
+        border:none;
+        vertical-align: middle;
+        margin-left:5px;
+    }
+
+    .model-unit input.model-unit-del {
+        background-image: url(/Content/Images/projects/delModelUnit.png);
+        width:28px;
+        height:28px;
+        -ms-border-radius:2px;
+        border-radius:2px;
+        border:none;
+        vertical-align: middle;
+        margin-left:5px;
+    }
+
+    .asideWrap {
+        height: 1220px !important;
+    }
+
+    .corbar {
+        float: left;
+        margin-left: 3px;
+        margin-right: 10px;
+        width: 5px;
+        height: 22px;
+        background-color: #017EC1;
+    }
+
+</style>
+@functions{
+
+    public static List<SelectListItem> ProjectClassList()
+    {
+        var list = new List<SelectListItem>();
+        var cList = AecCloud.WebAPI.Models.ProjectClassList.Items;
+        for (var i = 0; i < cList.Count; i++)
+        {
+            var sel = i == 0;
+            list.Add(new SelectListItem
+            {
+                Text = cList[i], Value = cList[i], Selected = sel
+            });
+        }
+        return list;
+    }
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#creatProjectForAllBackup").submit(function () {
+            var error = jQuery('.text-danger').text();
+            if (error == "") {
+              //  console.log("already submit correctly,waiting");
+                document.getElementById("AjaxLoading11").style.display = "inherit";
+            }
+        });
+    });
+</script>
+        <!-- 主要内容部分 -->
+        <div id="content" class="clearfix">
+        <!-- 左边导航 -->
+        @Html.Partial("_LeftNavBIM")
+        <!-- 右边内容 -->
+        <section class="right">
+        <div class="section-header">
+            <div class="corbar"></div> 项目中心 <img src="/Content/Images/mdd/副级导航.png" /> 新建项目
+        </div>
+
+        <div class="project-info-edit">
+
+        @using (Html.BeginForm("CreateProjectForFullBackup", "BIM", FormMethod.Post, new {enctype = "multipart/form-data", id = "creatProjectForAllBackup"}))
+{
+    @Html.HiddenFor(m => m.TemplateId, new {@id = "templateId"})
+    @Html.HiddenFor(m => m.AreaId, new {@id = "AreaId"})
+
+                <div class="columnWrap clearfix">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        </div>
+    <div class="newProjectContent">
+
+                <div>
+                    <div class="columnWrap clearfix">
+                        <div class="create-proj-label-select">所属单位<span style="color:red">*</span></div>
+                        <div class="columnRight left"> @Html.DropDownListFor(model => model.Company, ViewData["gongsi"] as SelectList)</div>
+                    </div>
+                    <div class="columnWrap clearfix">
+                        <div class="create-proj-label-select">项目类别<span style="color:red">*</span></div>
+                        @*<div class="columnRight left">@Html.DropDownList("projClass", ProjectClassList())</div>*@
+                        <div class="columnRight left">@Html.DropDownListFor(model => model.ProjectClass, ViewData["projectclass"] as SelectList)</div>
+                    </div>
+                    <div class="columnWrap clearfix">
+                        <div class="create-proj-label-select">项目等级<span style="color:red">*</span></div>
+                        <div class="columnRight left"> @Html.DropDownListFor(model => model.ProjectLevel, ViewData["projectlevel"] as SelectList)</div>
+                    </div>
+                    <div class="columnWrap clearfix">
+                        <div class="create-proj-label-select">所在地区<span style="color:red">*</span></div>
+                        <div class="columnRight left">
+        @Html.DropDownListFor(model => model.Area, ViewData["areas"] as SelectList)
+                        </div>
+                    </div>
+
+                </div>
+        @*如果没有使用本地上传图片的话 此处input记录下默认图片的路径传进后台 *@
+                <input type="hidden" name="imgSrc" id="imgSrc" value="/Content/Images/projects/template1.jpg"/>
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label">
+                        项目封面<span style="color:red">*</span>
+                    </div>
+                    <div class="left preview-img" id="previewDiv">
+                        <table cellpadding="0" cellspacing="0" border="0" class="projectCoverChoose">
+                            <tr>
+                                <td rowspan="2" id="preview">
+                                    <img id="imghead" src="" width="227" height="176"/>
+                                </td>
+
+                                <td>
+                                    <img src="/Content/Images/projects/template1.jpg" width="108" height="84"/>
+                                </td>
+
+                                <td>
+                                    <img src="/Content/Images/projects/template2.jpg" width="108" height="84"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="/Content/Images/projects/template3.jpg" width="108" height="84"/>
+                                </td>
+
+                                <td id="imghead">
+                                    <a href="#" title="自定义封面">
+                                        <img src="/Content/Images/projects/addCover.png" width="108" height="84" alt="自定义封面"/>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                        @Html.ValidationMessageFor(m => m.Cover, "", new { @class = "text-danger" })
+                    </div>
+                    <input type="file" onchange="previewImage(this)" style="display: none;" id="imgUp" name="projectImg" accept=".jpg,.bmp,.gif,.jpeg"/>
+                </div>
+
+
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label">
+                        项目名称<span style="color:red">*</span>
+                    </div>
+                    <div class="columnRight left">
+        @*<input type="text" value="" class="newProjectInput" />*@
+        @Html.TextBoxFor(m => m.Name, new {@class = "inputComment inputEdit", placeholder = " 请输入项目名称"})
+        @Html.ValidationMessageFor(m => m.Name, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label">
+                        项目编号<span style="color:red">*</span>
+                    </div>
+                    <div class="columnRight left">
+        @Html.TextBoxFor(m => m.Number, new {@class = "inputComment inputEdit", placeholder = " 请输入ERP立项编号"})
+        @Html.ValidationMessageFor(m => m.Number, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+        <div class="columnWrap clearfix">
+            <div class="create-proj-label">
+                建设单位<span style="color:red">*</span>
+            </div>
+            <div class="columnRight left model-unit">
+                @Html.TextBoxFor(m => m.OwnerUnit, new {@class = "inputComment inputEdit", placeholder = " 请输入建设单位"})
+                <input type="button" class="multiinputadd" value="" />
+                <input type="button" class="multiinputdel" value="" style="display: none" />
+
+                @Html.ValidationMessageFor(m => m.OwnerUnit, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="columnWrap clearfix">
+            <div class="create-proj-label labelalign">
+                项管单位
+            </div>
+            <div class="columnRight left model-unit">
+                @Html.TextBoxFor(m => m.PmUnit, new {@class = "inputComment inputEdit", placeholder = " 请输入项管单位"})
+                <input type="button" class="multiinputadd" value="" />
+                <input type="button" class="multiinputdel" value="" style="display: none" />
+                @Html.ValidationMessageFor(m => m.PmUnit, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="columnWrap clearfix">
+            <div class="create-proj-label">
+                监理单位<span style="color:red">*</span>
+            </div>
+            <div class="columnRight left model-unit">
+                @Html.TextBoxFor(m => m.PropSupervisorUnit, new {@class = "inputComment inputEdit", placeholder = " 请输入监理单位"})
+                <input type="button" class="multiinputadd" value="" />
+                <input type="button" class="multiinputdel" value="" style="display: none" />
+                @Html.ValidationMessageFor(m => m.PropSupervisorUnit, "", new {@class = "text-danger"})
+            </div>
+        </div>
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label labelalign">
+                        勘察单位
+                    </div>
+                    <div class="columnRight left model-unit">
+                        @Html.TextBoxFor(m => m.InvestigateUnit, new {@class = "inputComment inputEdit", placeholder = " 请输入勘察单位"})
+                        <input type="button" class="multiinputadd" value="" />
+                        <input type="button" class="multiinputdel" value="" style="display: none" />
+                        @Html.ValidationMessageFor(m => m.InvestigateUnit, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label">
+                        设计单位<span style="color:red">*</span>
+                    </div>
+                    <div class="columnRight left model-unit">
+                        @Html.TextBoxFor(m => m.PropDesignUnit, new {@class = "inputComment inputEdit", placeholder = " 请输入设计单位"})
+                        <input type="button" class="multiinputadd" value="" />
+                        <input type="button" class="multiinputdel" value="" style="display: none" />
+                        @Html.ValidationMessageFor(m => m.PropDesignUnit, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label">
+                        建设规模<span style="color:red">*</span>
+                    </div>
+                    <div class="columnRight left">
+        @Html.TextBoxFor(m => m.ConstructionScale, new {@class = "inputComment inputEdit", placeholder = " 请输入建设规模"})
+        @Html.ValidationMessageFor(m => m.ConstructionScale, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label">
+                        合同金额<span style="color:red">*</span>
+                    </div>
+                    <div class="columnRight left">
+        @Html.TextBoxFor(m => m.ContractAmount, new {@class = "inputComment inputEdit", placeholder = " 请输入合同金额"})
+        @Html.ValidationMessageFor(m => m.ContractAmount, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label labelalign">
+                        工程概况
+                    </div>
+                    <div class="columnRight left">
+        @*<textarea class="newProjectTextarea" cols="" role=""></textarea>*@
+        @Html.TextAreaFor(m => m.Description, new { @class = "textareaEdit", placeholder = " 请输入工程概况" })
+        @Html.ValidationMessageFor(m => m.Description, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label">
+                        合同开工日期<span style="color:red">*</span>
+                    </div>
+                    <div class="date-info left">
+        @*<input type="text" name="date" class="tcal newProjectInput" value="" />*@
+        @Html.TextBoxFor(m => m.StartDateUtc, new {@class = "form_datetime inputComment inputEdit form-control", name = "date", placeholder = " 请选择合同开工日期", id = "startTime"})
+        @Html.ValidationMessageFor(m => m.StartDateUtc, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label">
+                        合同竣工日期<span style="color:red">*</span>
+                    </div>
+                    <div class="date-info left">
+        @*<input type="text" name="date" class="tcal newProjectInput" value="2012-12-12" />*@
+        @Html.TextBoxFor(m => m.EndDateUtc, new {@class = "form_datetime inputComment inputEdit form-control", name = "date", placeholder = " 请选择合同竣工日期", id = "endTime"})
+        @Html.ValidationMessageFor(m => m.EndDateUtc, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+
+                @*<div class="projectTitle">新建单体</div>
+                <input type="hidden" id="ModelList" name="ModelList" value=""/>
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label">
+                        新建单体<span style="color:red">*</span>
+                    </div>
+                    <div class="columnRight left model-unit">
+        @Html.TextBoxFor(c => c.FirstModel, new { @class = "inputComment inputEdit model-edit", placeholder = " 请输入单体名称" })
+        
+                        <input type="button" class="model-unit-add" value="" style="margin-right:30px;"/>
+                        @Html.ValidationMessageFor(m => m.FirstModel, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="columnWrap clearfix">
+                    <div class="create-proj-label labelalign">
+                        新建单体
+                    </div>
+                    <div class="columnRight left model-unit">
+                        <input type="text" class="inputComment inputEdit model-edit" placeholder=" 请输入单体名称"/>
+                        <input type="button" class="model-unit-add" value=""/>
+                        <input type="button" class="model-unit-del" value=""/>
+                    </div>
+                </div>*@
+
+
+
+                <div class="InvitateBtn">
+                    <input type="submit" class="InvitateSave" id="create-proj-btn" value="确定"/>
+                    @*<a href="javascript:void(0);" title="确定" class="InvitateSave">确定</a>*@
+                    <input type="button" class="InvitateCancel" id="InviteCancel" value="返回"/>
+                    @*<a href="@Url.Action("Index", "BIM")" title="返回" class="InvitateCancel">返回</a>*@ <!--popupClose-->
+                </div>
+            </div>
+
+
+}
+        </div>
+        </section>
+        <div class="overlay">
+        </div>
+        <div id="AjaxLoading11" >
+            <div class="loadingWord11">
+                <img src="/Content/Images/waiting.gif">创建中，请稍候...
+            </div>
+        </div>
+        </div>
+
+
+        <script type="text/javascript">
+
+
+            function addDelFunc($elems) {
+                if (!$elems) {
+                    $elems = $('.model-unit-del');
+                }
+                $elems.click(function () {
+                    delModelUnit($(this));
+                });
+                }
+
+    function delModelUnit($delBtn) {
+        $delBtn.parent().parent().remove();
+        }
+
+    function addModelUnit($addBtn) {
+        var tempElem = '<div class="columnWrap clearfix">' +
+                        '<div class="create-proj-label labelalign">' +
+                            '新建单体' +
+                        '</div>' +
+                        '<div class="columnRight left model-unit">' +
+                         '   <input type="text" class="inputComment inputEdit model-edit" placeholder=" 请输入单体名称" />' +
+                         '   <input type="button" class="model-unit-add" value="" />' +
+                         '   <input type="button" class="model-unit-del" value="" />' +
+                        '</div>' +
+                    '</div>';
+        return $(tempElem).insertAfter($addBtn.parent().parent());
+        }
+
+    function addAddFunc($elems) {
+        if (!$elems) {
+            $elems = $('.model-unit-add');
+        }
+        $elems.click(function () {
+            var $elem = addModelUnit($(this));
+            addDelFunc($elem.find('.model-unit-del'));
+            addAddFunc($elem.find('.model-unit-add'));
+        });
+        }
+
+    function trimStr(str) {
+        if (String.prototype.trim) {
+            return str.trim();
+        }
+        var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+        return str.replace(rtrim, '');
+        }
+
+    function arrayContains(arr, item) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] === item) {
+                return true;
+            }
+        }
+        return false;
+        }
+
+    $(function () {
+        addAddFunc();
+        addDelFunc();
+
+
+        $('#create-proj-btn').click(function (e) {
+            var models = [];
+            var containSame = false;
+            var sameModel = '';
+            $('.model-edit').each(function () {
+                var v = $(this).val();
+                var v0 = trimStr(v);
+                if (v0 !== '') {
+                    if (!arrayContains(models, v0)) {
+                        models.push(v0);
+                    } else {
+                        containSame = true;
+                        sameModel = v0;
+                        return false;
+                    }
+                }
+            });
+            if (containSame) {
+                alert('单体名称有重复！' + sameModel);
+                return false;
+            }
+            $('#ModelList').val(models.join('\n'));
+            var ownerUnits = [];
+            $('input[name="OwnerUnit"]').each(function () {
+                ownerUnits.push($(this).val());
+            });
+            $('#OwnerUnit').val(ownerUnits.join());
+            aggregatemultiinput('PropSupervisorUnit');
+            aggregatemultiinput('InvestigateUnit');
+            aggregatemultiinput('PmUnit');
+            aggregatemultiinput('PropDesignUnit');
+            $(this).submit();
+        });
+        function aggregatemultiinput(name) {
+            var ownerUnits = [];
+            var sel = 'input[name="' + name + '"]';
+            $(sel).each(function () {
+                ownerUnits.push($(this).val());
+            });
+            var sel2 = '#'+name;
+            $(sel2).val(ownerUnits.join());
+        };
+        //日期控件
+        $(".form_datetime").datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                minView: 2,
+                pickerPosition: "bottom-left"
+            });
+
+        ////处理谷歌浏览器时间选择器的bug
+        //$(".form_datetime").click(function () {
+        //    var datetimepickerTop = $(this).offset().top;
+        //    $(".datetimepicker").css("top", datetimepickerTop + 64);//32
+        //});
+
+        $('#InviteCancel').click(function () {
+            window.open('@(homeUrl)', "_self");
+        });
+
+
+    });
+            (function($) {
+                $('.multiinputadd').on('click', function () {
+                    console.log("multiinputadd click");
+                    var $elemappend = $(this).parent().parent().clone(true);
+                    $elemappend.insertAfter($(this).parent().parent()).find('.inputEdit').val('');
+                    $elemappend.find('.multiinputdel').show();
+                });
+                $('.multiinputdel').on('click', function () {
+                    console.log("multiinputdel click");
+                    $(this).parent().parent().remove();
+                });
+            })(jQuery);
+</script>

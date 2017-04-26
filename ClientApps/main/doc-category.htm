@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>分包商管理</title>
+
+    <link rel="stylesheet" href="styles/jquery.treeview.css" />
+    <link rel="stylesheet" href="styles/main1.css" />
+    <link rel="stylesheet" href="styles/doc-category.css" />
+
+
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/jquery.layout.js"></script>
+    <script src="scripts/jquery.treeview/jquery.treeview.js"></script>
+    <script src="scripts/md.js"></script>
+    <script src="scripts/mf/alias.js"></script>
+    <script src="scripts/mf/objectOps.js"></script>
+    <script src="scripts/UIControlLibrary/localization1.js"></script>
+    <script src="scripts/UIControlLibrary/home_common.js"></script>
+    <script src="scripts/UIControlLibrary/listing_common.js"></script>
+    <script src="scripts/knowDocOps.js"></script>
+    <script src="scripts/doc-category.js"></script>
+
+    <script>
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+        function getSelected(o) { 
+            var professionItems=[];                 
+            for(var i=0;i<o.length;i++){ 
+                if(o.options[i].selected){    
+                    professionItems.push({id: i,name:o.options[i].value}); 
+                }        
+            } return professionItems;
+        }
+        function getSelected1(o) { 
+             var professionItems=[];                        
+            for(var i=0;i<o.length;i++){ 
+                if(o.options[i].selected){    
+                 professionItems.push({id: o.options[i].value,name:o.options[i].name}); 
+                } 
+            } return professionItems;
+        }
+        function getDashboardStartedHandler(dashboard) {
+            var data = dashboard.CustomData;
+            
+            var shellFrame = dashboard.Parent;
+            var loc = new localization(); 
+            var vault = data.Vault;
+            
+            initializeLayout(dashboard, shellFrame);
+            
+            //layout
+            initLayout();
+        
+            initCitiesSelector(vault);
+            initIsQualifiedSelector(vault);
+            initContractedProfessionSelector(vault);
+            initProvincesListSelector(vault);
+      
+            $("#btnOK").on("click", function(){
+                var o = document.getElementById("ContractedProfession");
+                var professionItems=[];                 
+            for(var i=0;i<o.length;i++){ 
+                if(o.options[i].selected){    
+                    professionItems.push({id: i,name:o.options[i].value}); 
+                } 
+            } 
+                //技术
+                var technologyItems = getSelected1(document.getElementById("IsQualified"));
+                //项目
+                var cityItems = getSelected(document.getElementById("cities"));
+                //其它
+                var province = getSelected(document.getElementById("provinces"));
+                //文本
+                var searchText = $("#searchText").val();
+                var obj = knowDocOps.searchDocs(vault, professionItems, technologyItems, cityItems,  province, searchText);
+                
+                CC.category.create_dashboard(shellFrame, loc, "fullareadiv", obj.path, vault, obj.id);
+            });
+
+            return function(){
+   
+            };
+        }
+    </script>
+
+    <script>
+        function initLayout(){
+            $("body").layout({ 
+                west__size: 220,//pane的大小
+                spacing_open: 2, // ALL panes
+                spacing_closed: 8,//关闭时边框的间隙
+                togglerContent_open: "<div style='background:red; height: 50px;'></div>",
+                togglerContent_closed: "<div style='background:red; height: 50px;'></div>", //也可以用<img/>
+                togglerTip_open: "收起",
+                togglerTip_closed: "展开",
+                sliderTip: "显示/隐藏侧边栏",//在某个Pane隐藏后，当鼠标移到边框上显示的提示语。
+                resizerTip: "调整大小", //鼠标移到边框时，提示语
+                applyDemoStyles: true 
+            });
+        }
+        
+     
+          function initProvincesListSelector(vault){
+               var tmp="<select id=\"provinces\" >  <option value =\"全部\">全部</option> ";
+            //   $("#provinceSel").append(dom0);
+            var types = knowDocOps.getOtherItemList(vault);
+            for (var l = 0; l < types.length; l++){
+                tmp += " <option value=\""
+                    +  types[l].Name 
+                    + "\">" +  types[l].Name + "</option>";
+            }
+           tmp+="</select>";
+              $("#provinceSel").append($(tmp));
+        }
+           function initCitiesSelector(vault){
+               var tmp="<select id=\"cities\" >  <option value =\"全部\">全部</option> ";
+            var types = knowDocOps.getProjectList(vault);
+            for (var l = 0; l < types.length; l++){
+                tmp += " <option value=\""
+                    +  types[l].Name 
+                    + "\">" +  types[l].Name + "</option>";
+            }
+           tmp+="</select>";
+              $("#citySel").append($(tmp));
+        }
+             function initContractedProfessionSelector(vault){
+               var tmp="<select id=\"ContractedProfession\" >  <option value =\"全部\" selected>全部</option> ";
+            var types = knowDocOps.getDisciplineList(vault);
+            for (var l = 0; l < types.length; l++){
+                tmp += " <option value=\""
+                    +  types[l].Name 
+                    + "\">" +  types[l].Name + "</option>";
+            }
+           tmp+="</select>";
+              $("#professionSel").append($(tmp));
+        }
+         function initIsQualifiedSelector(vault){
+               var tmp="<select id=\"IsQualified\" >  <option value =\"0\">全部</option> ";
+            var types = knowDocOps.getSkillList(vault);
+            for (var l = 0; l < types.length; l++){
+                tmp += " <option value=\""
+                    +  types[l].Id 
+                    + "\">" +  types[l].Name + "</option>";
+            }
+           tmp+="</select>";
+              $("#isqualified").append($(tmp));
+        }
+     
+   
+    </script>
+
+</head>
+
+<body>
+
+    <div class="ui-layout-center">
+        <div class="div-center-head" id="search-head">
+            <div id="professionSel" style="float:left"><span>承包专业：</span></div>
+            <div id="isqualified" style="float:left"><span>合格：</span></div>
+            <div id="citySel" style="float:left"><span>城市：</span></div>
+            <div id="provinceSel" style="float:left"><span>  省：</span></div>
+<div>                <button id="btnOK">搜索</button>            </div>
+        </div>
+        <div class="div-center-content">
+            <div id="fullareadiv"></div>
+        </div>
+    </div>
+</body>
+
+</html>

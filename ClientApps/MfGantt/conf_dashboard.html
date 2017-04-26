@@ -1,0 +1,736 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>M-Files Gantt View - Configuration Dashboard</title>
+    <link rel='stylesheet' type='text/css' href='css/smoothness/jquery-ui-1.9.0.custom.css' />
+    <link rel='stylesheet' type='text/css' href='css/jquery.miniColors.css' />
+    <link rel='stylesheet' type='text/css' href='css/jquery.multiSelect.css' />
+    <link rel='stylesheet' type='text/css' href='css/mfconf.css' />
+    <script type='text/javascript' src='js/jquery-1.8.2.js'></script>
+    <script type='text/javascript' src='js/jquery-ui-1.9.0.custom.js'></script>
+    <script type='text/javascript' src='js/Base64.js'></script>
+    <script type='text/javascript' src='js/date/Date.js'></script>
+    <script type='text/javascript' src='js/date/date-fi-FI.js'></script>
+    <script type='text/javascript' src='js/date/date-zh-CN.js'></script>
+    <script type='text/javascript' src='js/jquery.miniColors.js'></script>
+    <script type='text/javascript' src='js/jquery.multiSelect.js'></script>
+    <script type='text/javascript' src='js/jquery.bgiframe.js'></script>
+    <script type='text/javascript' src='js/gantt/mfutils.js'></script>
+    <script type='text/javascript' src='js/gantt/mfpersist.js'></script>
+    <script type='text/javascript' src='js/gantt/mfconf.js'></script>
+    <!--script type="text/javascript" src="firebug-lite/build/firebug-lite-debug.js">
+{
+    overrideConsole: true,
+    startOpened: false,
+    startInNewWindow: false,
+    enableTrace: false,
+	enablePersistence: true
+}
+</script> -->
+    <script type='text/javascript'>
+
+        // Global hack for configuration panel object creation
+        var Parent;
+
+        function OnNewDashboard( dashboard ) {
+            ///<summary>Initiates the Gantt Configuration Dashboard</summary>
+            ///<param name="dashboard" type="MFiles.Dashbord">The current dashboard object</param>
+            "use strict";
+
+            // initialize JQuery M-Files extensions
+            // (places common variables in $.mf namespace)
+            $.mf.setDashboard( dashboard );
+
+            // Globals (this is so the configuration panel can reference the newObject method
+            // TODO: Move configuration management to shellui module script (it has the longest lifetime)
+            Parent = dashboard.customData.parent;
+
+            // declare our variables
+            var elem = dashboard.customData.elem,
+                gantt = elem.data( "gantt" ), // Handle on Gantt Widget
+                mfgantt = elem.data( "mfgantt" ), // Handle on MFGantt Widget
+                gts = { value: gantt.options, type: "ganttTimeScale", sortPriority: 90 }, //Gantt Time Scale Editor options
+                behavior = { value: mfgantt.options.behavior, type: "ganttBehavior", sortPriority: 80 },
+				view = mfgantt._view; // a reference to the current view
+
+            function getSettings() {
+                /// <summary> Returns the current settings to be persisted </summary>
+                /// <returns type="Object">
+                ///    {
+                ///      vault:(object with vault specific settings), 
+                ///      view: (object with view specific settings) 
+                ///    }
+                /// </returns>
+
+
+                // retrieve the basic map definitions (without inheritence or inhertied properties)
+                var mapDefs = mfgantt.getMapDefs();
+
+                return {
+                    "vault": { //库
+                        vaultObjTypes: mapDefs.vaultObjTypes,
+                        vaultClasses: mapDefs.vaultClasses,
+                        timeUnits: mfgantt.getTimeUnits(),
+                        nonWorkingTime: mfgantt.getNonWorkingTime()
+                    },
+                    "view": { //视图
+                        viewObjTypes: mapDefs.viewObjTypes,
+                        viewClasses: mapDefs.viewClasses,
+                        behavior: mfgantt.options.behavior
+                    },
+                    user: {
+                        
+                    }
+                };
+            }
+
+            function updateAll() {
+                /// <summary> Saves all settings, updates inherited properties in the editors, and updates the Gantt chart </summary>
+
+
+                // SAVE SETTINGS
+                // TODO: Move settings management to shellui module
+
+                var settings = getSettings(),
+                    type, name;
+
+                // check vault rights
+                if( $.mf.vault.SessionInfo.CanManageCommonViews ) {
+
+                    // Save vault settings cause the user has the rights
+                    $.mf.settings( "MFiles.GanttView.VaultSettings", MFFolderConfiguration, settings.vault );
+                }
+
+                // check view rights
+                if( !view.Common || $.mf.vault.SessionInfo.CanManageCommonViews ) {
+
+                    // Save the view settings cause the user has the rights
+                    type = ( view.Common ) ? MFFolderConfiguration : MFUserDefinedValue;
+                    name = "MFiles.GanttView." + view.ID + ".ViewSettings";
+                    $.mf.settings( name, type, settings.view );
+                }
+
+                // save user settings
+                //$.mf.settings( "MFiles.GanttView.UserSettings", MFUserDefinedValue, settings.user );
+
+                // update all editors (so inherited property updates cascade)
+                $( "#conf" ).mfconf( "refreshAll" );
+
+                // refresh the gantt chart itself with new settings
+                mfgantt.updateAll();
+
+            }
+
+            function saveUserSettings() {
+
+                var settings = getSettings();
+                // save user settings
+                $.mf.settings( "MFiles.GanttView." + view.ID + ".UserSettings", MFUserDefinedValue, settings.user );
+
+            }
+
+
+            // Custom property editors
+            var editors = {
+
+                // GANTT TIME SCALE EDITOR
+                ganttTimeScale: {
+                    extend: "object",
+                    type: "ganttTimeScale",
+                    name: "时间比例", //Timescale
+                    members: {
+
+                        // Center Date
+                        focus: {
+                            name: "中心日期", //Center date
+                            type: "date",
+                            onChange: function( item, origItem ) {
+
+                                // update the gantt chart but preserve the center date (don't calculate)
+                                gantt.refresh( true );
+                            }
+                        },
+
+                        // Scale Width
+                        scaleWidth: {
+                            name: "宽度间隔(px)", //Scale width (px)
+                            type: "number",
+                            options: {
+                                step: 100,
+                                min: 2000,
+                                max: 10000
+                            }
+                        },
+
+                        // Zoom Level
+                        zoomLevel: {
+                            name: "缩放级别", //Zoom level
+                            type: "ganttZoomLevel"
+                        },
+
+                        // Base width
+                        baseWidth: {
+                            name: "宽度单位(px)", //Unit width (px)
+                            type: "number",
+                            options: {
+                                step: 5,
+                                min: 15,
+                                max: 100
+                            }
+                        },
+
+                        // Show current time (bar)
+                        showCurrentTime: {
+                            name: "显示当前时间", //Show current time
+                            type: "bool"
+                        },
+
+                        // Shade days off
+                        shadeOffDays: {
+                            name: "隐藏休息日", //Shade off days
+                            type: "bool"
+                        },
+
+                        // Shade holidays
+                        shadeHolidays: {
+                            name: "隐藏假期", //Shade holidays
+                            type: "bool"
+                        }
+                    },
+
+                    onChange: function( item, origItem ) {
+
+                        // update the gantt chart when any time scale setting has been changed
+                        gantt.refresh();
+                    }
+                },
+
+                // GANTT ZOOM LEVEL
+                ganttZoomLevel: {
+                    extend: "options",
+                    type: "ganttZoomLevel",
+                    getOptions: function( item ) {
+
+                        var props = {};
+
+                        // loop over each zoom level defined in the gantt chart
+                        $.each( gantt.options.zoomLevels, function( i, zl ) {
+
+                            // get text description of zoom level
+                            var str = zl.tiers.join(", ");
+
+                            // only capitalize first letter
+                            str = str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+                            // create a option entry and prefix with the index for proper sort order
+                            props[i] = ( i + 1 ) + " - " + str;
+                        } );
+
+                        return props;
+                    }
+
+                },
+
+                ganttBehavior: {
+                    extend: "object",
+                    type: "ganttBehavior",
+                    name: "行为", //Behavior
+                    members: {
+
+                        // Center Date
+                        autoRefresh: {
+                            name: "自动刷新图标", //Auto-refresh chart
+                            type: "bool"
+                        },
+
+                        autoRefreshInterval: {
+                            name: "刷新间隔(分钟)", //Refresh interval (min)
+                            type: "number",
+                            options: {
+                                step: 1,
+                                min: 1,
+                                max: 60
+                            }
+                        }
+                    },
+                    onChange: function( item, origItem ) {
+
+                        // persist the updated settings
+                        //saveUserSettings();                        
+                        updateAll();
+                        mfgantt.updateRefreshInterval();
+                    }
+                },
+
+                ganttObjTypeMap: {
+                    extend: "object",
+                    type: "ganttObjTypeMap",
+                    getName: function( item ) {
+                        if( item.value.objTypeID === "default" ) {
+                            return "默认项设置"; //Default item settings
+                        }
+                        return $.mf.vault.ObjectTypeOperations.GetObjectType( item.value.objTypeID ).NameSingular + " (对象类型)"; //(Object type)
+                    },
+                    members: {
+                        properties: { name: "属性", type: "ganttMapProperties" }, //Properties
+                        relationships: { name: "关系", type: "ganttMapRelationships" }, //Children
+                        options: { name: "选项", type: "ganttMapOptions" }, //Options
+                        itemStyle: { name: "样式", type: "itemStyle" }, //Item style
+                        progressStyle: { name: "进度样式", type: "progressStyle" } //Progress style
+                    },
+                    onChange: function( item, origItem ) { updateAll(); }
+                },
+                ganttClassMap: {
+                    extend: "ganttObjTypeMap",
+                    type: "ganttClassMap",
+                    getName: function( item ) {
+                        return $.mf.vault.ClassOperations.GetObjectClass( item.value.classID ).Name + " (类别)"; //(Class)
+                    }
+                },
+                ganttMapProperties: {
+                    extend: "object",
+                    type: "ganttMapProperties",
+                    name: "Properties",
+                    members: { //
+                        type: { name: "渲染为", type: "options", options: { options: ["活动", "里程碑", "循环", "资源"], inheritable: true } }, //Render as       "Activity", "Milestone", "Resource", "Recurring"
+                        startDate: { name: "开始日期", type: "mfilesProperty", options: { dataType: [5 /*, 7, 12*/], inheritable: true } }, //Start date
+                        endDate: { name: "终止日期", type: "mfilesProperty", options: { dataType: [5 /*, 7, 12*/], inheritable: true } }, //End date
+                        startTime: { name: "开始时间", type: "mfilesProperty", options: { dataType: [6], inheritable: true } }, //Start time
+                        endTime: { name: "结束时间", type: "mfilesProperty", options: { dataType: [6], inheritable: true } }, //End time
+                        progress: { name: "进度", type: "mfilesProperty", options: { dataType: [2, 3], inheritable: true } },  //Progress
+                        duration: { name: "时间跨度", type: "mfilesProperty", options: { dataType: [2, 3], inheritable: true } }, //Duration
+                        durationUnit: { name: "时间跨度单位", type: "mfilesProperty", options: { dataType: [9], inheritable: true } }, //Duration unit
+                        recurInterval: { name: "循环间隔", type: "mfilesProperty", options: { dataType: [2, 3], inheritable: true } }, //Recurrence interval
+                        recurUnit: { name: "循环间隔单位", type: "mfilesProperty", options: { dataType: [9], inheritable: true } }, //Recurrence unit
+                        dependency: { name: "随后", type: "mfilesProperty", options: { dataType: [9, 10], inheritable: true } }, //Comes after
+                        allocation: { name: "分配", type: "ganttAllocation", options: { inheritable: true } }, //Allocation
+                        label: { name: "标签", type: "string", options: { inheritable: true } }, //Label
+                        icon: { name: "图标", type: "mfilesIcon", options: { inheritable: true } } //Icon
+                    },
+                    //onChange: function(item, origItem) {updateAll();}					
+                },
+                ganttAllocation: {
+                    extend: "object",
+                    type: "ganttAllocation",
+                    name: "Allocation",
+                    members: {
+                        objectType: { name: "对象类型", type: "mfilesObjType", options: {} }, //Object Type
+                        resource: { name: "属性", type: "ganttMapSpecificProperty" }, //Property
+                        //target: { name: "Target", type:"mfilesProperty", options:{dataType:[9,10]}, basedOnObjType:true }	
+                    }
+                },
+                ganttMapOptions: {
+                    extend: "object",
+                    type: "ganttMapOptions",
+                    name: "Properties",
+                    members: {
+                        showLabel: { name: "显示标签", type: "options", options: { options: { 0: "否", 1: "左侧", 2: "内部", 3: "右侧" }, inheritable: true, sort: false } }, //Show label    No Left Inside  Right
+                        showProgress: { name: "显示进度", type: "bool", options: { inheritable: true } } //Show progress
+                    },
+                    //onChange: function(item, origItem) {updateAll();}					
+                },
+                itemStyle: {
+                    extend: "object",
+                    type: "itemStyle",
+                    members: {
+                        fill: { name: "梯度填充", type: "linearGradient", options: { inheritable: true } }, //Fill gradient
+                        //"fill-opacity": {name:"Opacity", type:"number", options: {step:.1, min:0, max:1}},
+                        stroke: { name: "边框", type: "color", options: { inheritable: true } }, //Border
+                        //"stroke-opacity": {name:"Border Opacity", type:"number", options: {step:.1, min:0, max:1}}				
+                    },
+                    initInput: function( item, elem ) {
+                        return $( '<input id="' + item.id + '" class="mfconf-input" type="text" disabled="disabled"/>' ).appendTo( elem );
+                    },
+                    update: function( item ) {
+                        $( "#" + item.id ).val( "Fill:" + item.value.fill + "; Stroke:" + item.value.stroke ).prop( "disabled", true /*this.isDisabled(item)*/ );
+
+                        if( $.isArray( item.subItems ) ) {
+                            $.each( item.subItems, function( i, subItem ) {
+                                subItem.value = item.value[subItem.key];
+                                subItem.editor.update( subItem );
+                            } );
+                        }
+                    },
+                    onChange: function( item, origItem ) {
+                        this.update( item );
+                    }
+                },
+                progressStyle: {
+                    extend: "itemStyle",
+                    type: "progressStyle",
+                    members: {
+                        fill: { name: "填充", type: "color", options: { inheritable: true } }, //Fill
+                        "fill-opacity": { name: "填充不透明度", type: "number", options: { step: .1, min: 0, max: 1, inheritable: true } }, //Fill opacity
+                        stroke: { name: "边框", type: "color", options: { inheritable: true } }, //Border
+                        "stroke-opacity": { name: "边框不透明度", type: "number", options: { step: .1, min: 0, max: 1, inheritable: true } } //Border opacity
+                    }
+                },
+                mfilesProperty: {
+                    extend: "options",
+                    type: "mfilesProperty",
+                    getOptions: function( item ) {
+                        var props = { "-1": "(未定义)" }; //(not defined)
+
+                        //cache properties (really slow otherwise)
+                        $.mf.propDefs = $.mf.propDefs || $.mf.vault.PropertyDefOperations.GetPropertyDefs();
+
+
+                        $.each( $.mf.propDefs, function( i, pd ) {
+                            if( !item.options || !item.options.dataType ||
+                                item.options.dataType === pd.DataType
+                                || ( $.isArray( item.options.dataType ) && $.inArray( pd.DataType, item.options.dataType ) !== -1 )
+                            ) {
+
+                                props[pd.ID] = pd.Name + " (" + pd.ID + ")";
+                            }
+                        } );
+                        return props;
+                    }
+                },
+                ganttMapSpecificProperty: {
+                    extend: "options",
+                    type: "ganttMapSpecificProperty",
+                    getOptions: function( item ) {
+                        var props = { "-1": "(未定义)" }, //(not defined)
+                            curItem = item.parent,
+                            objType;
+
+                        // go up the hierarchy until we find the parent that represents a map from which we can derive the objectType
+                        while( objType === undefined ) {
+                            if( curItem.editor.type === "ganttObjTypeMap" || curItem.editor.type === "ganttClassMap" ) {
+                                objType = curItem.value.objTypeID;
+                            }
+                            if( !curItem.parent ) {
+                                break;
+                            }
+                            curItem = curItem.parent;
+                        }
+
+                        $.mf.propDefs = $.mf.propDefs || $.mf.vault.PropertyDefOperations.GetPropertyDefs();
+
+                        $.each( $.mf.propDefs, function( i, pd ) {
+                            if( pd.BasedOnValueList && pd.ValueList == objType ) {	//( objType === undefined  || pd.ValueList === objType )						
+                                props[pd.ID] = pd.Name + " (" + pd.ID + ")";
+                            }
+                        } );
+
+                        return props;
+
+                    }
+                },
+
+                ganttMapRelationships: {
+                    extend: "object",
+                    type: "ganttMapRelationships",
+                    members: {
+                        to: { name: "到父对象", type: "array", options: { childType: "toRelationship", protoChild: { property: null, 100: [] }, inheritable: true }, childName: "通过..." }, //Refer to parent    via...
+                        from: { name: "从父对象", type: "array", options: { childType: "mfilesProperty", inheritable: true, protoChild: -1, childOptions: { dataType: [9, 10] } }, childName: "Property" }, //Defined in parent        
+                    }
+                },
+                toRelationship: {
+                    extend: "object",
+                    type: "toRelationship",
+                    members: {
+                        property: { name: "属性", type: "ganttMapSpecificProperty", options: {}, sortPriority: 99 }, //Property
+                        100: { name: "类别过滤", type: "mfilesClass", options: { multiple: true, noneSelected: "Any Class" }, sortPriority: 1 } //Class filter              
+                    }
+                },
+                mfilesObjType: {
+                    extend: "options",
+                    type: "mfilesObjType",
+                    getOptions: function( item ) {
+                        var props = { "-1": "(未定义)" }; //(not defined)
+
+                        //cache properties (really slow otherwise)
+                        $.mf.objTypeDefs = $.mf.objTypeDefs || $.mf.vault.ObjectTypeOperations.GetObjectTypes();
+
+                        $.each( $.mf.objTypeDefs, function( i, ot ) {
+                            props[ot.ID] = ot.NameSingular;
+                        } );
+
+                        return props;
+                    }
+                },
+                mfilesClass: {
+                    extend: "options",
+                    type: "mfilesClass",
+                    getOptions: function( item ) {
+                        var props = {};
+
+                        //cache properties (really slow otherwise)
+                        $.mf.classDefs = $.mf.classDefs || $.mf.vault.ClassOperations.GetAllObjectClasses();
+
+                        $.each( $.mf.classDefs, function( i, c ) {
+                            props[c.ID] = c.Name;
+                        } );
+                        return props;
+                    }
+                },
+                timeUnitContainer: {
+                    extend: "object",
+                    type: "timeUnitContainer",
+                    members: {
+                        vaultTimeUnits: { name: "值列表", type: "array", options: { childType: "vaultTimeUnitMap", protoChild: { valueList: -1, units: { hours: -1, days: -1, weeks: -1, months: -1, years: -1 } } } } //Value lists
+                    },
+                    onChange: function( item, origItem ) { updateAll(); }
+                },
+                mfilesValueList: {
+                    extend: "options",
+                    type: "mfilesValueList",
+                    getOptions: function( item ) {
+                        var opts = { "-1": "" };
+
+                        //cache properties (really slow otherwise)
+                        $.mf.valueLists = $.mf.valueLists || $.mf.vault.ValueListOperations.GetValueLists();
+
+                        $.each( $.mf.valueLists, function( i, vl ) {
+                            if( !vl.RealObjectType ) {
+                                opts[vl.ID] = vl.NamePlural;
+                            }
+                        } );
+                        return opts;
+                    }
+                },
+                mfilesValueListItem: {
+                    extend: "options",
+                    type: "mfilesValueListItem",
+                    getOptions: function( item ) {
+                        var opts = { "-1": "&lt;无&gt;" }; //none
+
+                        if( item.options && item.options.valueList ) {
+                            var valueList = parseInt( item.options.valueList );
+
+                            $.mf.valueListItems = $.mf.valueListItems || {};
+
+                            //cache properties (really slow otherwise)
+                            $.mf.valueListItems[valueList] = $.mf.valueListItems[valueList] || $.mf.vault.ValueListItemOperations.GetValueListItems( valueList, false, MFExternalDBRefreshTypeNone );
+
+                            $.each( $.mf.valueListItems[valueList], function( i, vli ) {
+                                opts[vli.ID] = vli.Name;
+                            } );
+                        }
+
+                        //item.inherited = false;
+
+                        return opts;
+                    }
+                },
+                vaultTimeUnitMap: {
+                    extend: "object",
+                    type: "vaultTimeUnitMap",
+                    members: {
+                        valueList: { name: "值列表", type: "mfilesValueList" }, //Value list
+                        units: { name: "单位", type: "vaultTimeUnits" }, //Units
+                    },
+                    onChange: function( item, origItem ) {
+                        if( origItem.type === "mfilesValueList" ) {
+                            item.confPanel._refreshChildren( item.subItems[1] );
+                        }
+                    }
+                },
+                vaultTimeUnits: {
+                    extend: "object",
+                    type: "vaultTimeUnits",
+                    getSubItems: function( item ) {
+                        var vl = item.parent.value.valueList,
+                            keys = ["hours", "days", "weeks", "months", "years"],
+                            keyNames = ["小时", "天", "周", "月", "年"];
+
+                        item.subItems = [];
+
+                        if( vl !== -1 ) {
+                            item.subItems = $.map( keys, function( k, i ) {
+                                var val = parseInt( item.value[k] || -1 ),
+                                    ucName = keyNames[i]; //k.charAt( 0 ).toUpperCase() + k.slice( 1 );
+
+                                return { key: k, name: ucName, type: "mfilesValueListItem", value: val, parent: item, options: { valueList: vl } }
+                            } );
+
+                        }
+
+                        return item.subItems;
+                    }
+                },
+                ganttNonWorkingTime: {
+                    extend: "object",
+                    type: "ganttNonWorkingTime",
+                    members: {
+                        offDays: { name: "休息日", type: "array", options: { childType: "dayOfWeek", protoChild: -1, multiple: true, noneSelected: "None" }, childName: "" }, //Days off (weekly)
+                        holidays: { name: "假期", type: "array", options: { childType: "string", protoChild: -1 }, childName: "" } //Holidays
+                    },
+                    onChange: function( item, origItem ) { updateAll(); gantt.refresh(); }
+                },
+                mfilesIcon: {
+                    extend: "options",
+                    type: "mfilesIcon",
+                    getOptions: function( item ) {
+                        var props = { "-1": "(无)", "0": "(默认)" }, //(none) (default)
+                            exclude = [2, 4, 5, 6, 16],
+                            valueListIDs;
+
+                        //find relevant valueList ids to help filter properties
+                        valueListIDs = $.map( $.mf.vault.ValueListOperations.GetValueLists(), function( ot ) {
+                            if( !ot.RealObjectType && $.inArray( parseInt( ot.ID ), exclude ) === -1 ) {
+                                return ot.ID;
+                            }
+                        } );
+
+                        //cache properties (really slow otherwise)
+                        $.mf.propDefs = $.mf.propDefs || $.mf.vault.PropertyDefOperations.GetPropertyDefs();
+
+                        // find relevant properties
+                        $.each( $.mf.propDefs, function( i, pd ) {
+                            if( pd.BasedOnValueList && $.inArray( parseInt( pd.ValueList ), valueListIDs ) !== -1 ) {
+                                props[pd.ID] = pd.Name + " (" + pd.ID + ")";
+                            }
+                        } );
+                        return props;
+                    }
+                }
+
+                
+
+            }
+
+
+            $( "#conf" ).mfconf( {
+                editors: editors,
+                panels: ["view", "vault"] //  "视图", "库"
+            } )
+            .mfconf( "addItem", gts );
+            //.mfconf( "addItem", behavior );
+
+
+            elem.bind( "ganttoptionschanged.conf", function() {
+                gts.editor.update( gts );
+            } );
+
+            //hide vault tab if no rights
+            if( !$.mf.vault.SessionInfo.CanManageCommonViews ) {
+                $( "li:has([href='#mfconf-panel-vault'])" ).hide();
+            }
+
+
+            // Create a place to store currently loaded maps
+            var mapStatus = {};
+
+            function updateMaps( items ) {
+                /// <summary> switches current maps in editor based on the selected item(s) </summary>
+                /// <param name="items" type="Array"> Array of currently selected items </param>
+
+                // Something selected
+                if( $.isArray( items ) && items.length === 1 && items[0] ) {
+
+                    // get a handle on the selected item's class map
+                    var classMap = mfgantt.getMap( "viewClasses", items[0].verData["Class"] );
+
+                    // Class has changed! Load corresponding maps
+                    if( mapStatus.classID !== classMap.classID ) {
+
+                        // remove old items
+                        if( mapStatus.classID !== undefined ) {
+                            $( "#conf" ).mfconf( "removeItem", mapStatus.viewClass );
+                            $( "#conf" ).mfconf( "removeItem", mapStatus.vaultClass );
+                        }
+
+                        // create new class map items
+                        mapStatus.viewClass = { type: "ganttClassMap", value: classMap, sortPriority: 80 };
+                        mapStatus.vaultClass = { type: "ganttClassMap", value: mfgantt.getMap( "vaultClasses", classMap.classID ), sortPriority: 80 };
+
+                        //load 'em
+                        $( "#conf" ).mfconf( "addItem", mapStatus.viewClass, "view" ); //视图
+                        $( "#conf" ).mfconf( "addItem", mapStatus.vaultClass, "vault" ); //库
+                    }
+
+
+                    // ObjType has changed! Load corresponding maps
+                    if( mapStatus.objTypeID !== classMap.objTypeID ) {
+
+                        // remove old items
+                        if( mapStatus.objTypeID !== undefined ) {
+                            $( "#conf" ).mfconf( "removeItem", mapStatus.viewObjType );
+                            $( "#conf" ).mfconf( "removeItem", mapStatus.vaultObjType );
+                        }
+
+                        // create new ObjType map items
+                        mapStatus.viewObjType = { type: "ganttObjTypeMap", value: mfgantt.getMap( "viewObjTypes", classMap.objTypeID ), sortPriority: 70 };
+                        mapStatus.vaultObjType = { type: "ganttObjTypeMap", value: mfgantt.getMap( "vaultObjTypes", classMap.objTypeID ), sortPriority: 70 };
+
+
+                        //load 'em
+                        $( "#conf" ).mfconf( "addItem", mapStatus.viewObjType, "view" );  //视图
+                        $( "#conf" ).mfconf( "addItem", mapStatus.vaultObjType, "vault" ); //库
+
+                    }
+
+                    mapStatus.objTypeID = classMap.objTypeID;
+                    mapStatus.classID = classMap.classID;
+
+                } else {
+
+                    // Nothing selected, clear item specific maps
+                    if( mapStatus.objTypeID !== undefined ) {
+                        $( "#conf" ).mfconf( "removeItem", mapStatus.viewClass );
+                        $( "#conf" ).mfconf( "removeItem", mapStatus.vaultClass );
+                        $( "#conf" ).mfconf( "removeItem", mapStatus.viewObjType );
+                        $( "#conf" ).mfconf( "removeItem", mapStatus.vaultObjType );
+                    }
+
+                    mapStatus.objTypeID = undefined;
+                    mapStatus.classID = undefined;
+
+                }
+
+            }
+
+            // Only load the following things if the user has the rights to modify the view...
+            if( !view.Common || $.mf.vault.SessionInfo.CanManageCommonViews ) {
+
+                // Add Default Object Type to Vault Tab
+                var defaultObjType = { type: "ganttObjTypeMap", value: mfgantt.getMap( "vaultObjTypes", "default" ), sortPriority: 60, restrictInheritance: true };
+                $( "#conf" ).mfconf( "addItem", defaultObjType, "vault" ); //库
+
+
+                // Add Time Units
+                var timeUnits = { name: "时间单位映射", type: "timeUnitContainer", value: mfgantt.options.defs, sortPriority: 50 }; //Time unit mappings
+                $( "#conf" ).mfconf( "addItem", timeUnits, "vault" ); //库
+
+                // Add Non-Working Time
+                var nonWorkingTime = { name: "非工作时间", type: "ganttNonWorkingTime", value: gantt.options.nonWorkingTime, sortPriority: 40 }; //Non-working time
+                $( "#conf" ).mfconf( "addItem", nonWorkingTime, "vault" ); //库
+
+
+                $( "#conf" ).mfconf( "addItem", behavior );
+
+                // Change maps displayed based on the item selected
+                elem.bind( "ganttselectionchanged.conf", function( event, data ) {
+
+                    setTimeout( function() {
+                        updateMaps( data.items );
+                    }, 0 );
+
+                } );
+
+            }
+
+            //unbind event when closing the page, so we don't get freed script errors
+            $( window ).unload( function() {
+
+                // throws an error if parent window was closed first
+                try {
+                    elem.unbind( ".conf" );
+                } catch( e ) { }
+
+            } );
+
+        }
+
+
+
+    </script>
+
+</head>
+<body>
+    <div id="conf"></div>
+</body>
+</html>

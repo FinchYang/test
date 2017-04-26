@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<List>
+  <Element id="9_29" inviterId="2" type="inviteMember" statu="-1">
+    <projectId>29</projectId>
+    <inviteeName>asdfhart</inviteeName>
+    <projectName>测试项目123</projectName>
+    <date>2015-3-17</date>
+    <inviteeId>9</inviteeId>
+  </Element>
+  <Element id="2_7" inviterId="9" type="inviteMember" statu="-1">
+    <projectId>7</projectId>
+    <inviteeName>asdxhart</inviteeName>
+    <projectName>测试项目XX001</projectName>
+    <inviteeId>2</inviteeId>
+    <date>3月18日</date>
+  </Element>
+</List>

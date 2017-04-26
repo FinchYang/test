@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.m-files.com/schemas/appdef.xsd">
+	<guid>3BBC2032-3725-4652-BC26-91CB5BB08110</guid>
+	<name>BIMPreview</name>
+	<version>1.0</version>
+	<description>BIM Preview</description>
+	<publisher>CADSimula</publisher>
+	<copyright>(c) www.simuladesign.com 2015</copyright>
+	<required-mfiles-version>10.0.3911.4</required-mfiles-version>
+	<optional>true</optional>
+	<enabled-by-default>true</enabled-by-default>
+	<modules>
+		<module environment="shellui">
+			<file>scripts\md\base.js</file>
+			<file>scripts\md\bim.js</file>
+			<file>scripts\mf\client.js</file>
+			<file>scripts\mf\alias.js</file>
+			<file>scripts\mf\command.js</file>
+			<file>scripts\mf\ui.js</file>
+			<file>scripts\mf\vault.js</file>
+			<file>scripts\mf\objectOps.js</file>
+			<file>scripts\cc\core.js</file>
+			<file>scripts\wsh.js</file>
+
+			<file>scripts\cc\mfTreeDomOps.js</file>
+			<file>scripts\cc\bimModelPlan.js</file>
+			<file>scripts\cc\bimmodelbrowser.js</file>
+
+			<file>bim.js</file>
+			<file>main.js</file>
+		</module>
+	</modules>
+
+	<dashboards>	
+	<dashboard id="bimModelPlan">
+      <content>bimModelPlan.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="bimmodelbrowser">
+      <content>bimmodelbrowser.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://test.co.dbworld.cn/</trusted-content>
+      <trusted-content>http://co.dbworld.cn/</trusted-content>
+    </dashboard>
+    <dashboard id="bimModelList">
+      <content>bimModelList.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="bimTreeDom">
+      <content>bimTreeDom.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+		<dashboard id="qrcode">
+      <content>qrcode.htm</content>
+    </dashboard>
+
+	</dashboards>
+</application>

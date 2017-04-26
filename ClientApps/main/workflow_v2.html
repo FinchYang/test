@@ -1,0 +1,868 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="scripts/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+    <link href="styles/workflow.css" rel="stylesheet"/>
+    <script src="scripts/jquery/jquery.js"></script>
+    <script src="scripts/bootstrap/js/bootstrap.js"></script>
+    <script src="scripts/cc/workflow_v2.js"></script>
+    <script src="scripts/cc/workflowui.js"></script>
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+        function OnNewDashboard(dashboard) {
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+        function getDashboardStartedHandler(dashboard) {
+            return function () {
+                var vault = dashboard.Vault;
+                var data = dashboard.CustomData;
+                var flowData = $.parseJSON(data.workflowAdmin);
+                var versionData = data.versionFlows;
+                var multiLevel = data.multiLevel;
+                var properties = data.properties;
+                //alert(JSON.stringify(flowData));
+                //$('#test').val(JSON.stringify(flowData));
+                //alert(JSON.stringify(versionData));
+                versionData = correctOperator(versionData, flowData.Id);
+                //alert(JSON.stringify(versionData));
+                var historyStates = getHistoryStates(versionData, undefined);
+                var statePathArr = getSortedStatePathArr(flowData);
+                var currentPath = getCurrentStatePath(statePathArr, historyStates, multiLevel);
+                var srcSates = toUiData(currentPath, versionData, vault, properties);
+                //alert("工作流:"+JSON.stringify(srcSates));
+                var fileData = getAttachments(vault, properties);
+                //alert(JSON.stringify(fileData));
+                wfUi.uiInitialize(srcSates, flowData.Name, fileData); 
+            }
+        }
+        //流程路径的进一步处理
+        function getSortedStatePathArr(flowData) {
+            var res = [];
+            var states = flowData.States;
+            var trans = flowData.Transitions;
+
+            var pathArr = getStateTransPathArr(trans);
+            //忽略有回路的
+            var validArr = [];
+            for (var i = 0; i < pathArr.length; i++) {
+                var arr = pathArr[i];
+                if (arr.length <= 1) continue;
+                var ns = getNextStates(trans, arr[arr.length - 1]);
+                if (ns.length === 0) {
+                    validArr.push(arr);
+                }
+            }
+            
+            //转换成{Id,Name}对象数组
+            for (var j = 0; j < validArr.length; j++) {
+                var temArr = validArr[j];
+                var resItem = [];
+                for (var k = 0; k < temArr.length; k++) {
+                    var index = indexOf(states, 'Id', temArr[k]);
+                    if (index >= 0) resItem.push(states[index]);
+                }
+                if (resItem.length) res.push(resItem);
+            }
+
+            //按路径长短排序
+            if (res.length) {
+                res.sort(function (a, b) {
+                    return b.length - a.length;
+                });
+            }
+            return res;
+        }
+        function indexOf(src, keyName, kValue) {
+            var index = -1;
+            for (var i = 0; i < src.length; i++) {
+                var item = src[i][keyName];
+                if (!keyName) {
+                    item = src[i];
+                }
+                if (item === kValue) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        }
+        //通过流程转换 获取一系列流程路径
+        function getStateTransPathArr(flowTransitions) {
+            var res = [];
+            var trans = flowTransitions;
+            var bs = getNextStates(trans, 0);
+            if (bs.length !== 1) return res;
+            var beginState = bs[0];
+
+            var tempObj = {};//保存分支之前的流程路径
+            var temArr = [];//流程路径，如[a,b,c,d]
+            var stateDomQueue = [];//初始化队列
+            stateDomQueue.push({
+                "parent": 0,
+                "current": beginState
+            });
+            var iCount = 0;//防止死循环
+            var maxCount = 200;
+            //队列实现
+            while (stateDomQueue.length) {
+                iCount++;
+                if (iCount > maxCount) {
+                      return res;
+                 //   throw "Error: 流程中存在捕获不到的死循环";
+                }
+                //alert(JSON.stringify(stateDomQueue));
+                var temState = stateDomQueue[0];
+                var parent = temState.parent;
+                var current = temState.current;
+                if (tempObj.hasOwnProperty(parent.toString())) {
+                    temArr = arrayClone(tempObj[parent.toString()]);
+                }
+                temArr.push(current);
+
+                var nextStates = getRealNextStates(trans, current, beginState, temArr);
+                var nextLen = nextStates.length;
+                if (nextLen === 0) {
+                    //one array come out
+                    res.push(temArr);
+                    stateDomQueue.shift();
+                } else if (nextLen === 1) {
+                    //replace
+                    stateDomQueue.splice(0, 1, {
+                        "parent": current,
+                        "current": nextStates[0]
+                    });
+
+                } else if (nextLen > 1) {
+                    for (var i = 0; i < nextLen; i++) {
+                        var nextDom = {
+                            "parent": current,
+                            "current": nextStates[i]
+                        }
+                        if (i === 0) {
+                            stateDomQueue.splice(0, 1, nextDom);
+                        } else {
+                            stateDomQueue.splice(i, 0, nextDom);
+                        }
+                        //保存分支点->保存到parent
+                        var arr = arrayClone(temArr);
+                        tempObj[current.toString()] = arr;
+                    }
+                }
+            }
+            return res;
+        }
+        //第一个流程状态
+        function getBeginState(flowTransitions) {
+            var state = -1;
+            var bs = getNextStates(flowTransitions, 0);
+            if (bs.length === 1) {
+                state = bs[0];
+            }
+            return state;
+        }
+        function arrayClone(srcArr) {
+            var res = [];
+            for (var i = 0; i < srcArr.length; i++) {
+                res.push(srcArr[i]);
+            }
+            return res;
+        }
+        function getRealNextStates(trans, stateId, beginState, currentArr) {
+            var res = [];
+            var nextStates = getNextStates(trans, stateId);
+            for (var i = 0; i < nextStates.length; i++) {
+                if (isRealNext(nextStates[i], beginState, currentArr)) {
+                    res.push(nextStates[i]);
+                }
+            }
+            return res;
+        }
+        function isRealNext(nextSate, beginState, currentArr) {
+            var has = false;
+            for (var i = 0; i < currentArr.length; i++) {
+                if (currentArr[i] === nextSate) {
+                    has = true;
+                    break;
+                }
+            }
+            if (nextSate > 0 && nextSate !== beginState && !has) {
+                return true;
+            }
+            return false;
+        }
+        function getNextStates(trans, stateId) {
+            var res = [];
+            for (var i = 0; i < trans.length; i++) {
+                if (trans[i]["From"] === stateId) {
+                    res.push(trans[i]["To"]);
+                }
+            }
+            return res;
+        }
+
+        //源数据的进一步处理
+
+        //更正操作者名称 流程状态
+        function correctOperator(versionData, currentFlow) {
+
+            if (!versionData || !versionData.length) return;
+            var res = [];
+            for (var i = 0; i < versionData.length; i++) {
+                var item = versionData[i];
+                if (item.flowId !== currentFlow) {
+                    continue;
+                }
+                if (item.operatedBy.search(/服务器/i) !== -1
+                    && item.comment) {
+                    var splitIndex = item.comment.indexOf(':');
+                    if (splitIndex === -1) continue;
+                    
+                    var item2 = {
+                        "flowId": item.flowId,
+                        "stateId": item.stateId,
+                        //"comment": item.comment,
+                        "versionId": item.versionId,
+                        //"operatedBy": item.operatedBy,
+                        "operatedTime": item.operatedTime
+                    }
+                    item2.byAgent = true;//任务标记完成时，备注同步
+                    item2.comment = item.comment.substring(splitIndex + 1);
+                    var title = item.comment.substring(0, splitIndex);
+                    item2.operatedBy = title;
+
+                    var spaceIndex = title.indexOf(' ');
+                    if(spaceIndex !== -1){
+                        var stateId = title.substring(0, spaceIndex);
+                        stateId = parseInt(stateId);
+                        if(stateId){
+                            item2.stateId = stateId;
+                            item2.operatedBy = title.substring(spaceIndex + 1);
+                            //提取多个comment
+                            var comments = item2.comment;
+                            var arr = comments.split("\r\n"+stateId+" ");
+                            for(var j=0; j < arr.length; j++){
+                                if(j===0) {
+                                    item2.comment = arr[j];
+                                    continue;
+                                }
+                                var item3 = {
+                                    "flowId": item2.flowId,
+                                    "stateId": item2.stateId,
+                                    "versionId": item2.versionId,
+                                    "operatedTime": item2.operatedTime,
+                                    "byAgent": true
+                                }                               
+                                var splitIndex2 = arr[j].indexOf(':');
+                                if (splitIndex2 === -1) continue;
+                                item3.operatedBy = arr[j].substring(0, splitIndex2);
+                                item3.comment = arr[j].substring(splitIndex2 + 1);
+                                res.push(item3);
+                            }
+                        } 
+                    }
+                    //versionData.splice(i++, 0, item2);
+                    res.push(item2);
+                }
+                item.byAgent = false;
+                res.push(item);
+            }
+            return res;
+        }
+        
+        //命中适当的流程路径
+        function getCurrentStatePath(statePathArr, historyStates, multiLevel) {
+            var currentState = historyStates[historyStates.length - 1];
+            var paths = [];
+            for (var i = 0; i < statePathArr.length; i++) {
+                var path = statePathArr[i];
+                if (indexOf(path, "Id", currentState) >= 0) {
+                    paths.push(path);
+                }
+            }
+            if (paths.length === 0) return [];
+            var mPath = doWithMultiCheck(paths, multiLevel);
+            return mPath ? mPath : paths[0];
+        }
+
+        function doWithMultiCheck(statePathArr, multiLevel) {
+            if (multiLevel && multiLevel.isMultiCheck) {
+                for (var i = 0; i < statePathArr.length; i++) {
+                    var path = statePathArr[i];
+                    var index = indexOf(path, "Name", multiLevel.maxLevel);
+                    if (index >= 0) {
+                        for (var j = index+1; j < path.length; j++) {
+                            if (path[j].Name.search(/级审核/i) !== -1) {
+                                path.splice(j, 1);
+                                j--;
+                            }
+                        }
+                        return path;
+                    }
+                }
+            }
+            return null;
+        }
+        function getHistoryStates(versionData, beginState) {
+            var res = [];
+            for (var i = 0; i < versionData.length; i++) {
+                var item = versionData[i];
+                //if (indexOf(res, "", item.stateId) === -1) {
+                    res.push(item.stateId);
+                //} 
+            }
+            return res;
+        }
+       
+        //转换UI所定义的数据格式
+        function toUiData(currentPath, versionData, vault, properties) {
+            var res = [
+                {
+                    "Id": 0,
+                    "Name": "开始",
+                    "Status": "past", // only past,current and future
+                    "Data": []
+
+                }];
+            var vaultUserList = getUserList(vault);//用户列表
+            var vLen = versionData.length;
+            var currentState = versionData[vLen - 1].stateId;
+            var index = indexOf(currentPath, 'Id', currentState);
+            var status = "past";
+            for (var i = 0; i < currentPath.length; i++) {
+                if (i === index) {
+                    status = "current";
+                }else if (i > index) {
+                    status = "future";
+                }
+                var state = currentPath[i];
+                var uiState = {
+                    "Id": state.Id,
+                    "Name": state.Name,
+                    "Status": status,
+                    "Data": [],
+                    "AssignTo": []
+                }
+                var isFirst = i === 0;
+                addComments2State(uiState, versionData, isFirst);
+                addAssignedUsers2State(uiState, state, vault, properties, vaultUserList);
+                append2StateData(uiState);
+                res.push(uiState);
+            }
+
+            delEmptyStateBefore(res);
+            return res;
+        }
+        //删除没有备注的状态，并忽略server的备注
+        function delEmptyStateBefore(uiStates) {
+            if (!uiStates || !uiStates.length) return;
+            for (var i = 1; i < uiStates.length; i++) {
+                var state = uiStates[i];
+                var isPast = (state.Status === "past");
+                if (isPast) {
+                    if (state.Data.length === 0) {
+                        uiStates.splice(i, 1);
+                        i--;
+                        continue;
+                    }
+                }               
+                //忽略服务器备注
+                for (var j = 0; j < state.Data.length; j++) {
+                    var item = state.Data[j];
+                    if (item.Operator.search(/服务器/i) !== -1) {
+                        state.Data.splice(j, 1);
+                        j--;
+                    }
+                }
+            }
+        }
+        //添加流程节点备注(历史版本)
+        function addComments2State(uiState, versionData, isFirst) {
+            if (!versionData || !versionData.length) return;
+            for (var i = 0; i < versionData.length; i++) {
+                var item = versionData[i];
+                //忽略服务器备注
+                //if (item.operatedBy.search(/服务器/i) !== -1) continue;
+                if (item.stateId === uiState.Id) {
+                    uiState.Data.push({
+                        "Operator": item.operatedBy,
+                        "Time": item.operatedTime,
+                        "Comment": item.comment,
+                        "ByAgent": item.byAgent
+                    });
+                }
+            }
+            if(isFirst && uiState.Data.length){//起始节点
+                if(!uiState.Data[0].Comment && !uiState.Data[0].ByAgent){
+                    uiState.Data[0].Comment = " 起草";
+                    uiState.Data[0].ByAgent = true;
+                }
+            }
+        }
+        //添加节点审核人
+        function addAssignedUsers2State(uiState, state, vault, properties, vaultUserList){
+            if(state.To && state.To.length){
+                for(var i = 0; i < state.To.length; i++){
+                    var user = state.To[i];
+                    var index = indexOf(uiState.AssignTo, "UserId", user.UserId);
+                    if(index === -1){
+                        uiState.AssignTo.push({
+                            "UserId": user.UserId,
+                            "Name": user.Fullname
+                        })
+                    }
+                }
+            }
+            if(state.AssignProps && state.AssignProps.length){
+                for(var j=0; j < state.AssignProps.length; j++){
+                    var levels = state.AssignProps[j].Levels;
+                    var pUsers = getMultiLevelPropValue(vault, properties, levels, vaultUserList);
+                    for(var k=0; k < pUsers.length; k++){
+                        if(indexOf(uiState.AssignTo, "UserId", pUsers[k].UserId) === -1){
+                            uiState.AssignTo.push({
+                                "UserId": pUsers[k].UserId,
+                                "Name": pUsers[k].Name
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        //添加未阅人
+        function append2StateData(uiState){
+            for(var i=0; i < uiState.AssignTo.length; i++){
+                var item = uiState.AssignTo[i];
+                var index = indexOf(uiState.Data, "Operator", item.Name);
+                if(index === -1){
+                    uiState.Data.push({
+                        "Operator": item.Name,
+                        "Time": "",
+                        "Comment": " 未阅"
+                    });
+                }  
+            }
+        }
+
+        function getPropValue(properties, pDef){
+            var res = [];
+            if(properties.IndexOf(pDef) === -1) return res;
+            var tValue = properties.SearchForProperty(pDef).Value;
+            if(tValue.IsNULL()) return res;
+            if(tValue.DataType != MFDatatypeLookup && tValue.DataType != MFDatatypeMultiSelectLookup) return res;
+            if(tValue.DataType == MFDatatypeLookup){
+                var lp = tValue.GetValueAsLookup();
+                if(lp.Deleted || lp.Hidden) return res;
+                res.push({
+                    "Id": lp.Item,
+                    "Name": lp.DisplayValue,
+                    "ObjectType": lp.ObjectType
+                });
+            }else{
+                var lps = tValue.GetValueAsLookups();
+                for(var j=1; j <= lps.Count; j++){
+                    lp = lps.Item(j);
+                    if(lp.Deleted || lp.Hidden) continue;
+                    res.push({
+                        "Id": lp.Item,
+                        "Name": lp.DisplayValue,
+                        "ObjectType": lp.ObjectType
+                    });
+                }
+            }
+            return res;
+        }
+        function toUserList(users, uValues, vault, vaultUserList){
+            for(var i=0; i < uValues.length; i++){
+                var item = uValues[i];
+                if(item.ObjectType === 16){//用户组
+                    var gUsers = getUsersInGroup(vault, item.Id, vaultUserList);
+                    for(var j=0; j < gUsers.length; j++){
+                        if(indexOf(users, "UserId", gUsers[j].UserId) != -1) continue;
+                        users.push({
+                            "UserId": gUsers[j].UserId,
+                            "Name": gUsers[j].Name
+                        });
+                    }
+                }else{
+                    if(indexOf(users, "UserId", item.Id) != -1) continue;
+                    users.push({
+                        "UserId": item.Id,
+                        "Name": item.Name
+                    });
+                }  
+            }
+        }
+        function getProperties(vault, pv){
+            var oObjID = new MFiles.ObjID();
+            oObjID.SetIDs(pv.ObjectType, pv.Id);
+            return vault.ObjectOperations.GetLatestObjectVersionAndProperties(oObjID, false, false).Properties;
+        }
+        function getVersionData(vault, pv){
+            var oObjID = new MFiles.ObjID();
+            oObjID.SetIDs(pv.ObjectType, pv.Id);
+            return vault.ObjectOperations.GetLatestObjectVersionAndProperties(oObjID, false, false).VersionData;
+        }
+        function getMultiLevelPropValue(vault, properties0, levels, vaultUserList){
+            var res = [];
+            var len = levels.length;//最多3级
+            if(len === 1){
+                var pDef = levels[0].Id;
+                var vals = getPropValue(properties0, pDef);
+                toUserList(res, vals, vault, vaultUserList);
+            }
+            if(len === 2){
+                pDef = levels[0].Id;
+                var pDef2 = levels[1].Id;
+                vals = getPropValue(properties0, pDef);
+                for(var i=0; i < vals.length; i++){
+                    var props = getProperties(vault, vals[i]);
+                    var val2s = getPropValue(props, pDef2);
+                    toUserList(res, val2s, vault, vaultUserList);
+                }
+            }
+            if(len === 3){
+                pDef = levels[0].Id;
+                pDef2 = levels[1].Id;
+                var pDef3 = levels[2].Id;
+                vals = getPropValue(properties0, pDef);
+                if(!vals.length) return res;
+                for(i=0; i < vals.length; i++){
+                    props = getProperties(vault, vals[i]);
+                    val2s = getPropValue(props, pDef2);
+                    for(var j=0; j < val2s.length; j++){
+                        var prop2s = getProperties(vault, val2s[j]);
+                        var val3s = getPropValue(prop2s, pDef3);
+                        toUserList(res, val3s, vault, vaultUserList);
+                    }
+                }
+            }
+            return res;
+        }
+        //附件
+        function getAttachments(vault, properties){
+            var res=[];
+            var propDef = vault.PropertyDefOperations.GetPropertyDefIDByAlias("PropAttachment");
+            if(propDef){
+                var fileObjs = getPropValue(properties, propDef);
+                for(var i=0; i < fileObjs.length; i++){
+                    addObjFiles(vault, fileObjs[i], res);
+                }
+            }
+            return res;
+        }
+        function addObjFiles(vault, fileObj, res){
+            var objVn = getVersionData(vault, fileObj);
+            if(objVn.FilesCount === 0) return;
+            var objFiles = objVn.Files;
+            for(var i=1; i<= objFiles.Count; i++){
+                var item = objFiles.Item(i);
+                var fName = item.GetNameForFileSystem();
+                var fileId = item.ID;
+                //var fUrl = vault.ObjectFileOperations.GetPathInDefaultView(objVn.ObjVer.ObjID, objVn.ObjVer.Version, fileId, item.Version,MFLatestSpecificBehaviorAutomatic, false);
+                var fUrl = vault.ObjectOperations.GetMFilesURLForObjectOrFile(objVn.ObjVer.ObjID, -1, false, fileId, MFilesURLTypeOpen);
+                res.push({
+                    "Name": fName,
+                    "Url": fUrl
+                    // ,"Vault": vault,
+                    // "ObjVer": objVn.ObjVer,
+                    // "FileVer": item.FileVer,
+                    // "Open": function(){
+                    //     vault.ObjectFileOperations.OpenFileInDefaultApplication(0, this.ObjVer, this.FileVer,MFFileOpenMethodOpen);
+                    // }
+                });
+            }
+        }
+
+        //用户组的用户列表
+        function getUsersInGroup(vault, groupId, userList){
+            var res = [];
+            var userIds = getUserIdsInGroup(vault, groupId);
+            for(var i=0; i < userIds.length; i++){
+                if(indexOf(res, "UserId", userIds[i]) !== -1) continue;
+                var index = indexOf(userList, "UserId", userIds[i]);
+                if(index === -1) continue;
+                var user = userList[index];
+                res.push({
+                    "UserId": user.UserId,
+                    "Name": user.Name
+                });
+            }
+            return res;
+        }
+        function getUserIdsInGroup(vault, groupId) {
+            var eventMethodName = "getUserIdsInGroup";
+            var inputValue = groupId.toString();
+            var res = vault.ExtensionMethodOperations.ExecuteVaultExtensionMethod(
+                eventMethodName, inputValue);
+            res = eval('(' + res + ')');
+            return res;
+        }
+        function getUserList(vault){
+            var res=[];
+            var pairs = vault.UserOperations.GetUserList();
+            for(var i=1; i <= pairs.Count; i++){
+                res.push({
+                    "UserId": pairs.Item(i).Key,
+                    "Name": pairs.Item(i).Name
+                });
+            }
+            return res;
+        }
+        //test
+        $(function () {
+            //var data = flowTestData();
+            //var statePathArr = getSortedStatePathArr(data);
+            ////var res = getStateTransPathArr(data.Transitions);
+            //var currentState = data.Id;
+            //var versionData = flowHistoryData();
+            //correctOperator(versionData, currentState);
+            ////alert(JSON.stringify(versionData));
+            //var srcSates = toUiData(statePathArr, versionData);
+
+            //var srcSates = wfUi.getUiData();
+            //wfUi.uiInitialize(srcSates, 'XXX');
+        });
+     
+        //工作流及状态 测试数据
+        function flowTestData() {
+            var data = {
+                    "Id": 134,
+                    "Name": "监理工程师通知单",
+                    "States": [
+                    { "Id": 251, "Name": "监理起草" },
+                    { "Id": 252, "Name": "审查" },
+                    { "Id": 253, "Name": "归档" },
+                    { "Id": 254, "Name": "监理审核" },
+                    { "Id": 255, "Name": "总包回文" },
+                    { "Id": 256, "Name": "监理复查" }
+                ],
+                "Transitions": [
+                    { "From": 0, "To": 251 },
+                    { "From": 252, "To": 253 },
+                    { "From": 258, "To": 0 },
+                    { "From": 254, "To": 255 },
+                    { "From": 255, "To": 256 },
+                    { "From": 256, "To": 252 },
+                    { "From": 251, "To": 254 },
+                    { "From": 254, "To": 251 },
+                    { "From": 256, "To": 255 }
+                ]
+            }
+            var data2 = {
+                "Id": 135,
+                "Name": "多分支流程",
+                "States": [
+                { "Id": 252, "Name": "A" }
+                , { "Id": 257, "Name": "B" }
+                , { "Id": 258, "Name": "C" }
+                , { "Id": 259, "Name": "D" }
+                , { "Id": 260, "Name": "E" }
+                , { "Id": 261, "Name": "F" }
+                ],
+                "Transitions": [
+                    { "From": 0, "To": 252 },
+                    { "From": 252, "To": 257 },
+                    { "From": 252, "To": 259 },
+                    { "From": 252, "To": 260 },
+                    { "From": 257, "To": 258 },
+                    { "From": 257, "To": 259 },
+                    { "From": 258, "To": 259 },
+                    { "From": 259, "To": 261 }
+                ]
+            }
+            var data3 = {
+                "Id": 136,
+                "Name": "回路分支流程",
+                "States": [
+                { "Id": 1, "Name": "A" }
+                , { "Id": 2, "Name": "B" }
+                , { "Id": 3, "Name": "C" }
+                , { "Id": 4, "Name": "D" }
+                , { "Id": 5, "Name": "E" }
+                , { "Id": 6, "Name": "F" }
+                ],
+                "Transitions": [
+                    { "From": 0, "To": 1 },
+                    { "From": 1, "To": 2 },
+                    { "From": 1, "To": 4 },
+                    { "From": 2, "To": 3 },
+                    { "From": 2, "To": 1 },
+                    { "From": 3, "To": 2 },
+                    { "From": 3, "To": 5 },
+                    { "From": 4, "To": 1 }
+                ]
+            }
+            return data;
+        }
+        //历史版本 测试数据
+        function flowHistoryData() {
+            //监理工程师通知单
+            var data = [
+                {
+                    "flowId": 134,
+                    "stateId": 251,
+                    "comment": "",
+                    "versionId": 1,
+                    "operatedBy": "凯德-史益军",
+                    "operatedTime": "2016/5/30 11:25"
+                }, {
+                    "flowId": 133,
+                    "stateId": 251,
+                    "comment": "",
+                    "versionId": 2,
+                    "operatedBy": "凯德-史益军",
+                    "operatedTime": "2016/5/30 11:26"
+                }, {
+                    "flowId": 134,
+                    "stateId": 254,
+                    "comment": "凯德-庞逸飞: 谁谁谁水水水水",
+                    "versionId": 3,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 11:27"
+                }, {
+                    "flowId": 134,
+                    "stateId": 251,
+                    "comment": "",
+                    "versionId": 4,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 11:27"
+                }, {
+                    "flowId": 134,
+                    "stateId": 254,
+                    "comment": "",
+                    "versionId": 5,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 11:27"
+                }, {
+                    "flowId": 134,
+                    "stateId": 251,
+                    "comment": "",
+                    "versionId": 6,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 11:28"
+                }, {
+                    "flowId": 134,
+                    "stateId": 254,
+                    "comment": "",
+                    "versionId": 7,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 11:28"
+                }, {
+                    "flowId": 134,
+                    "stateId": 255,
+                    "comment": "凯德-郑海: 请复查",
+                    "versionId": 9,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 11:29"
+                }, {
+                    "flowId": 134,
+                    "stateId": 256,
+                    "comment": "",
+                    "versionId": 10,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 11:29"
+                }, {
+                    "flowId": 134,
+                    "stateId": 255,
+                    "comment": "凯德-郑海: 请复查",
+                    "versionId": 12,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 11:30"
+                }, {
+                    "flowId": 134,
+                    "stateId": 256,
+                    "comment": "",
+                    "versionId": 13,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 11:30"
+                }, {
+                    "flowId": 134,
+                    "stateId": 255,
+                    "comment": "凯德-郑海: 无备注",
+                    "versionId": 15,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/30 18:33"
+                }, {
+                    "flowId": 134,
+                    "stateId": 256,
+                    "comment": "凯德-庞逸飞: 无备注",
+                    "versionId": 17,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/31 10:26"
+                }, {
+                    "flowId": 134,
+                    "stateId": 252,
+                    "comment": "",
+                    "versionId": 18,
+                    "operatedBy": "(DBWorld服务器)",
+                    "operatedTime": "2016/5/31 10:26"
+                }
+            ];
+            return data;
+        }
+    </script>
+</head>
+    <body>
+        <div class="main-title">
+            <span></span>
+            <!--<img src="images/attachment.jpg" title="查看附件" />-->
+        </div>
+        <div class="f-wrap">
+            <div class="f-current" >
+                <span>当前状态：</span>
+                <span class="f-current-state"></span>&nbsp;&nbsp;
+                <a title="查看详情">详细>></a>
+            </div>
+        </div> 
+        <div class="t-wrap">
+             <!-- 模态框（Modal）附件表 -->
+            <div class="modal fade" id="tModal_Attach" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <a class="close f-close" data-dismiss="modal" aria-hidden="true">
+                        </a>
+                        <table class="table table-condensed table-bordered">
+                            <caption>附件一览表</caption>
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>名称</th>
+                                    <th>链接地址</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- 模态框（Modal）总表 -->
+            <div class="modal fade" id="tModal" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <a class="close f-close" data-dismiss="modal" aria-hidden="true">
+                        </a>
+                        <table class="table table-condensed table-bordered">
+                            <caption>信息总表</caption>
+                            <thead>
+                                <tr>
+                                    <th>状态</th>
+                                    <th>操作者</th>
+                                    <th>时间</th>
+                                    <th>备注</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<textarea id="test"></textarea>       -->
+    </body>
+</html>

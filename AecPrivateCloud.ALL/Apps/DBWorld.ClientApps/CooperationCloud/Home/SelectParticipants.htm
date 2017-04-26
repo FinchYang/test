@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style type="text/css"></style>
+        <link rel="stylesheet" type="text/css" href="style/SelectParticipants.css" />
+        <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+        <script type="text/javascript">
+            function OnNewDashboard(dashboard) {
+                dashboard.Window.SetDefaultSize(422.5, 437.5, true); //设置默认大小
+                dashboard.Window.Resizable = false;
+                dashboard.Window.Maximizable = false;
+                dashboard.Window.Minimizable = false;
+
+                var data = dashboard.CustomData;
+                var parts = data.SrcParts;
+
+                $(function () {
+                    if (parts && parts.length > 0) {
+                        for (var i = 0; i < parts.length; i++) {
+                            var item = parts[i];
+                            var elemCheckItem = $("<tr></tr>");
+                            elemCheckItem.html('<td><input type="checkbox" name="ckName" value="'+ item.Title + '" id="' + item.ID.toString() + '" />' + '<label for="' + item.ID.toString() + '">' + item.Title + '</label></td>');
+                            $("tbody").append(elemCheckItem);
+                            /*
+                            $('#' + item.ID.toString()).click(function () {
+                                var objs = $("tbody input");
+                                var iCount = objs.length;
+                                var selectedCount = 0;
+                                for (var j = 0; j < iCount; j++) {
+                                    if (objs[j].checked) {
+                                        selectedCount += 1;
+                                    }
+                                }
+                                if (selectedCount == iCount) {
+                                    $('#selAll').attr(checked, "checked");
+                                } else {
+                                    $('#selAll').removeAttr(checked);
+                                }
+                                //$("#showCount").val(selectedCount.toString() + '/' + iCount.toString());
+                            });
+                            */
+                        }
+                    }
+                });
+
+                //全选点击效果
+                $("#selAll").click(function () {
+                    var objs = $('tbody input');
+                    var state = $(".ckSelAll input")[0].checked;
+                    for (var i = 0; i < objs.length; i++) {
+                        objs[i].checked = state;
+                    }
+                    /*
+                    if (state) $("#showCount").val(objs.length + '/' + objs.length.toString());
+                    else $("#showCount").val(0 + '/' + objs.length.toString());
+                    */
+                });
+
+                $('#btnSure').click(function () {
+                    var ckItems = [];
+                    var objs = $('tbody input');
+                    for (var i = 0; i < objs.length; i++) {
+                        if (objs[i].checked) {
+                            ckItems.push({ 'ID': objs[i].id, 'Title': objs[i].value });
+                        }
+                    }
+                    data.SelectedParts = ckItems;
+                    if (data.SelectedParts.length == 0) {
+                        alert("请选择您要共享的参与方.");
+                    } else {
+                        data.Cancelled = false;
+                        dashboard.Window.close();
+                    }
+                });
+                $('#btnCancel').click(function () {
+                    data.Cancelled = true;
+                    dashboard.Window.close();
+                });
+            }
+        </script>
+    
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="title_wrap">资料共享</div>
+            <div id="desc">选择待共享的参与方</div>
+            <div class="ckSelAll">
+                <input type="checkbox" name="selAll" id="selAll" />
+                <label for="selAll">全选</label>
+                <!--<input id="showCount" type="text" readonly="readonly" />-->
+            </div>
+            <div class="list_table">
+                <table>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="btn">
+                <input id="btnSure" type="button" value="确定" />
+                <input id="btnCancel" type="button" value="取消" />
+            </div>
+        </div>
+    </body>
+</html>

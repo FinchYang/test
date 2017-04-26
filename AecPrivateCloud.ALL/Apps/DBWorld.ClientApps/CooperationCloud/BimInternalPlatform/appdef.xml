@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.m-files.com/schemas/appdef.xsd">
+  <guid>F101258B-FD65-4199-B22F-240B507C0DCC</guid>
+  <name>协同云</name>
+  <version>6</version>
+  <description>协同云</description>
+  <publisher>CADSimula</publisher>
+  <copyright>(c) www.simuladesign.com 2014</copyright>
+  <required-mfiles-version>10.0.3683.0</required-mfiles-version>
+  <optional>true</optional>
+  <modules>
+    <module environment="shellui" event-priority="1">
+      <!--<file>scripts\metadataAlias.js</file>-->
+      <file>scripts\md\base.js</file>
+      <file>scripts\md\bim.js</file>
+      <file>scripts\md\mail.js</file>
+      <file>scripts\md\report.js</file>
+      
+      <file>scripts\mf\client.js</file>
+      <file>scripts\mf\alias.js</file>
+      <file>scripts\mf\command.js</file>
+      <file>scripts\mf\ui.js</file>
+      <file>scripts\mf\vault.js</file>
+      <file>scripts\mf\objectOps.js</file>
+      <file>scripts\cc\core.js</file>
+      <file>scripts\cc\mail.js</file>
+      <file>scripts\cc\project.js</file>
+      <file>scripts\cc\mail.js</file>
+      <file>scripts\cc\softConfig.js</file>
+      <file>scripts\cc\cmdCallbacks.js</file>
+      <file>scripts\web.js</file>
+      <file>scripts\wsh.js</file>
+      <file>scripts\cc\viewlog.js</file>
+      <file>main.js</file>
+      <file>scripts\cc\public.js</file>
+      
+      <file>scripts\cc\invite.js</file>
+      <file>scripts\cc\member.js</file>
+      <file>scripts\cc\mfTreeDomOps.js</file>
+      <file>scripts\cc\bimModelPlan.js</file>
+      <file>scripts\cc\crowdsourcing.js</file>
+      <file>scripts\cc\bimmodelbrowser.js</file>
+      <file>scripts\cc\reports\reportOps.js</file>
+      <file>scripts\cc\reports\taskTimeReport.js</file>
+      <file>scripts\cc\reports\tasksstatusreport.js</file>
+      <file>scripts\cc\reports\projectcostreport.js</file>
+    </module>
+    <module environment="vaultui">
+      <file>scripts\md\base.js</file>
+      <file>scripts\md\bim.js</file>
+      <file>scripts\mf\alias.js</file>
+      <file>scripts\mf\objectOps.js</file>
+      <file>vaultUiEntry.js</file>
+    </module>
+  </modules>
+  <dashboards>
+    <dashboard id="tasks">
+      <content>tasks.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="alltasks">
+      <content>alltasks.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="members">
+      <content>members.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="home">
+      <content>projhome.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="SelectParticipants">
+      <content>SelectParticipants.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="invitemember">
+      <content>invitemember.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="email">
+      <content>Mail.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="documents">
+      <content>documents.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="sendm">
+      <content>send.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="draftm">
+      <content>draft.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="bimModelPlan">
+      <content>bimModelPlan.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="bimmodelbrowser">
+      <content>bimmodelbrowser.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://test.co.dbworld.cn/</trusted-content>
+      <trusted-content>http://co.dbworld.cn/</trusted-content>
+    </dashboard>
+    <dashboard id="bimModelList">
+      <content>bimModelList.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="bimTreeDom">
+      <content>bimTreeDom.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="crowdsourceTask">
+      <content>crowdsourceTask.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="elementAnnex">
+      <content>ElementAnnex.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="mailcontacts">
+      <content>mailcontacts.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="tasksstatusreport">
+      <content>tasksstatusreport.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="viewlog">
+      <content>viewlog.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="tasktimereport">
+      <content>tasktimereport.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="memberhoursreport">
+      <content>memberhoursreport.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="projectcostreport">
+      <content>projectcostreport.htm</content>
+      <trusted-content>m-files://showmetadata/</trusted-content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="dtaggregation">
+      <content>dt_aggregation.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+    <dashboard id="newmessage">
+      <content>newmessage.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+  </dashboards>
+</application>

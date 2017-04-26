@@ -1,0 +1,359 @@
+﻿@model BIMModel
+
+@{
+    ViewBag.Title = "BIM模型中心";
+}
+<link href="~/Content/oldstyles/loading.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/oldstyles/second.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/oldstyles/footer.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/oldscripts/Mfile.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/jquery.flexslider-min.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/commonMethod.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/kefu.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+
+<script src="~/Scripts/oldscripts/commonMethod.js"></script>
+<script src="~/Scripts/oldscripts/JuqeryCookie.js"></script>
+<script src="~/Scripts/oldscripts/BIMIndex.js"></script>
+<script src="~/Scripts/oldscripts/BIM.js"></script>
+<link href="~/Content/oldstyles/BIMClient.css" rel="stylesheet" />
+<link href="~/Content/oldstyles/BIMMaster.css" rel="stylesheet" />
+<link href="~/Content/oldstyles/BIMPopup.css" rel="stylesheet" />
+<link href="~/Content/Site.css" rel="stylesheet" />
+<script src="~/Scripts/oldscripts/jquery.form.js"></script>
+<style>
+    .body-container {
+        background-color: white;
+    }
+
+    a.new-project-button {
+        color: white;
+        margin: 1px 9px;
+        padding: 1px 5px;
+        font-size: 12px;
+    }
+
+    .new-project-button .edit-container-icon:hover {
+        width: 40px;
+        width: 40px;
+        background-color: #008ad2;
+        background-color: rgba(0,138,210,1);
+        -ms-border-radius: 20px;
+        border-radius: 20px;
+    }
+
+
+    ul.tab_ul {
+        margin-top: 10px;
+        border-bottom: 1px solid #f0f0f0;
+        background-color: white;
+        font-size: 14px;
+    }
+
+        ul.tab_ul .li_on {
+            border-bottom: 1px solid #008ad2;
+        }
+
+    .otherProjectTab .tab_ul li a {
+        width: 97px;
+        padding-right: 15px;
+        border-right: 1px solid #008ad2;
+        color: black;
+    }
+
+    #content {
+        background-color: #f0f0f0;
+    }
+
+    .projectContent {
+        margin-left: 15px;
+    }
+
+    .tab_content {
+        width: 980px;
+        background-color: white;
+        margin-right: 10px;
+        margin-bottom: 20px;
+        position: absolute;
+        top: 80px;
+        bottom: 0;
+    }
+
+    .projectListWrap .projectName {
+        padding-top:15px;
+    }
+
+    .projectListBtnConfirm p a.change-state-ok {
+        width: 100px;
+        height: 40px;
+        background-color: #008ad2;
+        color: white;
+        margin: 0;
+        margin-top: 30px;
+        margin-right: 20px;
+        padding-top: 9px;
+        -ms-border-radius: 4px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .section-header {
+        margin-right: 10px !important;
+    }
+
+    .tab_con {
+        overflow-y: auto;
+    }
+
+    .corbar {
+        float: left;
+        margin-left: 3px;
+        margin-right: 10px;
+        width: 5px;
+        height: 22px;
+        background-color: #017EC1;
+    }
+
+    .projectListBtnConfirm p a.change-state-cancel {
+        width: 100px;
+        height: 40px;
+        background-color: #b5b5b5;
+        color: black;
+        margin: 0;
+        margin-top: 30px;
+        padding-top: 9px;
+        margin-left: 20px;
+        -ms-border-radius: 4px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+
+        //Tab 公用tab标签样式
+        var $li = $(".tab_ul li");
+        $li.click(function () {
+            //当前li增加样式li_on同时去除与当前li同一层的li中的li_on样式
+            $(this).addClass("li_on").siblings().removeClass("li_on");
+            //获得当前li的索引值，以备让div使用。
+            var $index = $li.index(this);
+            $(".tab_content > div").eq($index).show().siblings().hide();
+        }).hover(function () {
+            $(this).addClass("hover");
+        }, function () {
+            $(this).removeClass("hover");
+        });
+
+        //拖动事件
+        $(".dragDiv").mousedown(function (e) {
+            $(this).css("cursor", "move");
+            var offset = $(this).offset();
+            var x = e.pageX - offset.left;
+            var y = e.pageY - offset.top;
+            $(window).bind("mousemove", function (ev) {
+                $(".dragDiv").stop();
+                var _x = ev.pageX - x;
+                var _y = ev.pageY - y;
+                $(".dragDiv").animate({ left: _x + "px", top: _y + "px" }, 10);
+            });
+        });
+        $(window).mouseup(function () {
+            $(".dragDiv").css("cursor", "default");
+            $(this).unbind("mousemove");
+        });
+
+        //下拉列表
+        $('[name="nice-select"]').click(function (e) {
+            $('[name="nice-select"]').find('ul').hide();
+            $(this).find('ul').show();
+            e.stopPropagation();
+        });
+        $('[name="nice-select"] li').hover(function (e) {
+            $(this).toggleClass('on');
+            e.stopPropagation();
+        });
+        $('[name="nice-select"] li').click(function (e) {
+            var val = $(this).text();
+            var dataVal = $(this).attr("data-value");
+            $(this).parents('[name="nice-select"]').find('input').val(val);
+            $('[name="nice-select"] ul').hide();
+            e.stopPropagation();
+            //alert($(this).parents('[name="nice-select"]').find('input').val());
+        });
+        $(document).click(function () {
+            $('[name="nice-select"] ul').hide();
+        });
+
+        $(".projectListBtn").on("click", "dl dt", function () {
+            $(this).parents(".projectListBtn").next().next().fadeIn("fast");
+        });
+
+        //$(".projectListWrap").hover(function (e) {
+        //    console.log("hover a project");
+        // //   $('.hoverflash').style.left = '0%';
+        //    document.getElementByClass("hoverflash").style.left = "0%";
+        //});
+    })
+</script>
+
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section class="right">
+        <div class="section-header"> <div class="corbar"></div> 网站后台 <img src="/Content/Images/mdd/副级导航.png" /> BIM模型中心</div>
+
+        <div class="otherProject">
+            <div class="tab otherProjectTab">
+                <ul class="tab_ul">
+                    <li class="li_on">
+                        <a href="javascript:void(0);">
+                            进行中项目
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">
+                            已立项项目
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">
+                            已暂停项目
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">
+                            已结束项目
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab_content">
+
+                    <div class="tab_con Tabshow">
+                        <div class="projectContent clearfix">
+                            <ul>
+                                @foreach (var item in Model.ProjectDto)
+                                {
+                                    if (item.Status.Id == 2) //此处显示启动的
+                                    {
+                                        <li id="project_@item.Id">
+                                            <div class="projectListWrap">
+                                                <div class="projectListImg" style="background-image: url('/BIM/GetImage?projectId=@item.Id');">
+                                                </div>
+                                                <div class="projectName">
+                                                    <a href="@Url.Action("Project", "Model", new {guid = @item.Vault.Guid, name=@item.Name})" title="@item.Name" target="_blank">
+                                                        @item.Name
+                                                    </a>
+                                                </div>
+
+                                            </div>
+
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab_con ">
+                        <div class="projectContent clearfix">
+                            <ul>
+                                @foreach (var item in Model.ProjectDto)
+                                {
+                                    if (item.Status.Id == 1) //此处显示立项
+                                    {
+                                        <li id="project_@item.Id">
+                                            <div class="projectListWrap">
+                                                <div class="projectListImg" style="background-image: url('/BIM/GetImage?projectId=@item.Id'); background-size: cover;">
+                                                </div>
+
+                                                <div class="projectName">
+                                                    <a href="@Url.Action("Project", "Model", new { guid = @item.Vault.Guid, name = @item.Name })" title="@item.Name" target="_blank">
+                                                        @item.Name
+                                                    </a>
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <!--已暂停项目-->
+                    <div class=" tab_con">
+                        <div class="projectContent clearfix">
+                            <ul>
+                                @foreach (var item in Model.ProjectDto)
+                                {
+                                    if (item.Status.Id == 3)
+                                    {
+                                        <li id="project_@item.Id">
+                                            <div class="projectListWrap">
+                                                <div class="projectListImg" style="background-image: url('/BIM/GetImage?projectId=@item.Id'); background-size: cover;">
+                                                </div>
+                                                <div class="projectName">
+                                                    <a href="@Url.Action("Project", "Model", new { guid = @item.Vault.Guid, name = @item.Name })" title="@item.Name" target="_blank">
+                                                        @item.Name
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <!--已结束项目-->
+                    <div class="tab_con">
+                        <div class="projectContent clearfix">
+                            <ul>
+                                @foreach (var item in Model.ProjectDto)
+                                {
+                                    if (item.Status.Id == 4)
+                                    {
+                                        <li id="project_@item.Id">
+                                            <div class="projectListWrap">
+                                              @*  <div class="projectListImg">*@
+                                                    <div class="projectListImg" style="background-image: url('/BIM/GetImage?projectId=@item.Id'); background-size: cover;">
+                                                        <a href="@Url.Action("ProjectDetail", "BIM", new {projectId = @item.Id})">
+                                                       @*     <img class="imgprojectcover" src="/BIM/GetImage?projectId=@item.Id" alt="项目图片" />*@
+                                                        </a>
+                                                    </div>
+                                                @*<div class="projectListBtn">
+                                                        <dl>
+                                                            <dt> 立项 </dt>
+                                                            <dt> 启动 </dt>
+                                                            <dt> 暂停 </dt>
+                                                            <dt> 结束 </dt>
+                                                        </dl>
+                                                    </div>*@
+                                                @*<div class="projectListBtnConfirm">
+                                                        确定要修改项目状态吗？
+                                                        <p><a href="#" title="取消" name="cancel">取消</a><a href="#" title="确定" name="sure">确定</a></p>
+                                                    </div>*@
+                                            </div>
+                                            <div class="projectName">
+                                                <a href="@Url.Action("Project", "Model", new { guid = @item.Vault.Guid, name = @item.Name })" title="@item.Name" target="_blank">
+                                                    @item.Name
+                                                </a>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>

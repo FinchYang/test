@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title></title>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+
+<!-- Styles used on the dashboard -->
+<style type="text/css">
+
+body {
+    font-family: "tahoma";
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+
+#fullareadiv {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+
+.mf-listing-header {
+    height: 26px;
+    margin: 0px;
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #cccccc;
+	cursor: pointer;
+}
+html.mf-ltr .mf-listing-header { padding: 6px  6px 0px 13px; }
+html.mf-rtl .mf-listing-header { padding: 6px 13px 0px  6px; }
+
+.mf-listing-header.mf-compact-layout {
+    height: 22px;
+    padding-top: 4px;
+    padding-bottom: 0px;
+}
+
+.mf-listing-header.mf-listing-active {
+}
+
+.mf-listing-header-text {
+    font-family: 'Segoe UI';
+    font-size: 14px;
+    padding: 0px;
+    border-width: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+html.mf-ltr .mf-listing-header-text { margin: 0px 22px 0px  0px; }
+html.mf-rtl .mf-listing-header-text { margin: 0px  0px 0px 22px; }
+
+.mf-listing-header-text.mf-compact-layout {
+    font-size: 13px;
+}
+
+.mf-listing-header-collapsed-state {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    overflow: hidden;
+}
+html.mf-ltr .mf-listing-header-collapsed-state { float: right; }
+html.mf-rtl .mf-listing-header-collapsed-state { float: left;  }
+
+.mf-listing-header-collapsed-state .mf-listing-header-expanded {
+    width: 16px;
+    height: 16px;
+    background-image: url( 'images/collapse.png' );
+}
+
+.mf-listing-header-collapsed-state .mf-listing-header-collapsed {
+    width: 16px;
+    height: 16px;
+    background-image: url( 'images/expand.png' );
+}
+
+</style>
+
+<!-- Include the jQuery Core library -->
+<script src="scripts/jquery/jquery.js"></script>
+<script src="scripts/jquery/jquery-ui-1.10.0.custom.js"></script>
+
+<!-- Helper scripts -->
+<script src="scripts/home_common.js"></script>
+<script src="scripts/listing_common.js"></script>
+<script src="scripts/UIControlLibrary/utilities.js"></script>
+<script src="scripts/UIControlLibrary/localization.js"></script>
+
+<!-- Dashboard implementation -->
+<script type="text/javascript">
+
+"use strict";
+
+function OnNewDashboard( dashboard ) {
+	/// <summary>Gets called when a new dashboard object is created.</summary>
+	/// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+	
+	// Register a handler to listen the started event.
+	dashboard.Events.Register( MFiles.Event.Started, getDashboardStartedHandler( dashboard ) );
+}
+
+function getDashboardStartedHandler( dashboard ) {
+	/// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+	/// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+	/// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+	// Return the event handler.
+	return function() {
+
+        // Shortcuts.
+        var shellFrame = dashboard.Parent;
+        var loc = new localization();
+        var additionalSectionShown = false;
+
+        // Apply right-to-left layout if necessary.
+        if( dashboard.UseRightToLeftLayout ) {
+
+            // Apply right-to-left layout.
+            $( "html" ).attr( "dir", "rtl" );
+            $( "html" ).addClass( "mf-rtl" );
+
+        } else {
+
+            // Apply left-to-right layout.
+            $( "html" ).attr( "dir", "ltr" );
+            $( "html" ).addClass( "mf-ltr" );
+        }
+
+        // Apply compact layout if necessary.
+        if( shellFrame.UseCompactLayout ) {
+
+            // Apply compact layout.
+            $( ".mf-listing-header" ).addClass( "mf-compact-layout" );
+            $( ".mf-listing-header-text" ).addClass( "mf-compact-layout" );
+        }
+
+        // Bind to the main listing window.
+        bindToMainListing( shellFrame, loc, $( "#listing_main" ) );
+
+        // Create the "Assigned to" listing.
+        createListing( shellFrame, loc, $( "#listing_assigned" ), MFiles.MFBuiltInView.AssignedToMe,
+                        function( container, objectsCount ) {
+
+                            // Specify the relative height of this listing.
+                            var heightNumber = 20;
+                            if( objectsCount <= 2 )
+                                heightNumber = 15;
+                            if( objectsCount <= 1 )
+                                heightNumber = 10;
+                            if( objectsCount > 20 )
+                                heightNumber = 30;
+                            container.data( "heightNumber", heightNumber );
+
+                            // Hide the section if it has no content.
+                            if( objectsCount == 0 )
+                                container.hide();
+                            else
+                                additionalSectionShown = true;
+                        } );
+
+        // Create the "Checked Out to Me" listing.
+        createListing( shellFrame, loc, $( "#listing_checkedout" ), MFiles.MFBuiltInView.CheckedOutToCurrentUser,
+                        function( container, objectsCount ) {
+
+                            // Specify the relative height of this listing.
+                            var heightNumber = 20;
+                            if( objectsCount <= 2 )
+                                heightNumber = 15;
+                            if( objectsCount <= 1 )
+                                heightNumber = 10;
+                            if( objectsCount > 20 )
+                                heightNumber = 30;
+                            container.data( "heightNumber", heightNumber );
+
+                            // Hide the section if it has no content.
+                            if( objectsCount == 0 )
+                                container.hide();
+                            else
+                                additionalSectionShown = true;
+                        } );
+
+        // Create the "Recently Accessed by Me" listing.
+        createListing( shellFrame, loc, $( "#listing_recent" ), MFiles.MFBuiltInView.RecentlyAccessedByMe,
+                        function( container, objectsCount ) {
+
+                            var shown = false;
+
+                            // Specify the relative height of this listing.
+                            var heightNumber = 35;
+                            container.data( "heightNumber", heightNumber );
+
+                            // Collapse initially.
+                            container.find( ".mf-listing-content" ).hide();
+
+                            // Expand initially, if the first section and has content.
+                            if( additionalSectionShown == false && objectsCount > 0 ) {
+
+                                container.find( ".mf-listing-content" ).show();
+                                additionalSectionShown = true;
+                            }
+
+                        } );
+
+        // Listen to the ActiveListingChanged event.
+        shellFrame.Events.Register( MFiles.Event.ActiveListingChanged, getActiveListingChangedHandler( shellFrame ) );
+
+        // Resize panes.
+        $( window ).resize( resized );
+        resized();
+
+        // Turn off main listing's column headers to properly scroll to the top.
+        $( "#listing_main" ).data( "listing" ).ColumnHeadersVisible = false;
+	};
+}
+
+ function bindToMainListing(shellFrame, loc, container) {
+    /// <summary>Binds to the main listing window.</summary>
+
+    // Create the listing and bind to it.
+    var listingMain = createMainListing(shellFrame, loc, container, '');
+    // Set the first column to auto-fit.
+    listingMain.AutoFitFirstColumn = true;
+    // Perform post-processing.
+    container.data("shellframe", shellFrame);
+    container.data("heightNumber", 50);
+    // Update the header of the listing.
+    updateHeaderState(listingMain, container.find(".mf-listing-header"));
+}
+/*
+function bindToMainListing( shellFrame, loc, container ) {
+	/// <summary>Binds to the main listing window.</summary>
+
+    // Create the listing and bind to it.
+    var listingMain = createMainListing( shellFrame, loc, container );
+
+	// Set the first column to auto-fit.
+	listingMain.AutoFitFirstColumn = true;
+
+    // Perform post-processing.
+    container.data( "shellframe", shellFrame );
+    container.data( "heightNumber", 50 );
+
+    // Update the header of the listing.
+    updateHeaderState( listingMain, container.find( ".mf-listing-header" ) );
+}
+
+function createListing( shellFrame, loc, container, viewID, postProcessing ) {
+
+    try {
+
+        // Create the listing and bind to it.
+        var listing = createAdditionalListing( shellFrame, loc, container, viewID );
+        var objectsCount = listing.Items.GetObjectVersionsCount();
+
+	    // Set the first column to auto-fit.
+	    listing.AutoFitFirstColumn = true;
+
+        // Perform post-processing.
+        postProcessing( container, objectsCount );
+    }
+    catch( err ) {
+
+        // Hide this listing.
+        container.data( "disabled", true );
+        container.hide();
+    }
+
+    // Update the header of the listing.
+    updateHeaderState( listing, container.find( ".mf-listing-header" ) );
+}
+
+function getActiveListingChangedHandler( shellFrame ) {
+	/// <summary>Called when the active listing changes.</summary>
+
+	return function( previousActiveListing, newActiveListing ) {
+
+        // Currently nothing to do here.
+	}
+}
+*/
+function resized() {
+	/// <summary>Resize panes after the window has been resized.</summary>
+
+    var container = $( "#listings.mf-panel-container" );
+    var totalHeight = container.height();
+
+    // A panel may be completely invisible, or might show its header only.
+    // The remaining height is divided between panels with visible content
+    // in proportion of their "height numbers".
+
+    // Calculate the total of the "height numbers" of panels with visible content,
+    // as well as the total height of the headers of all visible panels.
+    var headerHeightTotal = 0;
+    var visibleHeightNumbers = 0;
+    var visiblePanels = 0;
+    container.find( ".mf-panel:visible" ).each( function() {
+
+        // Add to "height numbers total" if the content of this panel is visible.
+        if( $( this ).find( ".mf-listing-content:visible" ).length >= 1 )
+            visibleHeightNumbers += $( this ).data( "heightNumber" );
+
+        // Always add to header height total;
+        headerHeightTotal += $( this ).find( ".mf-listing-header" ).outerHeight();
+
+        // Count the number of visible panels (i.e., at least header is visible).
+        visiblePanels++;
+
+    } );
+
+    // Resize visible panels.
+    var remainingHeight = totalHeight;
+    var totalHeightForPanelContent = totalHeight - headerHeightTotal;
+    var panelIndex = 0;
+    var lastPanelWithVisibleContent = null;
+    container.find( ".mf-panel:visible" ).each( function() {
+
+        // Use existing header height.
+        var headerHeight = $( this ).find( ".mf-listing-header" ).outerHeight();
+
+        // Calculate the panel height (header + content).
+        var panelHeight = 0;
+        if( $( this ).find( ".mf-listing-content:visible" ).length >= 1 ) {
+
+            // The panel content is visible.
+            
+            // Treat the last visible panel in a different way.
+            if( panelIndex == visiblePanels - 1 ) {
+
+                // Last visible panel takes up all remaining space.
+                panelHeight = remainingHeight;
+            }
+            else {
+
+                // Calculate the appropriate panel height.
+                var heightNumber = $( this ).data( "heightNumber" );
+                panelHeight = headerHeight + parseInt( ( heightNumber / visibleHeightNumbers ) * totalHeightForPanelContent );
+            }
+
+            // Remember the last panel with visible content.
+            lastPanelWithVisibleContent = $( this );
+        }
+        else {
+
+            // Only the header is visible.
+            panelHeight = headerHeight;
+        }
+
+        // Never exceed remaining height.
+        if( panelHeight > remainingHeight )
+            panelHeight = remainingHeight;
+
+        // Resize the panel.
+        $( this ).height( panelHeight );
+        remainingHeight -= panelHeight;
+
+        // Resize content.
+        setListingContentHeight( $( this ) );
+
+        // Update panel index.
+        panelIndex++;
+
+    } );
+
+    // If there is still some remaining height left, make the last panel with visible content taller.
+    if( remainingHeight > 0 && lastPanelWithVisibleContent != null ) {
+
+        // Make the last panel with visible content taller.
+        var newHeight = lastPanelWithVisibleContent.height() + remainingHeight;
+        lastPanelWithVisibleContent.height( newHeight );
+        setListingContentHeight( lastPanelWithVisibleContent );
+    }
+}
+
+</script>
+</head>
+
+<!-- The dashboard content -->
+<body>
+
+    <div id="fullareadiv" style="width: 100%; height: 100%; padding: 0px; margin: 0px; border: 0px;">
+
+        <div id="listings" class="mf-panel-container" style="width: 100%; height: 100%; padding: 0px; margin: 0px; border: 0px;">
+            <div id="listing_main" class="mf-panel" style="width: 100%; height: 50%; padding: 0px; margin: 0px; border: 0px; overflow: hidden;">
+                <div class="mf-listing-header"></div>
+                <div class="mf-listing-content"></div>
+            </div>
+            <div id="listing_assigned" class="mf-panel" style="width: 100%; height: 25%; padding: 0px; margin: 0px; border: 0px; overflow: hidden;">
+                <div class="mf-listing-header"></div>
+                <div class="mf-listing-content"></div>
+            </div>
+            <div id="listing_checkedout" class="mf-panel" style="width: 100%; height: 25%; padding: 0px; margin: 0px; border: 0px; overflow: hidden;">
+                <div class="mf-listing-header"></div>
+                <div class="mf-listing-content"></div>
+            </div>
+            <div id="listing_recent" class="mf-panel" style="width: 100%; height: 25%; padding: 0px; margin: 0px; border: 0px; overflow: hidden;">
+                <div class="mf-listing-header"></div>
+                <div class="mf-listing-content"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

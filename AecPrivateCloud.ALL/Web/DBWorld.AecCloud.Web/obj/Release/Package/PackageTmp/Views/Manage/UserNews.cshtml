@@ -1,0 +1,192 @@
+﻿@{
+    ViewBag.Title = "消息";
+    //Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/oldstyles/loading.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/oldstyles/second.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/oldstyles/footer.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/oldscripts/Mfile.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/jquery.flexslider-min.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/commonMethod.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/kefu.js"></script>
+
+<link href="~/Content/oldstyles/BIMClient.css" rel="stylesheet" />
+<link href="~/Content/oldstyles/BIMMaster.css" rel="stylesheet" />
+<link href="~/Content/oldstyles/BIMPopup.css" rel="stylesheet" />
+<style type="text/css">
+    .messageTable {
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .waitFor {
+        color: #2da5da;
+        font-weight: bold;
+    }
+
+        .waitFor .messageTableOperate a {
+            color: #2da5da;
+        }
+
+    .messageTable tr td, .messageTable tr th {
+        padding: 5px;
+    }
+
+    .messageTable tr th {
+        font-size: 14px;
+        border-bottom: 1px solid #ccc;
+    }
+
+        .messageTable tr th:first-child {
+            text-align: left;
+        }
+
+    .messageTable tr td {
+        border-bottom: 1px dashed #ccc;
+        /*text-align: center;*/
+    }
+
+        .messageTable tr td:first-child {
+            text-align: left;
+        }
+
+    .messageTableContain {
+    }
+
+    .messageTableOperate {
+        width: 120px;
+    }
+        .messageTableOperate a:hover {
+            text-decoration: underline;
+        }
+
+    .messageTableDate {
+        min-width: 150px;
+    }
+
+    .messageTableOperate .submitBtn {
+        margin-top: 0;
+        width: 80px;
+        height: 30px;
+    }
+
+        .messageTableOperate .submitBtn .submitA {
+            background-image: url('/Content/Images/btnBg.gif');
+            height: 30px;
+            line-height: 30px;
+            width: 80px;
+            font-size: 14px;
+            display: inline-block;
+            text-align: center;
+            color: white;
+        }
+          .foot-bottom {
+            position: absolute;
+            bottom: 0px;
+            height: 40px;
+            width: 100%;
+        }
+</style>
+<script type="text/javascript">
+    var pageIndex = 1;
+    var pageSize = 10;
+
+    $(function () {
+        $(".messageTableOperate").on("click", "a", function () {
+            $(this).parents("tr").removeClass("waitFor");
+        });
+
+        var h = $(document).height();
+        var waitTime = null;
+        $(".overlay").css({ "height": h });
+        $(".overlay").css({ 'display': 'block', 'opacity': '0.8' });
+        $(".showbox").stop(true).animate({ 'margin-top': '300px', 'opacity': '1' }, 200);
+        waitTime = setTimeout(function () {
+            $(".overlay").hide();
+            $(".showbox").hide();
+        }, 2000);
+
+        $.post("/Manage/GetUserNews", { pageSize: 20, pageIndex: 1 }, function (data) {
+            //修改JSON字符串中换行问题！
+            //alert(JSON.stringify(data));
+            data = data.replace("\n\r", " ");
+            data = data.replace("\r\n", " ");
+            data = data.replace("\n", " ");
+            data = data.replace("\r", " ");
+            data = data.replace("\t", "    ");
+            data = data.replace(" ", " ");
+            data = data.replace("\"", "\\" + "\"");
+            var res = strToJson(data);
+            var tempStr = "";
+            $.each(res, function (i, item) {
+                tempStr += "<tr id='" + item.id + "'><td>" + item.InviteeName + "(" + item.InviteeEmail + ")请求加入：" + item.ProjectName + "</td>";
+                tempStr += "<td class='messageTableDate'>" + item.InviteeConfirmMessage + "</td>";
+                tempStr += "<td class='messageTableOperate'><div class='submitBtn'><a href='#' class='submitA'' id='sure_" + item.ProjectId + "_" + item.InviteeId + "_" + item.PartyId + "'>确认</a></div></td></tr>";
+            });
+            $(".messageTable tbody").html(tempStr);
+            clearTimeout(waitTime);
+            $(".overlay").hide();
+            $(".showbox").hide();
+        });
+
+        $(".messageTable").on("click", ".submitBtn a", function () {
+            var tempId = $(this).attr("id");
+            var strs = tempId.split("_"); //字符分割
+            var projectId = strs[1];
+            var inviteeId = strs[2];
+            var partyId = strs[3];
+            $.post("/BIM/AccpetAskAction", { projectId: projectId, inviteeId: inviteeId, partyId: partyId }, function (data) {
+                if (data == "success") {
+                    alert("已同意！");
+                    location.reload();
+                } else {
+                    alert(data);
+                }
+            });
+        });
+    });
+</script>
+<!-- 当前位置 -->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="消息通知">消息通知</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section class="right">
+
+        <div class="projectTitle">
+            <span>消息通知</span>
+        </div>
+        <table cellpadding="0" cellspacing="0" border="0" class="messageTable">
+            <thead>
+                <tr>
+                    <th class="messageTableContain">
+                        内容
+                    </th>
+                    <th class="messageTableDate">
+                        验证信息
+                    </th>
+                    <th class="messageTableOperate">
+                        操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </section>
+    <div class="overlay">
+    </div>
+    <div id="AjaxLoading" class="showbox">
+        <div class="loadingWord">
+            <img src="~/Content/Images/waiting.gif">加载中，请稍候...
+        </div>
+    </div>
+</div>
+

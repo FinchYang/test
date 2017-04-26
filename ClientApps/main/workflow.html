@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="scripts/jquery/jquery.js"></script>
+    <script src="scripts/flow-chart/raphael-min.js"></script>
+    <script src="scripts/flow-chart/flowchart.js"></script>
+    <script src="scripts/cc/workflow.js"></script>
+    
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function OnNewDashboard(dashboard) {
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard){
+            return function(){
+                var data = dashboard.CustomData;
+                var flowData = $.parseJSON(data.workflowAdmin);
+                flowData.States.push({"Id": 0, "Name":"无状态"});
+                var versions = data.versionFlows;
+                var code = getWorkFlowString(flowData, versions);
+                //drawChart("canvas1", code.ongoing);
+                drawChart("canvas2", code.complete);
+            }
+        }
+
+        /*********************************************/
+        function getWorkFlowString(flowData, versions) {
+            var code = {};
+            
+            //��������
+            var str1 = "";
+            var flowObj = flowData;
+            var nodesStr = CC.workflow.combineCompleteNodesStr(flowObj, versions);
+            for (var i = 0; i < nodesStr.length; i++) {
+                str1 += nodesStr[i];
+                str1 += "\n";
+            }
+
+            var str2 = "";
+            var stepsStr = CC.workflow.combineCompleteStepsStr(flowObj);
+            for (var j = 0; j < stepsStr.length; j++) {
+                str2 += stepsStr[j];
+                str2 += "\n";
+            }
+            code.complete = str1 + "\n" + str2;
+
+            return code;
+        }
+
+        function drawChart(chartName, code) {
+            var chart = flowchart.parse(code);
+            chart.drawSVG(chartName, {
+                // 'x': 30,
+                // 'y': 50,
+                'line-width': 3,
+                'line-length': 20,
+                'text-margin': 10,
+                'font-size': 14,
+                'font': 'normal',
+                'font-family': 'Helvetica',
+                'font-weight': 'normal',
+                'font-color': 'black',
+                'line-color': 'black',
+                'element-color': 'black',
+                'fill': 'white',
+                'yes-text': 'Yes',
+                'no-text': 'No',
+                'arrow-end': 'block',
+                'scale': 1,
+                'symbols': {
+                    'start': {
+                        'font-color': 'red',
+                        'element-color': 'green',
+                        'fill': 'yellow'
+                    },
+                    'end': {
+                        'class': 'end-element'
+                    }
+                },
+                'flowstate': {
+                    'past': { 'fill': '#CCCCCC', 'font-size': 12 },
+                    'current': { 'fill': 'yellow', 'font-color': 'red', 'font-weight': 'bold' },
+                    'future': { 'fill': '#FFFF99' },
+                    'request': { 'fill': 'blue' },
+                    'invalid': { 'fill': '#444444' },
+                    'approved': { 'fill': '#58C4A3', 'font-size': 12, 'yes-text': 'APPROVED', 'no-text': 'n/a' },
+                    'rejected': { 'fill': '#C45879', 'font-size': 12, 'yes-text': 'n/a', 'no-text': 'REJECTED' }
+                }
+            });
+        }
+
+	</script>
+</head>
+<body>
+    <div id="canvas2" style="width: 100%; height: 100%;"></div>
+</body>
+</html>

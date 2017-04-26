@@ -1,0 +1,24 @@
+﻿@model LoginViewModel
+
+@{
+    ViewBag.Title = "激活邮箱";
+}
+
+
+@*<!-- 当前位置 -->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "Home", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="激活邮箱">激活邮箱</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavPartial")
+    <!-- 右边内容 -->
+    <section class="left">
+        请登录邮箱激活您的账号，如已激活，请 @Html.ActionLink("登录", "LogOn", "Account", null, new { @title = "登录"})！
+    </section>
+</div>*@
+
+

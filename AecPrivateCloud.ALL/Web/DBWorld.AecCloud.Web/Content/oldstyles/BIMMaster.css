@@ -1,0 +1,728 @@
+﻿/**
+    ** time : 2015 - 1 - 20
+    ** pro ： DBWorld
+    ** author : 肖颖
+    ** main : BIM客户端主要样式
+**/
+
+/*右侧*/
+section {
+    background: #ececec;
+    min-height: 200px;
+    min-width: 300px;
+    overflow: auto;
+    word-break: break-all;
+}
+
+.projectTitle {
+    border-bottom: 1px solid #ececec;
+    color: #1b96d1;
+    font-weight: bold;
+    padding-bottom: 3px;
+    padding-left: 20px;
+    padding-top:10px;
+    /* position: relative;*/
+    height: 35px;
+    margin-right:50px;
+    min-width: 300px;
+    font-size:16px;
+}
+
+.projectTitleTable {
+    background: #1b96d1;
+    font-size: 14px;
+    width: 100%;
+}
+
+    .projectTitleTable tr td:first-child {
+        text-align: center;
+        min-width: 100px;
+        width: 10%;
+    }
+
+    .projectTitleTable tr td:last-child {
+        min-width: 300px;
+        width: 90%;
+    }
+
+.currentProject {
+    height: 35px;
+    line-height: 35px;
+    overflow: hidden;
+}
+
+.changeProjectWrap {
+    height: 35px;
+    line-height: 35px;
+    position: relative;
+    width: 100%;
+}
+
+.changeProject input {
+    background: none;
+    border: none;
+    color: #fff;
+    font-family: "微软雅黑";
+    font-size: 14px;
+    height: 35px;
+    line-height: 35px;
+    width: 100%;
+    padding: 0 5% 0 1%;
+}
+
+.changeChoose {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.changeProjectList {
+    background: #fff;
+    border: 1px solid #1b96d1;
+    border-top: none;
+    color: #1b96d1;
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    width: 100%;
+    z-index: 5;
+    max-height: 300px;
+    overflow: auto;
+}
+
+    .changeProjectList ul li {
+        cursor: pointer;
+        height: 30px;
+        line-height: 30px;
+        padding-left: 15px;
+    }
+
+
+
+.projectTitle span {
+    background: #1b96d1;
+    border-radius: 2px;
+    color: #fff;
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    padding-left: 10px;
+    width: 130px;
+}
+
+.projectTitle a {
+    color: #1b96d1;
+    font-size: 12px;
+    margin-left: 20px;
+}
+
+.projectTitle cite {
+    font-style: normal;
+}
+
+.projectContent {
+    margin-bottom: 15px;
+}
+
+    .projectContent ul li {
+        width: 230px;
+        height: 240px;
+        float: left;
+        margin-left:3px;
+        margin-right: 2px;
+        margin-bottom: 10px;
+        list-style:none;
+        /*position: relative;*/
+    }
+
+.projectListWrap {
+    border:1px solid #d2d2d2;
+    background-color: #f0f0f0;
+    margin-top:20px;
+    height:240px;
+    position:relative;
+    width:228px;
+}
+.new-project-button{
+     opacity: 0;
+    position: absolute;
+    }
+  .projectListWrap:hover .new-project-button{
+       opacity: 1;  
+    }
+
+  .odacity-layer {
+      background-color:#000000;
+      background-color:rgba(0,0,0,0);
+    z-index:100;
+    width:228px;
+    height: 175px;
+    position:absolute;
+    top:0px;left: 0px;
+  }
+
+.odacity-layer:hover {
+        background-color:#000000;
+        background-color:rgba(0,0,0,0.7);
+    }
+ 
+    .projectListImg:hover {
+        border:2px solid #d2d2d2;
+        /*background-color:#000000;
+        background-color:rgba(0,0,0,0.7);*/
+    }
+
+.projectListImg {
+    height: 175px;
+    padding-top:110px;
+     padding-left:40px;
+    background-size: cover;
+}
+.projectListBtn {
+    border-top:1px solid #d2d2d2;
+    border-bottom:1px solid #d2d2d2;
+    height:34px;
+    overflow:hidden;
+    width:228px;
+    margin-top:2px;
+}
+.projectListBtn dl dt{
+    border-right:1px solid #d2d2d2;
+    cursor:pointer;
+    color:black;
+    float:left;
+    height:34px;
+    line-height:34px;
+    text-align:center;
+    width:56px;
+}
+    .projectContent .projectListBtn dl dt:hover {
+        background:#0f95f4;
+        color:#fff;
+    }
+    .projectListBtn dl dt.projectListOn {
+        color:#0f95f4;
+    }
+    .projectListBtn dl dt:last-child {
+        border-right:none;
+    }
+        .projectContent ul li a .imgprojectcover {
+            /*border: 1px solid #ccc;*/
+            height: 123px;
+            width: 218px;
+        }
+.projectListBtnConfirm{
+    color:black;
+    display:none;
+    z-index: 1000;
+    padding-top:40px;
+    position:absolute;
+    top:80px;
+    /*left:5px;*/
+    text-align:center;
+    width:481px;
+        height:187px;
+        background-image: url(/Content/Images/projects/修改项目状态.png);
+}
+    .projectListBtnConfirm a {
+        color:#fff;
+        margin:0 10px;
+    }
+        .projectListBtnConfirm a:hover {
+            text-decoration:underline;
+        }
+
+.projectName a, .projectIn a {
+    color: #7a7a7a;
+}
+
+    .projectName a:hover {
+        color: #1b96d1;
+        /*text-decoration: underline;*/
+    }
+
+.projectName, .projectIn {
+    /*height: 35px;
+    line-height: 35px;*/
+    overflow: hidden;
+    text-align: center;
+}
+
+.projectIn {
+    background: #1b96d1;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50px;
+}
+
+.projectName {
+    /*background: #2da5da;*/
+    /*position: absolute;
+    bottom: 0;
+    left: 0;*/
+    width: 228px;
+}
+
+    /*.otherName.projectName {
+    width: 185px;
+}
+
+    .otherName.projectName a {
+        width: 185px;
+    }*/
+
+    .projectName a {
+        display: block;
+        width: 208px;
+        padding: 0 10px;
+        padding-top:5px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+.projectContent span {
+    cursor: pointer;
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    z-index: 2;
+}
+
+/*命令列表*/
+.hoverShow {
+    display: none;
+    height: 148px;
+    position: absolute;
+    top: 0;
+    left: 145px;
+    width: 40px;
+    z-index: 1;
+}
+
+.hoverShowContent {
+    position: relative;
+}
+
+.hoverListBtn {
+    background: rgba(45,165,218,0.85);
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 148px;
+    width: 40px;
+}
+
+    .hoverListBtn dt {
+        color: #fff;
+        cursor: pointer;
+        font-size: 12px;
+        height: 28px;
+        line-height: 28px;
+        text-align: center;
+    }
+
+        .hoverListBtn dt:hover {
+            background: #ffbb41;
+        }
+
+.hoverShowConfirm {
+    background: url('Images/hoverShowConfirmBg.png') no-repeat 0 0;
+    color: #fff;
+    display: none;
+    font-size: 12px;
+    height: 40px;
+    overflow: hidden;
+    padding: 5px 5px 5px 15px;
+    position: absolute;
+    left: 40px;
+    top: 0;
+    width: 85px;
+    text-align: center;
+}
+
+    .hoverShowConfirm a {
+        color: #fff;
+        margin: 0px 3px;
+    }
+
+
+
+/*日历插件*/
+.tcalInput {
+    background: url('Images/calendarCal.gif') 100% 50% no-repeat;
+    padding-right: 20px;
+    cursor: pointer;
+}
+
+/* additional properties for input boxe in activated state, above still applies unless in conflict */
+.tcalActive {
+    background-image: url('Images/calendarCal.gif');
+}
+/* container of calendar's pop-up */
+#tcal {
+    position: absolute;
+    visibility: hidden;
+    z-index: 100000;
+    width: 215px;
+    background-color: white;
+    margin-top: 2px;
+    padding: 0 2px 2px 2px;
+    border: 1px solid silver;
+    -moz-box-shadow: 3px 3px 4px silver;
+    -webkit-box-shadow: 3px 3px 4px silver;
+    box-shadow: 3px 3px 4px silver;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='silver')";
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='silver');
+}
+
+/* table containing navigation and current month */
+#tcalControls {
+    border-collapse: collapse;
+    border: 0;
+    width: 100%;
+}
+
+    #tcalControls td {
+        border-collapse: collapse;
+        border: 0;
+        padding: 0;
+        width: 16px;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        cursor: pointer;
+    }
+
+    #tcalControls th {
+        border-collapse: collapse;
+        border: 0;
+        padding: 0;
+        line-height: 25px;
+        font-size: 10px;
+        text-align: center;
+        font-family: Tahoma, Geneva, sans-serif;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+#tcalPrevYear {
+    background-image: url('Images/calendarPrev_year.gif');
+}
+
+#tcalPrevMonth {
+    background-image: url('Images/calendarPrev_mon.gif');
+}
+
+#tcalNextMonth {
+    background-image: url('Images/calendarNext_mon.gif');
+}
+
+#tcalNextYear {
+    background-image: url('Images/calendarNext_year.gif');
+}
+
+/* table containing week days header and calendar grid */
+#tcalGrid {
+    border-collapse: collapse;
+    border: 1px solid silver;
+    width: 100%;
+}
+
+    #tcalGrid th {
+        border: 1px solid silver;
+        border-collapse: collapse;
+        padding: 3px 0;
+        text-align: center;
+        font-family: Tahoma, Geneva, sans-serif;
+        font-size: 10px;
+        background-color: #1b96d1;
+        color: white;
+    }
+
+    #tcalGrid td {
+        border: 0;
+        border-collapse: collapse;
+        padding: 2px 0;
+        text-align: center;
+        font-family: Tahoma, Geneva, sans-serif;
+        width: 14%;
+        font-size: 11px;
+        cursor: pointer;
+    }
+
+        #tcalGrid td.tcalOtherMonth {
+            color: silver;
+        }
+
+        #tcalGrid td.tcalWeekend {
+            background-color: #ACD6F5;
+        }
+
+        #tcalGrid td.tcalToday {
+            border: 1px solid red;
+        }
+
+        #tcalGrid td.tcalSelected {
+            background-color: #FFB3BE;
+        }
+
+
+
+
+/*项目详情*/
+.titleBlue {
+    background: #1b96d1;
+    color: #fff;
+    padding-left: 15px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.projectDetail {
+    margin-right: 20px;
+    width: 46%;
+    min-width: 490px;
+}
+
+.projectDetailTitle {
+    min-width: 470px;
+}
+
+    .projectDetailTitle a {
+        color: #fff;
+        margin-right: 15px;
+    }
+
+.projectDetailContent {
+    padding: 10px 0 10px 15px;
+    margin-right:50px;
+    margin-top:10px;
+}
+
+.chartContent {
+    height: 160px;
+    overflow: auto;
+}
+
+.projectDetailContent .columnRight {
+    border: 2px solid #dcdcdc;
+    /*min-height: 23px;
+    line-height: 23px;*/
+    /*min-width: 370px;*/
+    /*width: 80%;*/
+}
+
+.listLeft2 {
+    margin-left: 13px;
+}
+
+.projectDetailContent .columnRight.borderNone {
+    border: none;
+}
+
+.timeShow {
+    width: 190px;
+    text-align: center;
+}
+
+.projectApproval {
+    width: 85px;
+    text-align: center;
+}
+
+.projectApprovalSelect {
+    width: 65px;
+}
+/*编辑项目详情*/
+.editProject {
+    display: none;
+}
+
+.inputEdit {
+    border: 1px solid #1b96d1;
+    width: 100%;
+}
+
+.textareaEdit {
+    border: 1px solid #1b96d1;
+    /*color: #025a85;*/
+    font-family: "微软雅黑";
+    font-size: 14px;
+    min-height: 21px;
+    width: 100%;
+    resize: none;
+}
+
+.columnWrap {
+    min-height: 25px;
+}
+ .textareaEdit {
+    min-height: 45px;
+}
+
+.describeHeight {
+    /*height: 142px;*/
+    max-height: 348px;
+    overflow: auto;
+    resize:vertical;
+    /*padding-left: 7px;*/
+    color:rgb(2, 90, 133);
+}
+.editTime {
+    border: 1px solid #1b96d1;
+    height: 25px;
+    line-height: 25px;
+    min-width: 90px;
+}
+/*确定切换当前项目*/
+.affirmProject {
+    background: url('Images/affirmProjectBg.png') no-repeat 0 0;
+    color: #fff;
+    display: none;
+    height: 70px;
+    line-height: 24px;
+    position: absolute;
+    left: 500px;
+    top: 100px;
+    padding: 0 10px;
+    width: 210px;
+    z-index: 100;
+}
+
+    .affirmProject a {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+/*添加成员列表*/
+.closeUser a {
+    color: #096e9a;
+    display: block;
+    /*height: 70px;*/
+    /*width: 45px;*/
+    float: left;
+    margin-right: 5px;
+    position: relative;
+}
+
+.closeUser a img:hover {
+    border: 1px solid #008ad2;
+}
+
+    .closeUser a p {
+        display: inline-block;
+        width: 45px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        line-height: 24px;
+        height: 24px;
+        text-align: center;
+    }
+
+    .closeUser a span {
+        display:block;
+        position: absolute;
+        top: -5px;
+        right: 0;
+    }
+
+        .closeUser a span img {
+            height: 15px;
+            width: 15px;
+        }
+
+
+/*项目消息*/
+.messageTypeChoose {
+    display: inline-block;
+    margin-bottom: 10px;
+    width: 200px;
+}
+
+    .messageTypeChoose .nice-select {
+        height: 30px;
+        line-height: 30px;
+    }
+
+        .messageTypeChoose .nice-select input {
+            height: 30px;
+            line-height: 30px;
+        }
+
+.messageNews img {
+    height: 35px;
+    width: 35px;
+    margin-left: 15px;
+}
+
+.messageListTable {
+    border: 1px solid #1b96d1;
+    font-family: "微软雅黑";
+    font-size: 14px;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+.readColor {
+    color: #1b96d1;
+}
+
+    .readColor .messageTheme a {
+        color: #1b96d1;
+    }
+
+.unreadColor {
+    color: #f0983f;
+}
+
+    .unreadColor .messageTheme a {
+        color: #f0983f;
+    }
+
+.messageListTable tr th {
+    text-align: left;
+    padding-bottom: 15px;
+}
+
+.messageListTitle {
+    background: #1b96d1;
+    color: #fff;
+    font-weight: normal;
+    height: 30px;
+    line-height: 30px;
+    width: 90px;
+    text-align: center;
+}
+
+.messageListTable tbody tr > td:first-child {
+    padding-left: 10px;
+}
+
+.messageListTable tr td {
+    border-bottom: 1px dashed #ccc;
+    padding: 5px 10px 5px 0;
+    overflow: hidden;
+}
+
+.messageCategory {
+    width: 10%;
+}
+
+.messageTheme {
+    width: 45%;
+}
+
+.messageComment {
+    width: 25%;
+}
+
+.messageCreater {
+    width: 10%;
+}
+
+.messageDate {
+    width: 10%;
+}

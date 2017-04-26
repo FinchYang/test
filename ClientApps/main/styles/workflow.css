@@ -1,0 +1,130 @@
+﻿* body {
+    margin: 0;
+    padding: 0;
+    overflow: auto; /* when page gets too small */
+    width: 100%;
+    height: 100%;
+}
+.main-title {
+    background-color: #007DC6;
+    font-size: 18px;
+    color: white;
+    text-align: center;
+    line-height: 34px;
+    height: 35px;
+    margin-bottom: 20px;
+}
+.main-title img{
+    width: 25px;
+    height: 25px;
+    cursor:pointer;
+}
+.f-wrap {
+    margin: 20px 10px 25px 10px;
+    position:relative;
+}
+
+.f-current {
+    margin: 0 0 20px 50px;
+}
+.f-current>span {
+    font-size: 16px;
+    font-weight: bold;
+}
+.f-current>a {
+    cursor:pointer;
+    font-size: 12px;
+}
+.f-current-state {
+    color: red;
+}
+.f-panel {
+    width: 300px;
+}
+.f-panel-none {
+    width: 200px;
+    margin-left: 50px;
+}
+.f-panel-heading {
+    text-align: center;
+}
+.f-panel-title {
+    font-size: 17px;
+    font-weight: bold;
+    color: red;
+}
+.f-arrow {
+    margin-left: 152px;
+    margin-top: -17px;
+    margin-bottom: 2px;
+}
+.f-arrow img {
+    margin-left: -18px;
+    height: 50px;
+    width: 32px;
+}
+
+.t-wrap {
+    margin: 20px 35px 10px 50px;
+    position:relative;
+}
+.t-wrap .modal {
+    min-width: 420px;
+}
+.t-wrap table {
+    min-width: 360px;
+    width: 99.9%;
+}
+.t-wrap textarea {
+    width:100%;
+    min-height: 15px;
+    max-height: 120px;
+    background: white;
+    border: 0 solid white;
+    /*overflow-x:visible;*/
+    overflow-y:auto;
+    line-height: 100%;
+}
+.t-wrap input {
+    width:100%;
+    min-height: 18px;
+    background: white;
+    border: 0 solid white;
+    line-height: 100%;
+}
+
+.row-span {
+    vertical-align: middle;
+}
+.f-panel>a {
+    cursor:pointer;
+    font-size: 12px;
+    margin-left: 240px;
+}
+.f-close {
+    margin-top: 8px;
+    margin-right: 10px;
+    background: url('../images/close.png') no-repeat 0 0;
+    width: 30px;
+    height: 30px;
+}
+table>caption {
+    margin-top: -35px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+table>thead {
+    background-color: #069cf3;
+    color: white;
+}
+table td {
+    font-size: 14px;
+}
+
+.f-current-tr {
+    background: rgb(249, 249, 157);
+}
+.f-current-tr input,.f-current-tr textarea{
+    background: rgb(249, 249, 157);
+}

@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>项目联系人</title>
+    <link href="style/main.css" rel="stylesheet" />
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <link href="style/flatbutton.css" rel="stylesheet" />
+    
+    <script type="text/javascript" src="scripts/home_common.js"></script>
+    <script type="text/javascript" src="scripts/listing_common.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/utilities.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/localization.js"></script>
+    <script type="text/javascript" src="scripts/md/base.js"></script>
+    <script type="text/javascript" src="scripts/cc/invite.js"></script>
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+    <script type="text/javascript" src="scripts/mf/client.js"></script>
+    <script type="text/javascript" src="scripts/mf/vault.js"></script>
+    <script type="text/javascript" src="scripts/mf/objectOps.js"></script>
+    <script type="text/javascript" src="scripts/web.js"></script>
+    <script type="text/javascript" src="scripts/cc/public.js"></script>
+    <script type="text/javascript" src="scripts/md/mail.js"></script>
+    <script type="text/javascript" src="scripts/cc/mailcontacts.js"></script>
+    
+    <script type="text/javascript">
+
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+
+                var malId = dashboard.CustomData.malId;
+
+                // Shortcuts.
+                var shellFrame = dashboard.Parent;
+                var loc = new localization();
+                var additionalSectionShown = false;
+
+                initializeLayout(dashboard, shellFrame);
+ 
+                //根据路径创建对应Listing
+                var listing = createListingForPath(shellFrame, loc, $('#listing_members'), shellFrame.CurrentPath, //"邮件通讯录",
+                 function (container, objectsCount) {
+                     // Specify the relative height of this listing.
+                     var heightNumber = 20;
+                     if (objectsCount <= 2)
+                         heightNumber = 15;
+                     if (objectsCount <= 1)
+                         heightNumber = 10;
+                     if (objectsCount > 20)
+                         heightNumber = 30;
+                     container.data("heightNumber", heightNumber);
+                     additionalSectionShown = true;
+                 });
+
+                if (listing) CC.SetCommTheme(listing);
+
+                //获取vault对象
+                var vault = shellFrame.ShellUI.Vault;
+
+                //取出json文件中需要显示的列id
+                var temp = CC.mailcontacts.GetArray(vault);
+                var folderDefs = publicUtils.getFolderDefs(malId);
+                publicUtils.SetListingHeader(folderDefs, shellFrame, temp);
+   
+                // Listen to the ActiveListingChanged event.
+                shellFrame.Events.Register(MFiles.Event.ActiveListingChanged, getActiveListingChangedHandler(shellFrame));
+
+                // Resize panes.
+                $(window).resize(resizedWithHeight($("#divButton").height()));
+                resizedWithHeight($("#divButton").height())();
+                  
+                $("#btnNew").click(function () {
+                    var typeId = MF.alias.objectType(vault, md.emailAdressBook.typeAlias);
+                    var objType = vault.ObjectTypeOperations.GetObjectType(typeId);
+                    vault.ObjectOperations.ShowBasicNewObjectWindow(0, objType);
+                });
+
+                $("#btnDel").click(function () {
+                    
+                    var currentItem = shellFrame.ActiveListing.CurrentSelection.ObjectVersions;//当选中项前项
+                    if (currentItem.count === 0) { 
+                        shellFrame.ShellUI.ShowMessage("请选中您需要删除的对象！");
+                    } else {
+                        if (CC.mailcontacts.deleteDomTip(shellFrame)) {//删除提示
+                            var oObjID = currentItem.Item(1).ObjVer.ObjID;
+                            try {
+                                var delObj1 = vault.ObjectOperations.DeleteObject(oObjID);
+                                vault.ObjectOperations.DestroyObject(oObjID, true, delObj1.ObjVer.Version);
+
+                            } catch (e) {
+                                try { vault.ObjectOperations.DeleteObject(oObjID); } catch (e) { }
+                            }
+
+                            var objDeleted = true;
+                            try {
+                                var objVer = vault.ObjectOperations.GetLatestObjVer(oObjID, false, false);
+                                var objVersion = vault.ObjectOperations.GetObjectInfo(objVer, true, false);
+                                if (!objVersion.Deleted) objDeleted = false;
+                            } catch (e) { }
+
+                            if (objDeleted) {
+                                shellFrame.ShellUI.ShowMessage("删除成功！");
+                            } else {
+                                shellFrame.ShellUI.ShowMessage("您没有相关权限，删除失败！");
+                            }
+                        }
+                    }
+                });
+                 
+            };
+        }
+           
+    </script>
+
+</head>
+<body>
+    <div id="fullareadiv" style="width: 100%; height: 90%; padding: 0px; margin: 0px; border: 0px;">
+        <div id="listings" class="mf-panel-container" style="width: 100%; height: 100%; padding: 0px;  margin-bottom: 30px; border: 0px;">
+            <div id="listing_members" class="mf-panel" style="width: 100%; height: 50%; padding: 0px;margin: 0px; border: 0px; overflow: hidden;">
+                <div id="divMember">
+                </div>
+                <div class="mf-listing-content">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="divButton" style="cursor: pointer; height: 30px; line-height: 30px; font-size: 14px; color: #fff; overflow: hidden; position: absolute; left: 0; bottom: 0; width: 100%;">
+
+        <div class="sdHeaderDiv" id="btnNew">
+            <a href="#" class="sdHeaderDivA">
+                <img src="images/buttons/新建联系人.png" width="18" height="18" />
+                新建联系人
+            </a>
+        </div>
+
+        <div class="sdHeaderDiv" id="btnDel" style="margin-left: 130px; ">
+            <a href="#" class="sdHeaderDivA">
+                <img src="images/buttons/删除联系人.png" width="18" height="18" />
+                删除联系人
+            </a>
+        </div>
+    </div>
+</body>
+</html>

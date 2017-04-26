@@ -1,0 +1,94 @@
+﻿@using DBWorld.AecCloud.Web.Models
+@model List<DBWorld.AecCloud.Web.Models.ErpPmUser>
+@{
+    ViewBag.Title = "其他人员设置";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="项目中心">项目中心</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section id="permissionset" class="right">
+        <div class="section-header"> <div class="corbar"></div> 人员权限 <img src="/Content/Images/mdd/副级导航.png" /> 其他人员设置</div>
+        <div style="margin-left: 50px;margin-top: 50px;width: 900px;">
+            <div id='companylist' style="position: absolute;top: 100px;left: 300px;width: 250px">
+                <div style="margin-left: 60px;padding: 10px;">公司总部工程管理部（ERP立项信息负责人）</div>
+            </div>
+            <div style="position: absolute; top: 100px; left: 900px; width: 250px;">
+                <div style="margin-left: 60px; padding: 10px;">用户选择</div>
+                <select id='selectuser' style="width: 200px">
+                    <option value='0' >请选择</option>
+                </select>
+            </div>
+            <input style="position: absolute; top: 190px; left: 900px; background-color: #008ad2; color: white;padding: 5px 20px;" type='button' name='Submit' id='saveErpPm' value='提交' />
+        </div>
+    </section>
+</div>
+
+<script>
+    (function ($) {
+        var all;
+        $.ajax({
+            url: "/Manage/GetErpPmData",
+            success: function (data) {
+                all = strToJson(data);
+                $('#selectuser').empty();
+                var op = "<option value='" + '0 ' + "'>"
+                    + '请选择' + "</option>";
+                $('#selectuser').append(op);
+                $.each(all, function (i, item) {
+                    if (item.Selected) {
+                        op = "<option value='" + item.Id + "' selected='selected'>"
+                            + item.UserName + item.Fullname + "</option>";
+                    } else {
+                        op = "<option value='" + item.Id + "'>"
+                            + item.UserName + item.Fullname + "</option>";
+                    }
+                    $('#selectuser').append(op);
+                });
+            }
+        });
+        $('#saveErpPm').on('click', function () {
+            //  $("#permissionset").on("click", "#saveErpPm", function () {
+            //   $('#saveErpPm').click(function () {
+            console.log("before 1 ajax：");
+            var selid = $("#selectuser").val();
+            if (selid == 0) {
+                alert("请选择适当用户！");
+                return;
+            }
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: "/manage/permissionseterp",
+                    data: {
+                        userid: selid
+                    },
+                    async: false,
+                    success: function (data) {
+                        if (data === "success") {
+                            alert("设置成功！");
+                        } else {
+                            alert(data);
+                        }
+                    },
+                    error: function (xmlHttpRequest, textStatus, errorThrown) {
+                        console.log("设置失败：(status:" + xmlHttpRequest.status + ", readyState:" + xmlHttpRequest.readyState +
+                            ", textStatus:" + textStatus + ", errorThrown: " + errorThrown + ")");
+                    }
+                });
+                console.log("after 1 ajax：");
+            } catch (e) {
+                alert(e.message);
+            }
+            console.log("after ajax：");
+        });
+    })(jQuery);
+</script>

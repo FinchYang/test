@@ -1,0 +1,441 @@
+﻿@model UserInfoViewModel
+@{
+    ViewBag.Title = "个人中心-修改头像-DBWorld";
+   // Layout = "~/Views/Shared/_LayoutUserHome.cshtml";
+     <link href="~/Content/bootstrap.css" rel="stylesheet" type="text/css" />
+    //Html.AppendCssFileParts(Resources + "/Content/upload.css");
+    //Html.AppendCssFileParts(Resources + "/Content/user2.css");
+    //Html.AppendCssFileParts(ResourcesCommon + "/Content/jquery.Jcrop.min.css");
+
+    //Html.AppendScriptParts(ResourcesCommon + "/Scripts/jquery.Jcrop.min.js");
+
+    //Html.AppendScriptParts(ResourcesCommon + "/Scripts/jquery.confirm.js");
+    //Html.AppendScriptParts(ResourcesCommon + "/Scripts/jquery.alert-2.js");
+    //数据js
+    //Html.AddScriptParts(Url.Content("~/Scripts/plupload/plupload.init.js"));
+    //Html.AddScriptParts(Url.Content("~/Scripts/plupload/plupload.full.min.js"));
+    //Html.AddScriptParts(Url.Content(ResourcesScript + "/app/UserInfo.class.js"));
+}
+<input type="hidden" id="leftList" value="user-nav1" />
+<div class="webWidth clearfix">
+    <!--当前位置-->
+    <div class="currentPosition">
+        @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+        <span>>></span>
+        <a href="#" title="修改用户头像">修改用户头像</a>
+    </div>
+    <div class="user-home-wrap clearfix">
+        @Html.Partial("_LeftNavPrivatePartiale")
+        <div class="user-contain right">
+            <div class="box clearfix">
+                <div class="leftPart left">
+                    <div class="choose_b" id="NewUpdiv">
+                        <p class="choose">选择您要上传的头像</p>
+                        <span class="tubiao"></span>
+                    </div>
+                    <p class="support">仅支持JPG、GIF、PNG、JPEG、BMP格式，文件小于4M</p>
+                    <div class="uploadArea" id="imageArea">
+                        <div id="uploading">
+                            <img src="@Model.UserImage_Big" id="element_id" />
+                        </div>
+                    </div>
+                    @*<p class="rec">推荐头像</p>
+                        <ul id="tutu">
+                            <li value><img src="@Url.Content(ResourcesUserDefaultImg + "/1.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/2.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/3.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/4.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/5.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/6.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/7.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li class="nomargin"><img src="@Url.Content(ResourcesUserDefaultImg + "/8.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/9.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/10.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/11.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/12.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/13.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/14.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/15.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li class="nomargin"><img src="@Url.Content(ResourcesUserDefaultImg + "/16.jpg")" alt="" width="50" height="50"><div></div></li>
+                        </ul>*@
+                    <div class="save_b">
+                        @using (Html.BeginForm("CustomUpLoadUserImage", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", id = "form1" }))
+                        {
+                            <input type="hidden" id="x" name="x">
+                            <input type="hidden" id="y" name="y">
+                            <input type="hidden" id="w" name="w">
+                            <input type="hidden" id="h" name="h">
+                            <input type="file" id="files" name="files" accept=".jpg,.gif,.png,.jpeg,.bmp" />
+                            <input id="save_p" type="submit" value="裁剪图像">
+                        }
+                        <input class="save_p" type="button" value="裁剪图像">
+                    </div>
+                </div>
+                <div class="rightPart right">
+                    <p class="effect">效果预览</p>
+                    <p class="required">你上传的图片会自动生成3种尺寸，请注意小尺寸的头像 是否清晰</p>
+                    <!--缩略图100-->
+                    <div id="preview-pane">
+                        <div class="preview-container">
+                            <img src="@Model.UserImage_Big" class="jcrop-preview" alt="preview" id="preview" />
+                        </div>
+                        <div class="textPx">
+                            100*100像素
+                        </div>
+                    </div>
+                    <!--缩略图50-->
+                    <div id="preview-pane2">
+                        <div class="preview-container2">
+                            <img src="@Model.UserImage_Big" class="jcrop-preview2" alt="Preview" id="preview2" />
+                        </div>
+                        <div class="textPx">
+                            50*50像素
+                        </div>
+                    </div>
+                    <!--缩略图30-->
+                    <div id="preview-pane3">
+                        <div class="preview-container3">
+                            <img src="@Model.UserImage_Big" class="jcrop-preview2" alt="Preview" id="preview3" />
+                        </div>
+                        <div class="textPx">
+                            30*30像素
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function ($) {
+        $("#NewUpdiv").click(function () {
+            $("#files").click();
+            //$("#files")[0].onchange = function () {
+            //    console.log("改变了")
+            //};//setImagePreview;
+        });
+        $("#files").change(function () {
+            setImagePreview();
+        });
+        $(".save_p").click(function () {
+            $.confirm({
+                'title': '提示',
+                'message': '<div class="popupFailTips"><span></span>确认修改头像？</div>',
+                'buttons': {
+                    '确认': {
+                        'class': 'confirmBtnTrue',
+                        'action': function () {
+                            //$.ajax({
+                            //    cache: true,
+                            //    type: "POST",
+                            //    url: '/UserInfo/CustomUpLoadUserImage',
+                            //    data: $('#form1').serialize(),
+                            //    async: false,
+                            //    error: function (request) {
+                            //        alert("Connection error");
+                            //    },
+                            //    success: function (data) {
+                            //        alert("修改成功");
+                            //    }
+                            //});
+                            $.alertButtons({
+                                'title': '提示',
+                                'message': '<div class="popupSuccessTips"><span></span>修改头像成功！</div>',
+                                'buttons': {
+                                    '确认': {
+                                        'class': 'confirmBtnTrue',
+                                        'action': function () {
+                                            $("#save_p").click();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    '取消': {
+                        'class': 'confirmBtnCancel',
+                        'action': function () {
+
+                        }
+                    }
+                }
+            });
+        });
+        // Create variables (in this scope) to hold the API and image size
+        var jcrop_api,
+        boundx,
+        boundy,
+        // Grab some information about the preview pane
+        $preview = $('#preview-pane'),
+        $pcnt = $('#preview-pane .preview-container'),
+        $pimg = $('#preview-pane .preview-container img'),
+        xsize = $pcnt.width(),
+        ysize = $pcnt.height(),
+        $preview2 = $('#preview-pane2'),
+        $pcnt2 = $('#preview-pane2 .preview-container2'),
+        $pimg2 = $('#preview-pane2 .preview-container2 img'),
+        xsize2 = $pcnt2.width(),
+        ysize2 = $pcnt2.height(),
+        $preview3 = $('#preview-pane3'),
+        $pcnt3 = $('#preview-pane3 .preview-container3'),
+        $pimg3 = $('#preview-pane3 .preview-container3 img'),
+        xsize3 = $pcnt3.width(),
+        ysize3 = $pcnt3.height();
+
+        console.log('init', [xsize, ysize]);
+        console.log('init', [xsize2, ysize2]);
+        console.log('init', [xsize3, ysize3]);
+
+
+        //var api = $.Jcrop('#element_id', {
+        //    onChange: updatePreview,//改变选框执行
+        //    onSelect: showCoords,//选择完成之后执行
+        //    aspectRatio: 1 / 1,//剪切比例
+        //    boxWidth: 450,//图片最大宽度比例
+        //    setSelect: [0, 0, 50, 50]//设置初始裁剪框宽高位置
+        //}, function () {
+        //    // Use the API to get the real image size
+        //    var bounds = this.getBounds();
+        //    boundx = bounds[0];
+        //    boundy = bounds[1];
+        //    // Store the API in the jcrop_api variable
+        //    jcrop_api = this;
+
+        //    // Move the preview into the jcrop container for css positioning
+        //    $preview.appendTo(jcrop_api.ui.holder);
+        //    $preview2.appendTo(jcrop_api.ui.holder);
+        //    $preview3.appendTo(jcrop_api.ui.holder);
+        //});
+
+        $('#element_id').Jcrop({
+            onChange: updatePreview,//改变选框执行
+            onSelect: showCoords,//选择完成之后执行
+            aspectRatio: 1 / 1,//剪切比例
+            boxWidth: 450,//图片最大宽度比例
+            setSelect: [0, 0, 100, 100]//设置初始裁剪框宽高位置
+        }, function () {
+            // Use the API to get the real image size
+            var bounds = this.getBounds();
+            boundx = bounds[0];
+            boundy = bounds[1];
+            // Store the API in the jcrop_api variable
+            jcrop_api = this;
+
+            // Move the preview into the jcrop container for css positioning
+            //$preview.appendTo(jcrop_api.ui.holder);
+            //$preview2.appendTo(jcrop_api.ui.holder);
+            //$preview3.appendTo(jcrop_api.ui.holder);
+        });
+
+
+
+        function showCoords(c) {
+            $("#x").val(c.x);
+            $("#y").val(c.y);
+            $("#w").val(c.w);
+            $("#h").val(c.h);
+        }
+        function checkCoords() {
+            if (parseInt($('#w').val())) {
+                return true;
+            };
+            alert('请先选择要裁剪的区域后，再提交。');
+            return false;
+        };
+        function updatePreview(c) {
+            if (parseInt(c.w) > 0) {
+                var rx = xsize / c.w;
+                var ry = ysize / c.h;
+                var rx2 = xsize2 / c.w;
+                var ry2 = ysize2 / c.h;
+                var rx3 = xsize3 / c.w;
+                var ry3 = ysize3 / c.h;
+
+                $pimg.css({
+                    width: Math.round(rx * boundx) + 'px',
+                    height: Math.round(ry * boundy) + 'px',
+                    marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                    marginTop: '-' + Math.round(ry * c.y) + 'px'
+                });
+                $pimg2.css({
+                    width: Math.round(rx2 * boundx) + 'px',
+                    height: Math.round(ry2 * boundy) + 'px',
+                    marginLeft: '-' + Math.round(rx2 * c.x) + 'px',
+                    marginTop: '-' + Math.round(ry2 * c.y) + 'px'
+                });
+                $pimg3.css({
+                    width: Math.round(rx3 * boundx) + 'px',
+                    height: Math.round(ry3 * boundy) + 'px',
+                    marginLeft: '-' + Math.round(rx3 * c.x) + 'px',
+                    marginTop: '-' + Math.round(ry3 * c.y) + 'px'
+                });
+            }
+        };
+
+        function setImagePreview() {
+            var docObj = document.getElementById("files");
+
+            if (docObj.files && docObj.files[0]) {
+                //imgObjPreview.src = docObj.files[0].getAsDataURL();
+                //火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
+                var src = window.URL.createObjectURL(docObj.files[0]);
+
+                //jcrop_api.setImage(src);
+
+                //$("#imageArea img").attr("src", src);
+                $('#uploading').empty();
+                $('#uploading').append("<img id='element_id' />");
+                $("#element_id").attr("src", src);
+                $("#preview").attr("src", src);
+                $("#preview2").attr("src", src);
+                $("#preview3").attr("src", src);
+
+                $('#element_id').Jcrop({
+                    onChange: updatePreview,//改变选框执行
+                    onSelect: showCoords,//选择完成之后执行
+                    aspectRatio: 1 / 1,//剪切比例
+                    boxWidth: 450,//图片最大宽度比例
+                    setSelect: [0, 0, 50, 50]//设置初始裁剪框宽高位置
+                }, function () {
+                    // Use the API to get the real image size
+                    var bounds = this.getBounds();
+                    boundx = bounds[0];
+                    boundy = bounds[1];
+                    // Store the API in the jcrop_api variable
+                    jcrop_api = this;
+
+                    // Move the preview into the jcrop container for css positioning
+                    //$preview.appendTo(jcrop_api.ui.holder);
+                    //$preview2.appendTo(jcrop_api.ui.holder);
+                    //$preview3.appendTo(jcrop_api.ui.holder);
+                });
+
+            } else {
+                //IE下，使用滤镜
+                docObj.select();
+                var imgSrc = document.selection.createRange().text;
+                var localImagId = document.getElementById("localImag");
+                //必须设置初始大小
+                localImagId.style.width = "300px";
+                localImagId.style.height = "120px";
+                //图片异常的捕捉，防止用户修改后缀来伪造图片
+                try {
+                    localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                    localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+                } catch (e) {
+                    alert("您上传的图片格式不正确，请重新选择!");
+                    return false;
+                }
+                imgObjPreview.style.display = 'none';
+                document.selection.empty();
+            }
+            return true;
+        }
+        //该表图像
+        //$("#tutu li").click(function () {
+        //    var $this = $(this);
+        //    img = $this.find("img").attr("src");
+        //    $(this).find("div").addClass("hongkuang").end().siblings().find("div").removeClass("hongkuang");
+        //    jcrop_api.setImage(img);
+        //    $pimg.setImage(img);
+        //});
+    });
+</script>
+
+
+
+
+
+
+@*@model UserModel
+    @{
+        ViewBag.Title = "个人中心-修改头像-DBWorld";
+        Layout = "~/Views/Shared/_LayoutUserHome.cshtml";
+        Html.AddTitleParts("账户信息");
+        Html.AddTitleParts("账户信息");
+        //数据js
+        Html.AddScriptParts(Url.Content("~/Scripts/plupload/plupload.init.js"));
+        Html.AddScriptParts(Url.Content("~/Scripts/plupload/plupload.full.min.js"));
+        Html.AddScriptParts(Url.Content(ResourcesScript + "/app/UserInfo.class.js"));
+        //显示文件
+        Html.AddCssFileParts(Url.Content("~/Content/reset.css"));
+        Html.AddCssFileParts(Url.Content("~/Content/base1.css"));
+        //Html.AddCssFileParts(Url.Content("~/Content/upload.css"));
+        Html.AppendCssFileParts(Resources + "/Content/upload.css");
+        Html.AppendCssFileParts(Resources + "/Content/user.css");
+
+        Html.AppendScriptParts(ResourcesCommon + "/Scripts/jquery.alert.buttons.js");
+        Html.AppendScriptParts(ResourcesCommon + "/Scripts/jquery.alert.js");
+    }
+    <input type="hidden" id="leftList" value="userNav1" />
+    <div class="webWidth clearfix">
+        <div class="userHomeWrap clearfix">
+
+            @Html.Partial("_LeftNavPrivatePartiale")
+            <div class="userContain right">
+                <div class="box">
+                    <div class="leftPart fl">
+                        <div class="choose_b" id="Updiv">
+                            <p class="choose" id="Upload">选择您要上传的头像</p>
+                            <span class="tubiao"></span>
+                            <div id="UploadMSG" style="display:none"></div>
+                        </div>
+
+                        <p class="support">仅支持JPG、GIF、PNG、JPEG、BMP格式，文件小于4M</p>
+                        <div class="uploadArea">
+                            <div id="profile">
+                                <img src="@Model.UserImage_Big" alt="" width="150" height="150" class="beg">
+                            </div>
+                        </div>
+                        <p class="rec">推荐头像</p>
+                        <ul id="tutu">
+                            <li value><img src="@Url.Content(ResourcesUserDefaultImg + "/1.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/2.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/3.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/4.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/5.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/6.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/7.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li class="nomargin"><img src="@Url.Content(ResourcesUserDefaultImg + "/8.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/9.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/10.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/11.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/12.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/13.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/14.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li><img src="@Url.Content(ResourcesUserDefaultImg + "/15.jpg")" alt="" width="50" height="50"><div></div></li>
+                            <li class="nomargin"><img src="@Url.Content(ResourcesUserDefaultImg + "/16.jpg")" alt="" width="50" height="50"><div></div></li>
+                        </ul>
+                        <div class="save_b">
+                            <p class="save_p" id="save_image_btn">保存</p>
+                        </div>
+                    </div>
+                    <div class="rightPart fr">
+                        <p class="effect">效果预览</p>
+                        <p class="required">你上传的图片会自动生成3种尺寸，请注意小尺寸的头像 是否清晰</p>
+                        <div class="photo">
+                            <div class="photo1 fl">
+                                <div id="first">
+                                    <img src="@Model.UserImage_Mid" alt="" width="100" height="100">
+                                </div>
+                                <span>100*100像素</span>
+                            </div>
+                            <div class="photo2 fl">
+                                <div id="second">
+                                    <img src="@Model.UserImage_Small" alt="" width="50" height="50">
+                                </div>
+                                <span>50*50像素</span>
+                            </div>
+                            <div class="photo3 fl">
+                                <div id="third">
+                                    <img src="@Model.UserImage_Mini" alt="" width="30" height="30">
+                                </div>
+                                <span>30*30像素</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@

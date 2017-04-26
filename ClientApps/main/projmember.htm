@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+	<title>成员列表</title>
+    <link href="styles/projmember.css" rel="stylesheet" />
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <style>
+        
+    </style>
+
+    <script type="text/javascript">
+        function OnNewDashboard(dashboard) {
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard){
+            return function(){
+                var data = dashboard.CustomData;
+                mainFn(dashboard);
+            }
+        }
+        // $(function(){
+        //     mainFn();
+        // });
+        function mainFn(dashboard){
+            var vault;
+            if(dashboard) vault = dashboard.Vault;
+            var data = getTableData(vault);
+            addRows2Table(data)
+        }
+        
+        function addRows2Table(jsonObj) {
+            if (jsonObj && jsonObj.length) {
+                for (var j = 0; j < jsonObj.length; j++) {
+                    var group = jsonObj[j];
+                    var row0 = "<tr id='"+"g_"+group.ID+"'>"
+                        + "<td>" + group.Name + "</td>"
+                        + "<td>" + "" + "</td>"
+                        + "<td>" + "" + "</td>"
+                        + "<td>" + "" + "</td></tr>";
+                    $("#table1>tbody").append($(row0));
+                    $("#table1 tbody tr:last").addClass("tr-group");
+
+                    var mems = jsonObj[j].Members;
+                    for (var i = 0; i < mems.length; i++) {
+                        //在尾行插入新行
+                        var newRow = "<tr id='"+"u_"+mems[i].ID+"'>"
+                            + "<td>" + "" + "</td>"
+                            + "<td>" + mems[i].Name + "</td>"
+                            + "<td>" + mems[i].Account + "</td>"
+                            + "<td>" + mems[i].Email + "</td>"
+                            +"</tr>";
+                         $("#table1>tbody").append($(newRow));
+                    }
+                }
+            }
+        }
+        function getTableData(vault) {
+            //return getTestData();
+            var str = getDataFromServer(vault);
+            //alert(str);
+            // $('#output').val(str)
+            var jsonObj = eval('('+str+')');//JSON.parse()
+            var groups = jsonObj.UserGroups;
+            var userAccs = jsonObj.UserAccounts;
+            var loginAccs = jsonObj.LoginAccounts;
+            var users = getUsers(userAccs, loginAccs);
+            var res = getUsersInGroup(groups, users);
+            //alert(JSON.stringify(res));
+            return res;
+        }
+        function getUsers(userAccounts, loginAccounts){
+            var res = [];
+            for(var i=0; i < userAccounts.length; i++){
+                var u = userAccounts[i];
+                if(!u.Enabled) continue;
+                var index = indexOf(loginAccounts, "LoginName", u.LoginName);
+                if(index !== -1){
+                    var a = loginAccounts[index];
+                    if(!a.Enabled) continue;
+                    if(a.FullName){
+                        var name = a.FullName;
+                    }else{
+                        name = a.UserName;
+                    }
+                    var loginName = a.UserName;
+                    var item ={
+                        'ID': u.ID,
+                        'Account': loginName,
+                        'Name': name,
+                        'Email': a.EmailAddress
+                    }
+                    res.push(item);
+                }
+            }
+            return res;
+        }
+        function getUsersInGroup(userGroups, users){
+            var res = [];
+            var index0 = indexOf(userGroups, "ID", 2);
+            var g0 = userGroups[index0];
+            var members0 = getMembers(g0, users);
+            var item0 = {
+                'ID': g0.ID,
+                'Name': '未分组',
+                'Members': []
+            }
+            var existedMems = [];
+            for(var i = 0; i < userGroups.length; i++){
+                var g = userGroups[i];
+                var item ={
+                    'ID': g.ID
+                };
+                if(!g.Predefined){
+                    item.Name = g.Name;
+                    item.Members = getMembers(g, users);
+                    res.push(item);
+                    getExistedMembers(item.Members, existedMems);
+                }
+            }
+            for(var j = 0; j < members0.length; j++){
+                var m = members0[j];
+                var index = indexOf(existedMems, "ID", m.ID);
+                if(index === -1){
+                    item0.Members.push(m);
+                }
+            }
+            res.push(item0);
+            return res;
+        }
+        function getExistedMembers(members, existedMems){
+            for(var i = 0; i < members.length; i++){
+                var m = members[i];
+                var index = indexOf(existedMems, "ID", m.ID);
+                if(index === -1){
+                    existedMems.push(m);
+                }
+            }
+        }
+        function getMembers(group, users){
+            var res = [];
+            var mIds = group.Members;
+            for(var i = 0; i < mIds.length; i++){
+                var index = indexOf(users, "ID", mIds[i]);
+                if(index !== -1){
+                    res.push(users[index]);
+                }
+            }
+            return res;
+        }
+        function indexOf(src, propName, value){
+            for(var i=0; i < src.length; i++){
+                var u = src[i];
+                if(u[propName] === value){
+                    return i;
+                }
+            }
+            return -1;
+        }
+        function getDataFromServer(vault) {
+            var eventMethodName = "getUserListInGroup";
+            var inputValue = "";
+            var resStr = vault.ExtensionMethodOperations.ExecuteVaultExtensionMethod(
+                eventMethodName, inputValue);
+            return resStr;
+       }
+        
+	</script>
+    <script type="text/javascript">
+        function getTestData(){
+            var res=[];
+            res.push({
+               'ID': 1,
+                'Name': '内部用户',
+                'Predefined': true,
+                'Members':[{
+                    'ID':1,
+                    'Name':'张三',
+                    'Account':'zhang.san',
+                    'Email': 'test@163.com'
+                }]
+            });
+            res.push({
+               'ID': 101,
+                'Name': '用户组001',
+                'Predefined': false,
+                'Members':[{
+                    'ID':1,
+                    'Name':'张三',
+                    'Account':'zhang.san',
+                    'Email': 'test@163.com'
+                },{
+                    'ID':2,
+                    'Name':'李四',
+                    'Account':'li.si',
+                    'Email': 'test@163.com'
+                }]
+            });
+            res.push({
+               'ID': 102,
+                'Name': '用户组002',
+                'Predefined': false,
+                'Members':[{
+                    'ID':2,
+                    'Name':'李四',
+                    'Account':'li.si',
+                    'Email': 'test@163.com'
+                }]
+            });
+            return res;
+        }
+    </script>
+</head>
+<body>
+    <div id="tableWrap" style="width:100%;">
+        <table id="table1">
+            <thead>
+                <tr>
+                    <th style="width:300px;text-align: center">用户组名称</th>
+                    <th style="width:200px;text-align: center">成员名称</th>
+                    <th style="width:200px;text-align: center">账号</th>
+                    <th style="width:300px;text-align: center">E-mail</th>
+                </tr>    
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+    <!--<input id="output" type="text" />-->
+</body>
+</html>

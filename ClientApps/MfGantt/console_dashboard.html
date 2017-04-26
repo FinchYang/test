@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html >
+<head>
+<meta charset="utf-8" />
+<title>JavaScript Console</title>
+<link rel="stylesheet" href="console/console.css" />
+</head>
+<body>
+<form>
+  <textarea autofocus id="exec" spellcheck="false" autocapitalize="off" rows="1" autocorrect="off"></textarea>
+</form>
+<div id="console">
+  <ul id="output"></ul>
+</div>
+<script src="console/prettify.packed.js"></script>
+<script src="console/EventSource.js"></script>
+<script src="console/console.js"></script>
+<script>
+
+    function OnNewDashboard(dashboard) {
+		startConsole(window, dashboard.customData);
+    }
+	
+</script>
+</body>
+</html>

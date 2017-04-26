@@ -1,0 +1,743 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Model Plan</title>
+
+    <link type="text/css" rel="stylesheet" href="style/treeview/jquery.treeview.css" />
+    <link type="text/css" rel="stylesheet" href="style/layout-default.css">
+
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script type="text/javascript" src="scripts/layout/jquery.layout.js"></script>
+
+    <script src="scripts/jquery.treeview/jquery.treeview.js" type="text/javascript"></script>
+    <script src="scripts/jquery.treeview/jquery.treeview.edit.js" type="text/javascript"></script>
+    
+    <script src="scripts/md/base.js" type="text/javascript"></script>
+    <script src="scripts/md/bim.js" type="text/javascript"></script>
+
+    <script src="scripts/mf/alias.js" type="text/javascript"></script>
+    <script src="scripts/mf/objectOps.js" type="text/javascript"></script>
+    <script src="scripts/cc/mfTreeDomOps.js" type="text/javascript"></script>
+    <script src="scripts/cc/bimModelPlan.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        html, body {
+            background: #666;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: auto; /* when page gets too small */
+        }
+
+        body {
+            font-family: Verdana, helvetica, arial, sans-serif;
+            font-size: 68.75%;
+            background: #fff;
+            color: #333;
+        }
+
+        #container {
+            background: #999;
+            height: 100%;
+            margin: 0 auto;
+            width: 100%;
+            /*/max-width:	900px;*/
+            min-width: 700px;
+            _width: 700px; /* min-width for IE6 */
+        }
+
+        #treeWrap {
+            background: #ffffff;
+            /*border: 1px solid #666;
+            height: 600px;
+            width: 300px;*/
+            font-size: 13px;
+        }
+
+        #tableWrap {
+            /*margin-top: 10px;
+            margin-left: 400px;*/
+            background: #ffffff;
+            border: 1px solid #666;
+            /*
+            height: 430px;
+            width: 300px;
+            overflow: hidden;
+                */
+        }
+
+        .selectedSpan {
+            background-color: #CCCCCC;
+        }
+
+        /*#headTitle {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 25px 0 35px 0;
+        }*/
+       
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-right: auto;
+            margin-left: 0px;
+            /*margin-top: 15px;*/
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #b5d6e6;
+            font-size: 12px;
+            font-weight: normal;
+            text-align: center;
+            vertical-align: middle;
+            height: 20px;
+        }
+
+        th {
+            background-color: #007DC6; /* Gray;*/
+        }
+
+        .rowhover {
+            background-color: #cccc00;
+        }
+
+        .odd {
+            background-color: #bbf;
+        }
+
+        .even {
+            background-color: #ffc;
+        }
+        .treeTitle {
+            font-size: 14px;
+            font-weight: bold;
+            /*padding-top: 60px;*/
+            padding: 1px 1px 1px 20px;
+            margin-bottom: 5px;
+            background-color: #007DC6; 
+            height: 31px;
+            line-height: 31px;
+            color: white;
+        }
+        /*.currentPathTitle {
+            font-size: 12px;
+            margin:22px 0 0 0;
+        }*/
+
+        /* 按钮*/
+        .btn {
+            padding: 20px 0 18px 5px;
+        }
+        .btn-fixed {
+            position: fixed;
+            background: #ffffff;
+            /*top: 1px;*/
+            /*left: 1px;*/
+            bottom: 0px;
+            z-index: 2;
+            width: 196px;
+            text-align: center;
+        }
+        .btn input {
+            border: 0px solid #dfdfdf;
+            border-radius: 7px 7px 6px 6px;
+            background: #39A9F0;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: center;
+            height: 30px;
+            width: 80px;
+            padding: 0 4px 1px 4px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+        .btn input:hover {
+            background: #23c5ff;
+        }
+
+        .btn input:active {
+            background: #2276BC;
+        }
+        /* 特殊按钮*/
+        .sdHeaderDiv {
+            width: 120px;
+            background: #39A9F0;
+            border-radius: 7px 7px 6px 6px;
+            cursor: pointer;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+            float: left;
+            margin: 30px 5px 18px 20px;
+            /*right: 40px;
+        bottom: 20px;*/
+        }
+
+        .sdHeaderDiv a.sdHeaderDivA img {
+            vertical-align: middle;
+        }
+        .sdHeaderDiv a.sdHeaderDivA {
+            color: #fff;
+            display: block;
+            background: #39A9F0;
+            padding: 0 8px;
+            text-decoration: none;
+        }
+
+        .sdHeaderDiv a.sdHeaderDivA:hover {
+            background: #23c5ff;
+        }
+
+        .sdHeaderDiv a.sdHeaderDivA:active {
+            background: #2276BC;
+        }
+    </style>
+    <style>
+        /*数据加载时候动画样式表*/
+        .overlay
+        {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 998;
+            width: 100%;
+            height: 100%;
+            _padding: 0 20px 0 0;
+            background: #f6f4f5;
+            display: none;
+        }
+
+        .showbox
+        {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            z-index: 9999;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            margin-left: -80px;
+        }
+
+        .showbox, .overlay
+        {
+            position: absolute;
+            top: expression(eval(document.documentElement.scrollTop));
+        }
+
+        #AjaxLoading
+        {
+            border: 1px solid #8CBEDA;
+            color: #37a;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        #AjaxLoading div.loadingWord
+        {
+            width: 180px;
+            height: 50px;
+            line-height: 50px;
+            border: 2px solid #D6E7F2;
+            background: #fff;
+        }
+
+        #AjaxLoading img
+        {
+            margin: 10px 15px;
+            float: left;
+            display: inline;
+        }
+
+    </style>
+    <script type="text/javascript">
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+                var sf = dashboard.Parent;
+                var vault = sf.ShellUI.Vault;
+                $(function () {
+                    //布局
+                    $('#container').layout({
+                        //north__size: 50, //pane的大小
+                        west__size: 220, //pane的大小
+                        spacing_open: 2, // ALL panes
+                        spacing_closed: 8, //关闭时边框的间隙
+                        togglerContent_open: "<div style='background:red; height: 50px;'></div>",
+                        togglerContent_closed: "<div style='background:red; height: 50px;'></div>", //也可以用<img/>
+                        togglerTip_open: "收起",
+                        togglerTip_closed: "展开",
+                        sliderTip: "显示/隐藏侧边栏", //在某个Pane隐藏后，当鼠标移到边框上显示的提示语。
+                        resizerTip: "调整大小" //鼠标移到边框时，提示语
+                    });
+
+                    var proj = CC.treeDomOps.getProject(vault);
+                    var units = CC.treeDomOps.getUnits(vault);
+                    var propjId = proj.Type + "-" + proj.ID;
+                    var projDom = createLiDom(propjId, proj.Title, getModelPlans, "#directoryTree");
+
+                    for (var i = 0; i < units.length; i++) {
+                        var unitId = units[i].Type + "-" + units[i].ID;
+                        var unitDom = createLiDom(unitId, units[i].Title, getModelPlans, $("#" + propjId + ">ul"));
+
+                        var floors = CC.treeDomOps.getFloors(vault, units[i].ID);
+                        for (var j = 0; j < floors.length; j++) {
+                            var floorId = floors[j].Type + "-" + floors[j].ID;
+                            var floorDom = createLiDom(floorId, floors[j].Title, getModelPlans, unitDom.children("ul").filter(":first"));
+
+                            var discs = CC.treeDomOps.getDisciplines(vault, floors[j].ID);
+                            for (var k = 0; k < discs.length; k++) {
+                                var discId = discs[k].Type + "-" + discs[k].ID;
+                                var discDom = createLiDom(discId, discs[k].Title, getModelPlans, floorDom.find("ul:first")); //floorDom.find("ul").eq(0)
+                            }
+                        }
+                    }
+                    //初始化 目录树
+                    $("#directoryTree").treeview({
+                        unique: true
+                        /*
+				        toggle: function (e) {
+					        //$('ul', this).html('<li><a href=\"?/index.cfm\"><strong>hello</strong></a></li>');//这儿可以替换异步取数据函数
+					        alert('toggle');
+					        //e.preventDefault();//阻止事件冒泡
+				        }
+				        */
+                    });
+
+                    $("#add").click(function () {
+                        var spans = $('#directoryTree .selectedSpan');
+                        if (spans.length > 0) {
+                            var selectedLi = spans.eq(0).parents("li").filter(":first");
+                            var liArr = selectedLi.attr("id").split("-");
+                            if (liArr.length > 1) {
+                                if (CC.treeDomOps.isDisciplineDom(vault, liArr[0]) === false) {
+                                    var title = spans.eq(0).text();
+                                    var parentObj = { "ObjType": liArr[0], "ID": liArr[1], 'DisplayName': title };
+                                    var newObj = modelPlanOps.createDomObject(sf, parentObj);
+                                    if (newObj) {
+
+                                        var branch = createLiDom(newObj.Type + "-" + newObj.ID, newObj.Title, getModelPlans, selectedLi.find("ul:first"));
+                                        $("#directoryTree").treeview({
+                                            add: branch
+                                        });
+                                    }
+                                    //刷新
+                                    getModelPlans(selectedLi);
+                                } else {
+                                    //专业不能 再添加子项
+                                    sf.ShellUI.ShowMessage("该节点不能再创建子项。");
+                                }
+                            }
+                        } else {
+                            sf.ShellUI.ShowMessage("请先选择一个项目树节点，再创建子项。");
+                        }
+                    });
+                    $("#delete").click(function () {
+                        var spans = $('#directoryTree .selectedSpan');
+                        if (spans.length > 0) {
+                            var selectedLi = spans.eq(0).parents("li").filter(":first");
+                            var liArr = selectedLi.attr("id").split("-");
+                            if (liArr.length > 1) {
+                                if (CC.treeDomOps.isProjectDom(vault, liArr[0]) === false) {
+                                    var currentTitle = spans.eq(0).text();
+                                    var currentObj = { "ObjType": liArr[0], "ID": liArr[1], 'DisplayName': currentTitle };
+                                    if (modelPlanOps.deleteDomTip(sf, currentObj) === false) return;
+                                    /* 级联删除 */
+                                    var subLis = selectedLi.find("ul>li");
+
+                                    //删除子项
+                                    for (var i = subLis.length; i > 0; i--) {
+                                        var subli = subLis.eq(i - 1);
+                                        var subliArr = subli.attr("id").split("-");
+                                        var subTitle = subli.find(">span>a").filter(":first").text();
+                                        var subObj = { "ObjType": subliArr[0], "ID": subliArr[1], 'DisplayName': subTitle };
+                                        modelPlanOps.deleteDomObject(sf, subObj);
+                                    }
+                                    //删除模型策划
+                                    modelPlanOps.deleteModelPlan(sf, currentObj);
+                                    //删除当前节点
+                                    modelPlanOps.deleteDomObject(sf, currentObj);
+
+                                    $("#directoryTree").treeview({
+                                        remove: selectedLi
+                                    });
+                                    //清空table
+                                    //setCurrentPath("");
+                                    $("#table1 tr:gt(0)").remove();
+                                } else {
+                                    sf.ShellUI.ShowMessage("无权删除项目！");
+                                }
+                            } 
+                        } else {
+                            sf.ShellUI.ShowMessage("请先选择一个要删除的项目树节点！");
+                        }
+                    });
+                    /*
+			        $("#directoryTree").bind("contextmenu", function(event) {
+				        if ($(event.target).is("li") || $(event.target).parents("li").length) {
+					        $("#directoryTree").treeview({
+						        remove: $(event.target).parents("li").filter(":first")
+					        });
+					        return false;
+				        }
+			        });
+			        */
+                    $("#apply").click(function () {
+                        //showLoadingImage();
+                        var appPath = getAppPath();
+                        var exeFile = appPath + 'ProgressBar.exe';
+                        var barsShell = new ActiveXObject("WScript.Shell");
+                        var eCode = barsShell.Run(exeFile, 1, false);
+
+                        var tips = "";
+                        try {
+                            var trs = $("#table1 tbody tr");
+                            var res = [];
+                            for (var m = 1; m < trs.length; m++) {
+                                var domTr = trs.eq(m);
+                                var arr = domTr.attr('id').split('-');
+                                var title = domTr.find("td").eq(0).text();
+                                var template = domTr.find("td").eq(1).text();
+                                if (template) {
+                                    res.push({ Type: arr[0], ID: arr[1], Title: title, Template: template });
+                                }
+                            }
+                            
+                            for (var n = 0; n < res.length; n++) {
+                                if (modelPlanOps.setModelPlan(sf, res[n])) {
+                                    tips += res[n].Title + "，已应用新模板<" + res[n].Template + ">。\r\n";
+                                }
+                            }
+                        } catch (e) {
+
+                        } finally {
+                            //hideLoadingImage();
+                            var com_kill = appPath + 'KillBarProgress.bat';
+                            barsShell.Run(com_kill, 0, true);
+                            barsShell = null;
+                        }
+                        if (tips) {
+                            sf.ShellUI.ShowMessage(tips);
+                        }
+                    });
+                });
+
+                function createLiDom(id, title, clickCallback, parent) {
+                    var newDom = $("<li id='" + id + "'><span class='folder'><a href='#'>" + title + "</a></span><ul>" +
+                        "</ul></li>").appendTo(parent);
+                    $("#" + id + ">span>a").click(function (event) {
+                        //showLoadingImage();
+
+                        var selectedDom = $(event.target);
+                        $('#directoryTree .selectedSpan').removeClass("selectedSpan");
+                        selectedDom.addClass("selectedSpan");
+                        var domLi = selectedDom.parents("li").filter(":first");
+                        clickCallback(domLi);
+                        event.preventDefault();//阻止事件冒泡
+                    });
+                    $("#" + id + ">span>a").dblclick(function (event) {//双击，重命名
+                        var selectedDom = $(event.target);
+                        var parentsLi = selectedDom.parents("li");
+                        var selectedLi = parentsLi.eq(0);
+                        var parentTitle = "";
+                        if (parentsLi.length > 1) {
+                            parentTitle = selectedLi.parents("li").eq(0).find('span>a').filter(':first').text();
+                        }
+                        //alert("重命名:" + parentTitle);
+
+                        var liArr = selectedLi.attr("id").split("-");
+                        if (liArr.length > 1) {
+                            if (CC.treeDomOps.isProjectDom(vault, liArr[0]) === false) {
+                                var name = selectedDom.text();
+                                var currentObj = { "ObjType": liArr[0], "ID": liArr[1], 'DisplayName': name, 'ParentTitle': parentTitle };
+                                var newObj = modelPlanOps.renameDomObject(sf, currentObj);
+                                if (newObj.Title != name) {
+                                    selectedDom.text(newObj.Title);
+                                    //刷新table界面操作
+                                    //setCurrentPath(selectedLi);
+                                    clickCallback(selectedLi);
+                                }
+                            } else {
+                                sf.ShellUI.ShowMessage("此处不能修改项目名称");
+                            }
+                        }
+                        event.preventDefault();//阻止事件冒泡
+                    });
+                    return newDom;
+                }
+
+                function getModelPlans(domLi) {
+
+                    $('#apply').hide();
+                    clearTableContent();
+                    showLoadingImage();
+
+                    var title = domLi.find("span>a").filter(":first").text();
+                    var arr = domLi.attr("id").split('-');
+
+                    //var plans = modelPlanOps.searchModelPlans(sf, { 'ObjType': arr[0], 'ID': arr[1], 'DisplayName': title });
+                    //displayPlansInTable(domLi, plans);
+
+                    asyncSearchModelPlans({ 'ObjType': arr[0], 'ID': arr[1], 'DisplayName': title }, domLi);
+ 
+                }
+
+                function clearTableContent() {
+                    $("#table1 tr:gt(0)").remove();
+                }
+                function displayPlansInTable(propDom, modelPlans) {
+                    //var path = setCurrentPath(propDom);
+                    if ($("#table1 tr:gt(0)").length) {
+                        clearTableContent();
+                    }
+                    for (var i = 0; i < modelPlans.length; i++) {
+                        addRow2Table(modelPlans[i]);
+                    }
+                    setTrPattern();
+                }
+
+                function setTrPattern() {
+                    //$("#table1 tbody tr:odd").addClass("odd");
+                    //$("#table1 tbody tr:even").addClass("even");
+
+                    $("#table1 tbody tr").hover(
+                        function () {
+                            $(this).addClass("rowhover");
+                        }, function () {
+                            $(this).removeClass("rowhover");
+                        });
+                }
+
+                function addRow2Table(plan) {
+                    //在尾行插入新行
+                    var trId = plan.Type + "-" + plan.ID;
+                    var newRow = "<tr id='" + trId + "'>"
+                        //+ "<td></td>"
+                        + "<td>" + plan.Title + "</td>"
+                        + "<td>" + plan.Template + "</td>"
+                        + "<td>" + plan.Number + "</td>"
+                        + "<td>" + plan.Designer + "</td>"
+                        + "<td>" + plan.DisciLeader + "</td>"
+                        + "<td>" + plan.Deadline + "</td>"
+                        + "<td>" + plan.FinishedTime + "</td></tr>";
+                    $("#table1 tbody tr:last").after(newRow);
+                    $("#table1 tbody tr:last").dblclick(function () {
+                        var arr = $(this).attr('id').split('-');
+                        var updatedData = modelPlanOps.updateModelPlan(sf, { "Type": arr[0], "ID": arr[1] });
+                        if (updatedData) {//更新table项
+                            var tds = $(this).find("td");
+                            for (var i = 0; i < tds.length; i++) {
+                                if (i === 0) {
+                                    tds.eq(i).text(updatedData.Title);
+                                }
+                                else if (i === 1) {
+                                    tds.eq(i).text(updatedData.Template);
+                                }
+                                else if (i === 2) {
+                                    tds.eq(i).text(updatedData.Number);
+                                }
+                                else if (i === 3) {
+                                    tds.eq(i).text(updatedData.Designer);
+                                }
+                                else if (i === 4) {
+                                    tds.eq(i).text(updatedData.DisciLeader);
+                                }
+                                else if (i === 5) {
+                                    tds.eq(i).text(updatedData.Deadline);
+                                }
+                                else if (i === 6) {
+                                    tds.eq(i).text(updatedData.FinishedTime);
+                                }
+                            }
+                        }
+                        //$(this).addclass("rowhover");
+                    });
+                }
+
+                function setCurrentPath(propDom) {
+                    var path = "";
+                    if (propDom) {
+                        var parents = propDom.parents("li");
+                        //alert(parents.length);
+                        for (var i = parents.length; i > 0; i--) {
+                            path += parents.eq(i - 1).find("span>a").filter(":first").text() + "/";
+                        }
+                        path += propDom.find("span>a").filter(":first").text();
+                    }
+                    $("#currentPath").text(path);
+                    return path;
+                }
+                //加载动画图片操作
+                var waitTime = null;
+                function showLoadingImage() {
+                    $(".showbox").show();
+                    $(".overlay").show();
+                    //var h = $(document).height() * 0.99;
+                    var h = document.body.scrollHeight * 0.99;
+                    $(".overlay").css({ "height": h });
+                    $(".overlay").css({ 'display': 'block', 'opacity': '0.8' });
+                    
+                    $(".showbox").stop(true).animate({ 'margin-top': h / 2, 'opacity': '1' }, 200);
+                   
+                    waitTime = setTimeout(function () {
+                        $(".overlay").hide();
+                        $(".showbox").hide();
+                    }, 20000);
+                }
+
+                function hideLoadingImage() {
+                    clearTimeout(waitTime);
+                    $(".overlay").hide();
+                    $(".showbox").hide();
+                }
+
+                function getAppPath() {
+                    var appPath = 'file:///' + MFiles.ApplicationPath;
+                    appPath = appPath.replace(/\\/g, '/');
+                    appPath = appPath.replace(/{/g, '%7B');
+                    appPath = appPath.replace(/}/g, '%7D');
+                    appPath = appPath.replace(/ /g, '%20');
+                    return appPath;
+                }
+
+                function asyncSearchModelPlans(currentDomObj, domLi) {
+
+                    var sConditons = modelPlanOps.setSearchConditons(sf, currentDomObj);
+                    //异步加载
+                    vault.Async.ObjectSearchOperations.SearchForObjectsByConditions(sConditons, MFSearchFlagNone, false,
+                        function (objectSearchResults) {
+                            var res = [];
+                            var isProject = CC.treeDomOps.isProjectDom(vault, currentDomObj.ObjType);
+                            for (var i = 1; i <= objectSearchResults.Count; i++) {
+                                var obj = objectSearchResults.Item(i);
+                                var props = vault.ObjectPropertyOperations.GetProperties(obj.ObjVer, false);
+                                if (modelPlanOps._isTemplate(props) === false) {
+                                    //忽略模板
+                                    var plan = modelPlanOps._getPlanByProps(vault, obj.ObjVer.Type, obj.ObjVer.ID, props);
+                                    if (isProject && plan.DeletedStatus === false) {
+                                        //当点击项目时，忽略那些 文档上有属性残留的文档(事实上这些文档应该被删除的)
+                                        res.push(plan);
+                                    } else {
+                                        res.push(plan);
+                                    }
+                                }
+                            }
+                            if (res.length === 0 && isProject) {//首次点击项目节点时
+                                //alert(currentDomObj.DisplayName);
+                                var planObj = modelPlanOps.createModelPlan(sf, currentDomObj);
+                                res.push({
+                                    'Type': planObj.Type,
+                                    'ID': planObj.ID,
+                                    'Title': planObj.Title,
+                                    'Template': "",
+                                    'Number': "",
+                                    'Designer': "",
+                                    'DisciLeader': "",
+                                    'Deadline': "",
+                                    'FinishedTime': "",
+                                    'DeletedStatus': false
+                                });
+                            }
+                            res.sort(function (a, b) {
+                                return a.ID - b.ID;
+                            });
+
+                            displayPlansInTable(domLi, res);
+                            $('#apply').show();
+                            hideLoadingImage();
+                        });
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="container">
+        <!--
+            <div id="headTitle" class="ui-layout-north">
+                <div>模型策划</div>
+            </div>
+            -->
+        <div id="treeWrap" class="ui-layout-west">
+            <div class="btn btn-fixed">
+                <input id="add" type="button" value="新建子项" />
+                <input id="delete" type="button" value="删除" />
+            </div>
+            <div class="treeTitle">项目树</div>
+            <ul id="directoryTree" class="filetree">
+                <!--
+                    <li><span class="folder">Folder 2</span>
+                        <ul>
+                            <li id="1-22"><span class="folder"><a>Subfolder 2.1</a></span>
+                                <ul id="folder21">
+                                    <li><span class="folder">File 2.1.1</span></li>
+                                    <li><span class="folder">File 2.1.2</span></li>
+                                </ul>
+                            </li>
+                            <li><span class="folder">File 2.2</span></li>
+                        </ul>
+                    </li>
+                    -->
+            </ul>
+        </div>
+        <div id="tableWrap" class="ui-layout-center">
+            <!--<div class="currentPathTitle">
+                <span style="font-weight: bold;">当前目录：</span>
+                <label id="currentPath"></label>
+            </div>-->
+            <table id="table1">
+                <tr style="height: 31px;color: white;">
+                    <!--<th style="width: 80px;"></th>-->
+                    <th style="width: 160px;">模型名称</th>
+                    <th style="width: 160px;">模板 </th>
+                    <th style="width: 160px;">编号</th>
+                    <th style="width: 160px;">建模人</th>
+                    <th style="width: 160px;">专业负责人</th>
+                    <th style="width: 100px;">预计完成时间</th>
+                    <th style="width: 100px;">实际完成时间</th>
+                </tr>
+                <tbody></tbody>
+            </table>
+            <!--<div class="btn" style="float: right;margin: 10px 20px 0 0;">
+                <input id="apply" type="button" value="应用新模板" style="width: 100px;" />
+            </div>-->
+            <div class="sdHeaderDiv" id="apply" style ="display: none">
+                <a href="#" class="sdHeaderDivA">
+                    <img src="images/buttons/设置.png" width="22" height="22" />
+                    应用新模板
+                </a>
+            </div>
+            <div class="overlay">
+            </div>
+            <div id="AjaxLoading" class="showbox">
+                <div class="loadingWord">
+                    <img src="images/waiting.gif">操作中，请稍候...
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

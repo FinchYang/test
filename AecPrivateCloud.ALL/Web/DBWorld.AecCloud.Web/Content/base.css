@@ -1,0 +1,94 @@
+﻿/**
+    ** time : 2015 - 4 - 21
+    ** pro ： 6月新版本
+    ** author : 肖颖、刘甦
+    ** main : 初始化页面中所用到标签的原始样式，避免各种标签在不同浏览器默认解析样式影响页面的总体布局
+**/
+
+/*HTML5标签初始化*/
+section, aside, article, header, footer, nav {
+    display: block;
+}
+
+/*初始化样式*/
+body {
+    background: #fff;
+    color: #575757;
+    font-style: normal;
+    font-size: 12px;
+    font-family: "微软雅黑";
+    line-height: 22px;
+}
+
+.bodyGray {
+    background: #f9f9f9;
+    min-width:1170px;
+}
+
+body, div, iframe, p, ul,  dl, dt, dd, dl, h1, h2, h3, h4, table, th, td, input, button, select, textarea, label, section, aside, article, header, footer, nav {
+    margin: 0;
+    padding: 0;
+}
+/*列表默认排序方式去除*/
+ol, ul, li {
+    /*list-style: none;*/
+    outline: none;
+}
+
+em, i, cite ,address{
+    font-style: normal;
+}
+
+/*初始化图片的边框，避免有链接的图片出现一个很大的默认边框影响页面效果*/
+img {
+    border: 0;
+    vertical-align: middle;
+    outline: none;
+}
+
+/*清除因用float属性之后父级框架不能正常被子内容所撑开的浮动效果*/
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+/*文本输入框样式*/
+input, textarea, select, option, label {
+    color: #575757;
+    font-size: 12px;
+    font-family: "微软雅黑",'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    line-height: 24px;
+    outline: none;
+    vertical-align: middle;
+}
+
+    input[type=text][type=password][type=email][type=file][type=number][type=search][type=url][type=month][type=week][type=date][type=datetime][type=datetime-local] {
+        border: 1px solid #ccc;
+        height: 24px;
+        line-height: 24px;
+        padding: 0 3px;
+        width: 200px;
+    }
+
+    input[type=checkbox][type=radio] {
+        height: 16px;
+        vertical-align: middle;
+        width: 16px;
+    }
+
+/*默认a标签链接样式*/
+a {
+    color: #575757;
+    outline: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #00b4ed;
+}

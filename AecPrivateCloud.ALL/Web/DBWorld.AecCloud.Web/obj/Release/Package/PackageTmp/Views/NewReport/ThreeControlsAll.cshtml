@@ -1,0 +1,236 @@
+﻿@{
+    ViewBag.Title = "三大控制点一览表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script type="text/javascript">
+    var resData = null;
+    var page = 0;
+    var alllines = 0;
+    var maxlines = 10;
+    var allpage = 0;
+
+    function getthreecontrollsalldata(parameters) {
+        console.log("getthreecontrollsalldata begin");
+        var company = $("#selectCorporation option:selected").text();
+        var projLevel = $("#selectLevel option:selected").text();
+        var searchStr = $("#SearchString").val();
+        $.ajax({
+            url: "/newreport/GetThreeControlsAllData",
+            data: { selectCorporation: company, selectLevel: projLevel, SearchString: searchStr },
+            success: function (res) {
+                console.log("success");
+                resData = JSON.parse(res);
+                alllines = resData.length;
+                console.log(alllines);
+                allpage = Math.ceil(alllines / maxlines);
+                if (allpage > 0)
+                    page = page < 1 ? 1 : page;
+                loadPage(page);
+                synctabletaildata();
+            },
+            error: function (xmlHttpRequest, textStatus, errorThrown) {
+                console.log("error");
+                console.log("获取失败：(status:" + xmlHttpRequest.status + ", readyState:" + xmlHttpRequest.readyState +
+                        ", textStatus:" + textStatus + ", errorThrown: " + errorThrown + ")");
+            }
+        });
+    }
+    $(document).ready(function () {
+        getthreecontrollsalldata();
+        loadflipSelect();
+        $("#apply").click(function () {
+            getthreecontrollsalldata();
+        });
+        $("#pageNum").change(function () {
+            console.log("in page change");
+            page = $("#pageNum").val();
+            loadPage(page);
+        });
+        //下拉框翻页
+        $("#flipSelect").change(function () {
+            maxlines = $("#flipSelect option:selected").text();
+            synctabletaildata();
+            allpage = Math.ceil(alllines / maxlines);
+            page = page > allpage ? allpage : page;
+
+            loadPage(page);
+            synctabletaildata();
+            $("#pageNum").val(page);
+        });
+        //转跳第一页
+        $("#firstPage").click(function () {
+            if (allpage > 0) {
+                page = 1;
+                loadPage(1);
+            }
+        });
+        //转跳最后一页
+        $("#lastPage").click(function () {
+            if (allpage > 0) {
+                page = allpage;
+                loadPage(allpage);
+            }
+        });
+        //前一页
+        $("#prevPage").click(function () {
+            console.log("in previous page=" + page);
+            if (page > 1) {
+                page--;
+                $("#pageNum").val(page);
+                loadPage(page);
+            }
+        });
+        //后一页
+        $("#nextPage").click(function () {
+            console.log("in next page=" + page);
+            if (page < allpage) {
+                page++;
+                $("#pageNum").val(page);
+                loadPage(page);
+            }
+        });
+    });
+    function synctabletaildata() {
+        $("#summary").text("每页" + maxlines + "条，共" + alllines + "条数据信息");
+        $("#totalPages").text("/" + allpage);
+    }
+
+    //载入下拉框翻页数据
+    function loadflipSelect() {
+        $("#flipSelect option").remove();
+        var option = "<option>" + 10 + "</option>";
+        option += "<option>" + 20 + "</option>";
+        option += "<option>" + 30 + "</option>";
+        option += "<option>" + 40 + "</option>";
+        option += "<option>" + 50 + "</option>";
+        option += "<option>" + 60 + "</option>";
+        $("#flipSelect").append(option);
+    }
+    //翻页
+    function loadPage(page) {
+        console.log("in loadpage,page=" + page);
+        if (page < 1) page = 1;
+        if (page > allpage) page = allpage;
+        $("#mainTable tr").remove();
+        if (allpage < 1) return;
+        for (var i = 0; i < maxlines; i++) {
+            var item = (page - 1) * maxlines + i;
+            if (item < resData.length) {
+                var tr = "<tr>";
+                tr += "<td>" + resData[item].Serial + "</td>";
+                tr += "<td>" + resData[item].Name + "</td>";
+                tr += "<td>" + resData[item].Company + "</td>";
+                tr += "<td>" + resData[item].Manager + "</td>";
+                tr += "<td style='color: red; width: 120px;'>" + resData[item].Fundamental + "</td>";
+                tr += "<td style='color: red; width: 119px;'>" + resData[item].PrincipalPart + "</td>";
+                tr += "<td style='color: red; width: 120px;'>" + resData[item].Finish + "</td>";
+
+                tr += "</tr>";
+                $("#mainTable").append(tr);
+            } else {
+                $("#mainTable").append("<tr><td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td></tr>");
+            }
+        }
+        $("#pageNum").val(page);
+    }
+    function prevent(e) {
+        e.preventDefault ? e.preventDefault() : e.returnValue = false;
+    }
+    function digitInput(e) {
+        var c = e.charCode || e.keyCode; //FF、Chrome IE下获取键盘码
+        if ((c != 8 && c != 46 && // 8 - Backspace, 46 - Delete
+                (c < 37 || c > 40) && // 37 (38) (39) (40) - Left (Up) (Right) (Down) Arrow
+                (c < 48 || c > 57) && // 48~57 - 主键盘上的0~9
+                (c < 96 || c > 105)) // 96~105 - 小键盘的0~9
+                || e.shiftKey) { // Shift键，对应的code为16
+            prevent(e); // 阻止事件传播到keypress
+        }
+    }
+    $(function () {
+        $("#pageNum").keydown(function (e) {
+            digitInput(e);
+        });
+    });
+</script>
+<!-- 当前位置 -->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="项目中心">项目中心</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section class="right">
+        <div class="section-header"> <div class="corbar"></div> 项目报表 <img src="/Content/Images/mdd/副级导航.png" /> 三大控制点</div>
+
+    @*    <div class="section-header">项目报表 <img src="~/Content/Images/mdd/副级导航.png" alt="" /> 三大控制点</div>*@
+        @*<div style="margin-left: 20px;">
+            <p>
+               
+            </p>
+        </div>*@
+        @using (Html.BeginForm("ThreeControlsAll", "NewReport", System.Web.Mvc.FormMethod.Get))
+        {
+            <p style="margin-left: 2em;">
+                <h5>
+                    <span style="background-color: orange; color: white; padding: 5px;">
+                        三大控制点一览表
+                    </span>
+                    <span style="color: white">---</span>
+                    <span>
+                        <a style="background-color: #1a83cb; color: white; padding: 5px;" href="@Url.Action("ThreeControls", "NewReport")" title="三大控制点预警">三大控制点预警</a>
+                    </span>
+                </h5>
+                @Html.DropDownList("selectLevel", "项目级别")
+                @Html.DropDownList("selectCorporation", "公司")
+                @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { maxlength = 192, placeholder = "请输入单位工程名称关键字" })
+
+                <input type="button" id="apply" value="筛选" />
+            </p>
+        }
+
+        <table class="cscectable">
+            <thead style="background-color: #1a83cb;color: white;">
+                <tr>
+                    <th rowspan="2" style="width: 51px;">序号</th>
+                    <th rowspan="2" style="width: 229px;">
+                        单位工程名称
+
+                    </th>
+                    <th rowspan="2" style="width: 243px;">
+                        所属单位
+
+                    </th>
+                    <th rowspan="2" style="width: 85px;">项目经理</th>
+                    <th colspan="3" style="text-align: center; max-width:361px; ">三大控制点完成日期</th>
+                </tr>
+                <tr>
+                    <th style="text-align: center; width: 120px;">基础</th>
+                    <th style="text-align: center; width: 119px;">主体</th>
+                    <th style="text-align: center; min-width: 120px; max-width: 120px;">竣工</th>
+                </tr>
+            </thead>
+            <tbody id="mainTable"></tbody>
+        </table>
+        <div id="flipArea">
+            <select id="flipSelect"></select>
+            <div id="flipButtons">
+                <img id="firstPage" title="第一页" src="/Content/Images/mdd/左1.png" />
+                <img id="prevPage" title="前一页" src="/Content/Images/mdd/左2.png" />
+                <input type="text" id="pageNum" value="0" />
+                <div id="totalPages">/0</div>
+                <img id="nextPage" title="后一页" src="/Content/Images/mdd/右2.png" />
+                <img id="lastPage" title="最后一页" src="/Content/Images/mdd/右1.png" />
+            </div>
+            <div id="summary">每页 10 条， 共 0 条数据信息</div>
+        </div>
+
+    </section>
+</div>
+
+

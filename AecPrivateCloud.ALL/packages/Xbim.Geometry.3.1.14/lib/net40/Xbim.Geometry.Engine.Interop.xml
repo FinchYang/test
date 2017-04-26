@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Xbim.Geometry.Engine.Interop</name>
+    </assembly>
+    <members>
+        <member name="T:Xbim.Geometry.Engine.Interop.XbimArchitectureConventions">
+            <summary>
+            A class representing the conventions we use for processor specific Geometry Engine library
+            </summary>
+        </member>
+        <member name="P:Xbim.Geometry.Engine.Interop.XbimArchitectureConventions.Suffix">
+            <summary>
+            The suffix we apply to platform-specific assemblys in the current process architecture
+            </summary>
+        </member>
+        <member name="P:Xbim.Geometry.Engine.Interop.XbimArchitectureConventions.SubFolder">
+            <summary>
+            The default subfolder to look for platform-specific assemblys in the current process architecture
+            </summary>
+        </member>
+    </members>
+</doc>

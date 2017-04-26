@@ -1,0 +1,552 @@
+﻿/**
+    ** time : 2015 - 4 - 21
+    ** pro ： 6月新版本
+    ** author : 肖颖、刘甦
+    ** main : 主体框架布局应用样式
+**/
+
+/*网页总宽度固定*/
+.webWidth {
+    margin: 0 auto;
+    width: 1170px;
+}
+
+.webWidthContent {
+    margin: 0 auto;
+    padding: 15px;
+    width: 1140px;
+}
+/*头部内容*/
+.headerContent {
+}
+/*底部内容*/
+.footContent {
+}
+/*二级页面主内容*/
+.secondContent {
+}
+/*当前位置*/
+.currentPosition {
+    padding: 15px 0 15px 0;
+}
+
+    .currentPosition a {
+        margin-right: 2px;
+    }
+
+        .currentPosition a:hover {
+            color: #00b4ed;
+        }
+
+
+/*商城内页布局*/
+/*左侧推荐*/
+.recommendList {
+    width: 20%;
+    overflow: hidden;
+}
+/*推荐列表*/
+.recommendList {
+    width: 20%;
+    overflow: hidden;
+}
+
+.recommendDiv {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    margin-bottom: 20px;
+}
+
+.recommendTitle.title {
+    background: #f7f7f7;
+    color: #3589c4;
+    font-size: 14px;
+    font-weight: normal;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 15px;
+}
+
+.recommendOtherTitle {
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+    color: #575757;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+}
+
+    .recommendOtherTitle .more {
+        font-size: 10px;
+        font-weight: normal;
+    }
+
+.adRecommend {
+    margin-bottom: 20px;
+}
+/*右侧内容*/
+.storeRight {
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.storeRightContent {
+    /*border: 1px solid #e8e8e8;*/
+    margin-left: 20px;
+}
+
+/*
+    **默认浮动样式
+    **用法左浮动加上样式left，右浮动加上right即可
+*/
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+/*
+    **标题默认样式
+    **用法只需要在相应的div上加上样式名即可
+*/
+.title {
+    color: #575757;
+    font-size: 18px;
+    font-weight: bold;
+    overflow: hidden;
+}
+
+    .title .more, .title span {
+        font-size: 14px;
+        font-weight: normal;
+    }
+/*显示更多*/
+.more {
+    float: right;
+    margin-right: 10px;
+}
+
+/*
+    **名称:按钮默认样式
+    **用法:在一个class命名为btnDiv的块中包含一组是a标签或者input提交的按钮即可
+    **修改:如实际应用的按钮样式不一样，只需要书写相应的属性覆盖默认的属性即可
+    **示例:<div class="btnDiv"><a href="">确定</a><a href="">取消</a></div>
+*/
+.btnDiv {
+    background: #3589c4;
+    border: medium none;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-family: "微软雅黑",'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    height: 26px;
+    line-height: 26px;
+    margin: 0 2px 0 0;
+    overflow: hidden;
+    vertical-align: middle;
+    text-align: center;
+    width: 90px;
+}
+
+    .btnDiv a {
+        color: #fff;
+        display: block;
+    }
+
+        .btnDiv input:hover, .btnDiv a:hover {
+            background: #3572aa;
+        }
+
+        .btnDiv input:active, .btnDiv a:active {
+            padding: 1px 0 0 1px;
+        }
+
+/*
+    **图片浏览（包括图片自动左右滚动，点击左右箭头左右滚动）
+    **这里只是初始化默认的样式，具体的样式可参考Commodity.css样式表中的（小图片滚动预览）模块
+    **调用此模板需要引进jquery.picture.roll.js代码
+*/
+.pictureRoll {
+    position: relative;
+    overflow: hidden;
+}
+
+.pictureRollList {
+    position: absolute;
+    left: 20px;
+    top: 0px;
+    overflow: hidden;
+}
+
+    .pictureRollList ul li {
+        float: left;
+        overflow: hidden;
+    }
+
+    .pictureRollList img {
+        border: 1px solid #ccc;
+    }
+
+.pictureRollBtn a {
+    position: absolute;
+}
+
+/*
+    **弹出窗口
+    **
+*/
+.popupBg {
+    display: none;
+    background-color: #000000;
+    opacity: 0.5;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=50)";
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+}
+
+.popupDailog {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    background: #ffffff;
+}
+
+.popupClose {
+    background: url('images/new/popupClose.png') no-repeat 0 0;
+    cursor: pointer;
+    /*position: absolute;*/
+    right: -15px;
+    top: -15px;
+    width: 31px;
+    height: 31px;
+    z-index: 10001;
+}
+
+.testPopup {
+    width: 500px;
+    height: 400px;
+    background: #ffd800;
+}
+
+/*模拟confirm*/
+#confirmOverlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: url('Images/new/confirmOverlayBg.png') repeat 0 0 \9;
+    background: linear-gradient(rgba(11,11,11,0.1), rgba(11,11,11,0.6)) repeat-x rgba(11,11,11,0.2);
+    background: -moz-linear-gradient(rgba(11,11,11,0.1), rgba(11,11,11,0.6)) repeat-x rgba(11,11,11,0.2);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(11,11,11,0.1)), to(rgba(11,11,11,0.6))) repeat-x rgba(11,11,11,0.2);
+    z-index: 100000;
+}
+
+    #confirmOverlay #confirmBox {
+        background: #fff;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        -moz-box-shadow: 0 0 2px rgba(255, 255, 255, 0.6) inset;
+        -webkit-box-shadow: 0 0 2px rgba(255, 255, 255, 0.6) inset;
+        box-shadow: 0 0 2px rgba(255, 255, 255, 0.6) inset;
+    }
+
+
+
+/*
+    **轮转图基础属性
+    **调用的时候只需要在相应的地方添加修改即可
+*/
+#pictureRoll {
+    margin: 0 auto;
+    position: relative;
+    height: 320px;
+    overflow: hidden;
+    width: 1170px;
+}
+
+.flexslider .slides img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.flexslider {
+    height: 320px;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 100%;
+}
+
+    .flexslider .slides li {
+        position: relative;
+    }
+
+.flexslider-container {
+    position: relative;
+}
+/*
+    **内容位置控制样式
+    **在li中添加一个div为该样式的即可
+*/
+.flex-caption {
+    top: 70px;
+    right: 30px;
+    width: 230px;
+    color: rgb(0, 0, 0);
+    position: absolute;
+    max-height: 230px;
+    overflow: hidden;
+}
+/*左右图标的样式*/
+.flex-direction-nav li a {
+    width: 22px;
+    height: 24px;
+    margin: -13px 0 0;
+    display: block;
+    position: absolute;
+    top: 50%;
+    cursor: pointer;
+    text-indent: -9999px;
+}
+
+    .flex-direction-nav li a.next {
+        background: url("Images/new/next.png") no-repeat;
+        right: 10px;
+    }
+
+    .flex-direction-nav li a.prev {
+        background: url("Images/new/prev.png") no-repeat;
+        left: 10px;
+    }
+/*小圆圈控制样式*/
+.flex-control-nav {
+    margin-left: -31px;
+    position: absolute;
+    top: 300px;
+    left: 50%;
+}
+
+    .flex-control-nav li {
+        margin: 0 0 0 5px;
+        float: left;
+    }
+
+        .flex-control-nav li:first-child {
+            margin: 0;
+        }
+
+        .flex-control-nav li a {
+            width: 13px;
+            height: 13px;
+            display: block;
+            background: url(Images/bg_control_nav.png) no-repeat 0 0;
+            cursor: pointer;
+            text-indent: -9999px;
+        }
+
+            .flex-control-nav li a:hover {
+                background-position: 0 -13px;
+            }
+
+            .flex-control-nav li a.active {
+                background-position: 0 -26px;
+                cursor: default;
+            }
+
+/*tab 默认状态*/
+.tab {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+.tab_ul {
+    height: 24px;
+    /*overflow: hidden;*/
+}
+
+    .tab_ul li {
+        float: left;
+        width: auto;
+        text-align: center;
+        height: 24px;
+        line-height: 24px;
+        list-style: none;
+        cursor: pointer;
+    }
+
+    .tab_ul .li_on {
+        background: #e8e8e8;
+    }
+
+.tab_con {
+    height: auto;
+    overflow: hidden;
+    display: none;
+}
+
+.tab_content .Tabshow {
+    display: block;
+}
+/*
+    **分页代码
+    **用法加上相应的样式即可
+*/
+/*分页*/
+.paging {
+    height: 30px;
+    overflow: hidden;
+    padding: 5px 0;
+}
+
+    .paging a {
+        border: 1px solid #dddcdb;
+        border-radius: 2px;
+        color: #2e2e2e;
+        padding: 4px 12px;
+        margin-right: 5px;
+    }
+
+        .paging a:hover, .paging a.on {
+            background: #e8e8e8;
+            color: #2e2e2e;
+        }
+
+        .paging .hover, .paging a.hover:hover {
+            border: 1px solid #3589c4;
+            background: #3589c4;
+            color: #fff;
+        }
+
+.pageInputTxt {
+    border: 1px solid #dddcdb;
+    height: 26px;
+    margin: 0 3px;
+    text-align: center;
+    width: 30px;
+}
+
+
+/*上边的分页*/
+.pager {
+    margin-right: 10px;
+}
+
+    .pager span {
+        display: block;
+        margin: 0 8px;
+    }
+
+    .pager a {
+        /*display: block;
+    font-size: 16px;
+    height: 40px;
+    width: 20px;
+    text-align: center;*/
+        background: #fff none repeat scroll 0 0;
+        border: 1px solid #ddd;
+        color: #aaa;
+        font-family: "宋体";
+        font-size: 16px;
+        height: 23px;
+        line-height: 23px;
+        margin-top: 8px;
+        text-align: center;
+        width: 40px;
+    }
+
+        .pager a.disable {
+            background: #f1f1f1 none repeat scroll 0 0;
+            color: #ccc;
+            cursor: default;
+            padding: 0;
+        }
+
+
+/*评分显示*/
+/*.starImg, .starImg em {
+    background-image: url('Images/starImg.png');
+    background-repeat: no-repeat;
+    display: block;
+    height: 12px;
+    overflow: hidden;
+    width: 60px;
+}*/
+
+.star_no {
+    background-position: 0 -12px;
+}
+
+.star0 em {
+    width: 0px;
+}
+
+.star0d0 em {
+    width: 0px;
+}
+
+.star0d5 em {
+    width: 6px;
+}
+
+.star1d0 em {
+    width: 12px;
+}
+
+.star1d5 em {
+    width: 18px;
+}
+
+.star2d0 em {
+    width: 24px;
+}
+
+.star2d5 em {
+    width: 30px;
+}
+
+.star3d0 em {
+    width: 36px;
+}
+
+.star3d5 em {
+    width: 42px;
+}
+
+.star4d0 em {
+    width: 48px;
+}
+
+.star4d5 em {
+    width: 54px;
+}
+
+.star5d0 em {
+    width: 60px;
+}
+
+
+/*返回顶部*/
+.returnTop {
+    background: #fff;
+    bottom: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: none;
+    height: 45px;
+    line-height: 45px;
+    position: fixed;
+    right: 10px;
+    text-align: center;
+    width: 45px;
+    z-index: 10000000;
+}

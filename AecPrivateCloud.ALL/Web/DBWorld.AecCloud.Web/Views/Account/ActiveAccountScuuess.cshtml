@@ -1,0 +1,58 @@
+﻿@model ChangePasswordViewModel
+
+@{
+    ViewBag.Title = "激活成功";
+}
+@*<script type="text/javascript">
+    $(function () {
+        setTimeout(countDown, 1000);
+    });
+
+    function countDown() {
+        var count = $("#countDown").html();
+        count--;
+        $("#countDown").html(count);
+        if (count == 0) {
+            location.href = "@Url.Content("/Account/LogOn")";
+            return false;
+        }
+        setTimeout(countDown, 1000);
+    }
+</script>
+<!-- 当前位置 -->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "Home", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="激活成功">激活成功</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavPartial")
+    <!-- 右边内容 -->
+    <section class="left">
+        <div class="secondContent">
+            <div class="title userTitle">
+                激活成功
+            </div>
+            @if (ViewBag.statu == "1")//分激活和已经激活两种提示
+            {
+                <div>
+                    您的账号已经激活过,不用重复激活!<br />
+                    <span id="countDown" style="color:red;font-size:large;">3</span>&nbsp;秒后跳转到登录界面。<br />
+                    如果没有跳转，请点击登陆！
+                    @Html.ActionLink("登录", "LogOn", "Account", new { email = ViewBag.email })
+                </div>
+
+            }
+            else
+            {
+                <div>
+                    账号激活成功,&nbsp;<span id="countDown" style="color:red;font-size:large;">3</span>&nbsp;秒后跳转到登录界面。<br />
+                    如果没有跳转，请点击登陆！
+                    @Html.ActionLink("登录", "LogOn", "Account", new { email = ViewBag.email })
+                </div>
+            }
+        </div>
+    </section>
+</div>*@

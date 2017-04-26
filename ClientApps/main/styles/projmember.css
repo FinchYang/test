@@ -1,0 +1,34 @@
+/*
+*  表格样式设置
+*/
+* {
+    margin: 0;
+    padding: 0;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-right: auto;
+    margin-left: 0px;
+}
+
+th, td {
+    border: 1px solid #b5d6e6;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    height: 26px;
+}
+
+th {
+    height: 32px;
+    background-color: #007DC6;
+    color: white;
+}
+    tr:hover{
+        background-color: yellow;
+    }
+.tr-group {
+    background-color: #e0e0f9;
+}

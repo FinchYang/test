@@ -1,0 +1,622 @@
+﻿<!doctype html>
+<html>
+<head>
+    <title>任务工时统计</title>
+    <style>
+        #table_font {
+            width: 100px;
+            text-align: center;
+        }
+
+        #divPanl {
+            width: 142px;
+            height: 18px;
+            margin-bottom: 14px;
+        }
+
+        #divTitle {
+            width: 55px;
+            height: 17px;
+            float: left;
+        }
+
+        #dropdown-checkbox-task {
+            width: 80px;
+            font-size: 11px;
+            float: left;
+            margin: 0 0 0 3px;
+        }
+
+        #divPanlDate {
+            width: 145px;
+            height: 18px;
+            float: left;
+            margin-left: -15px;
+        }
+
+        #divTitleDate {
+            width: 55px;
+            float: left;
+        }
+
+        #startPicker {
+            width: 69px;
+            height: 16px;
+            float: left;
+            margin: 0 0 0 3px;
+        }
+
+        #imgStart {
+            width: 16px;
+            height: 16px;
+            float: left;
+        }
+
+        #endPicker {
+            width: 70px;
+            height: 16px;
+            float: left;
+            margin: 0 0 0 3px;
+        }
+
+        #dateEnd {
+            width: 91px;
+            height: 18px;
+            float: left;
+        }
+
+        #imgEnd {
+            width: 16px;
+            height: 16px;
+            float: left;
+        }
+
+        #lblSymbol {
+            float: left;
+            color: #36A6EC;
+        }
+
+        #updateReport {
+            float: right;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        #divMember {
+            float: left;
+            margin-right: 35px;
+        }
+
+        #chatContent {
+            text-align: center;
+        }
+
+        #rowHead {
+            height: 15px;
+            color: white;
+        }
+
+        .color-tip {
+            text-align: center;
+            margin-top: 7px;
+        }
+
+        .color-tip input {
+            border: 0px;
+            width: 14px;
+            height: 14px;
+            /*background: white;*/
+        }
+
+        .color-tip span {
+            font-size: 12px;
+            color: rgb(88, 111, 177);
+            margin-left: 5px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-right: auto;
+            margin-left: 0px;
+        }
+
+        th, td {
+            border: 1px solid #b5d6e6;
+            font-size: 12px;
+            font-weight: normal;
+            text-align: center;
+            vertical-align: middle;
+            height: 20px;
+        }
+
+        th {
+            background-color: #007DC6;
+            color: white;
+        }
+
+        .last {
+            background-color: #e0e0f9;
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <!--<link href="style/tasktimereport.css" rel="stylesheet" />-->
+    <link rel="stylesheet" href="style/report.css" />
+    <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap-dropdown-checkbox.css" />
+    <link href="scripts/jquery-ui-1.11.4.custom/jquery-ui.min.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery.datepicker-zh-CN.js"></script>
+    <script type="text/javascript" src="scripts/chart/Chart.js"></script>
+    <script src="scripts/dropdown-checkbox/bootstrap-dropdown-checkbox.js"></script>
+
+    <script src="scripts/md/base.js" type="text/javascript"></script>
+    <script src="scripts/md/report.js" type="text/javascript"></script>
+
+    <script src="scripts/mf/alias.js" type="text/javascript"></script>
+    <script src="scripts/mf/objectOps.js" type="text/javascript"></script>
+    <script src="scripts/cc/reports/reportOps.js" type="text/javascript"></script>
+    <script src="scripts/cc/reports/taskTimeReport.js" type="text/javascript"></script>
+    <style type="text/css">
+        /*弹出提示框*/
+
+        .page_rule {
+            position: absolute;
+            right: 10px;
+            top: 1px;
+            color: #fff;
+            cursor: help;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            background: #36A6EC;
+            width: 120px;
+        }
+
+        .page_rule_wrap {
+            min-width: 280px;
+            width: 50%;
+            min-height: 180px;
+            background: #f5f5f5;
+            box-shadow: 1px 1px 5px #ccc;
+            color: #000;
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 15px;
+            padding: 10px;
+            font-size: 14px;
+            z-index: 998;
+        }
+
+        .a_close {
+            float: right;
+        }
+
+        .page_rule_title.title {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+
+        .page_rule_title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .page_rule_wrap span {
+            font-size: 14px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            /*弹出提示*/
+            $(".page_rule").mouseover(function () {
+                $(".page_rule_wrap").show();
+            }).mouseout(function () {
+                Time = setTimeout(function () {
+                    $(".page_rule_wrap").hide();
+                }, 1500);
+            });
+            $(".page_rule_wrap").mouseover(function () {
+                clearInterval(Time);
+                $(".page_rule_wrap").show();
+            }).mouseout(function () {
+                $(".page_rule_wrap").hide();
+            });
+            $(".a_close").click(function () {
+                $(".page_rule_wrap").hide();
+            });
+        });
+
+    </script>
+    <script type="text/javascript">
+        "use strict";
+        var flag = false;
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () { 
+                var rd = dashboard;
+                var vault = dashboard.Vault;
+                var objVn = dashboard.CustomData.objVersion;
+                var props = dashboard.CustomData.properties;
+                mainFn(rd, vault, objVn.ObjVer, props);
+                flag = true;
+            }
+        }
+        if (!flag) {
+            $(function () {
+                //mainFn();
+            });
+        }
+
+        //初始化主函数
+        function mainFn(rd, vault, objVer, props) {
+            //历史信息
+            var oldReportData = getHistoryReport(vault, props);
+            var jsonObj = getJsonObj(oldReportData);
+            if (jsonObj && jsonObj.latestDate) {
+                $("#lastdate").text(jsonObj.latestDate);
+            }
+            //方块图
+            var myBarChart = newBarChart(jsonObj);
+
+            addRows2Table(jsonObj);
+            setColorTip();
+
+            $(".datepicker").datepicker({
+                changeMonth: true,  //月份下拉列表
+                changeYear: true,  //月份下拉列表
+                showMonthAfterYear: true,
+                dateFormat: "yy-mm-dd",
+
+                onSelect: function (dateText, inst) {
+                    if (this.id == "startPicker") {
+                        $("#endPicker").datepicker("option", "minDate", dateText);
+                    } else if (this.id == "endPicker") {
+                        $("#startPicker").datepicker("option", "maxDate", dateText);
+                    }
+                    var newData = getChangedTasks(vault);
+                    $("#dropdown-checkbox-task").dropdownCheckbox("reset", newData);
+                    //$(".dropdown-checkbox-task").dropdownCheckbox("append", tempData);
+                }
+            });
+            $(".datepicker").removeAttr("disabled");
+
+            var srcTasks = getTaskSrcData(vault, jsonObj);
+            $('#dropdown-checkbox-task').dropdownCheckbox({
+                data: srcTasks,
+                autosearch: true,
+                title: "Dropdown Checkbox",
+                hideHeader: false,
+                showNbSelected: true,
+                templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">选择任务 <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
+            });
+
+            $('#update').click(function () {
+                var startDateStr = $('#startPicker').val();
+                var endDateStr = $('#endPicker').val();
+                if (!reportOps.isValidDate(startDateStr, '-')
+                        || !reportOps.isValidDate(endDateStr, '-')) {
+                    return alert("日期格式不正确！");
+                }
+                if (jsonObj && jsonObj.statistics) {
+                    //清除方块图数据
+                    myBarChart.removeData();
+                    
+                    myBarChart.destroy();;
+
+                    //删除表格数据
+                    removeChildren($("#table1 tbody"));
+                }
+                var jsonObj2 = getJsonObjUpdated(vault);
+                if (jsonObj2 && jsonObj2.statistics) {
+                    myBarChart = newBarChart(jsonObj2);
+                    //myBarChart.addData([0, 0], "");
+                    addRows2Table(jsonObj2);
+                    //更新临时对象
+                    var nowStr = curentDateTime();
+                    jsonObj2.latestDate = nowStr;
+
+                    var checkedTasks = $('#dropdown-checkbox-task').dropdownCheckbox("checked");
+                    jsonObj2.checkedTasks = checkedTasks;
+
+                    var jsonStr = JSON.stringify(jsonObj2);
+                    
+                    var startDate = startDateStr ? new Date(startDateStr.replace(/\-/g, "/")) : null;                   
+                    var endDate = endDateStr ? new Date(endDateStr.replace(/\-/g, "/")) : null;                    
+                    
+                    taskTimeReportOps.updateReport(vault, objVer.ID, { 'startDate': startDate, 'deadline': endDate, 'checkedItems': [], 'reportInfo': jsonStr });
+
+                    $("#lastdate").text(nowStr);
+                }
+                jsonObj = jsonObj2;
+            });
+        }
+        function newBarChart(jsonObj) {
+            var chartData = getBarChartData(jsonObj);
+            var ctx = document.getElementById("canvas").getContext("2d");
+            var myBarChart = new Chart(ctx).Bar(chartData, {
+                scaleGridLineColor: "rgba(0,0,0,.05)",
+                //scaleShowVerticalLines: false,
+                responsive: true
+            });
+            return myBarChart;
+        }
+        function removeChildren(pnode) {
+            var trs = pnode.children();
+            for (var i = 1; i < trs.length; i++) {
+                trs.eq(i).remove();//trs[i].remove()在IE中不起作用
+            }
+        }
+        function setColorTip() {
+            var doms = $('.color-tip').children('input');
+            try {
+                doms.eq(0).css("background-color", "#2477BB");//已完成 
+                doms.eq(1).css("background-color", "#FFBC01");
+            } catch (e) { }
+        }
+        function addRows2Table(jsonObj) {
+            if (jsonObj && jsonObj.statistics) {
+                var items = jsonObj.statistics;
+                for (var i = 0; i < items.length; i++) {
+                    //在尾行插入新行
+                    var newRow = "<tr>"
+                        + "<td>" + items[i].man + "</td>"
+                        + "<td>" + converter(items[i].finished,2) + "</td>"
+                        + "<td>" + converter(items[i].unfinished,2) + "</td>"
+                        + "<td>" + converter(items[i].total,2) + "</td></tr>";
+                    $("#table1 tbody tr:last").after(newRow);
+                }
+                $("#table1 tbody tr:last").addClass("last");
+            }
+        }
+        function getBarChartData(jsonObj) {
+            var barChartData = {
+                labels: [],
+                datasets: [
+                    {
+                        label: "已完成",
+                        fillColor: "#2477BB",
+                        strokeColor: "#2477BB",
+                        highlightFill: "#2477BB",
+                        highlightStroke: "#2477BB",
+                        data: []
+                    },
+                    {
+                        label: "未完成",
+                        fillColor: "#FFBC01",
+                        strokeColor: "#FFBC01",
+                        highlightFill: "#FFBC01",
+                        highlightStroke: "#FFBC01",
+                        data: []
+                    }
+                ]
+            }
+
+            if (jsonObj && jsonObj.statistics) {
+                var items = jsonObj.statistics;
+                for (var i = 0; i < items.length; i++) {
+                    barChartData.labels.push(items[i].man);
+                    barChartData.datasets[0].data.push(converter(items[i].finished, 2));
+                    barChartData.datasets[1].data.push(converter(items[i].unfinished,2));
+                }
+            }
+            return barChartData;
+        }
+
+        //initialize data
+        function getHistoryReport(vault, props) {
+            var reportData = taskTimeReportOps.getOldReportData(vault, props);
+            return reportData;
+        }
+        function getJsonObj(oldReportData) {
+            // oldReportData: { 'startDate':string, 'deadline':string, 'tasks': [], 'reportInfo': jsonString };
+            var jsonObj = undefined;
+            if (oldReportData) {
+                if (oldReportData.startDate) {
+                    //alert(reportData.startDate.replace(/\//g, "-"));
+                    $("#startPicker").val(oldReportData.startDate.replace(/\//g, "-"));
+                }
+                if (oldReportData.deadline) {
+                    $("#endPicker").val(oldReportData.deadline.replace(/\//g, "-"));
+                }
+                if (oldReportData.reportInfo) {
+                    try {
+                        jsonObj = JSON.parse(oldReportData.reportInfo);
+                    } catch (e) {
+                    }
+                }
+            }
+            if (!jsonObj) {
+                jsonObj = {
+                    statistics: [{ id: 0, man: "总计", finished: 0, unfinished: 0, total: 0 }]
+                };
+            }
+            return jsonObj;
+        }
+        function getJsonObjUpdated(vault) {
+            var checkedItems = $('#dropdown-checkbox-task').dropdownCheckbox("checked");
+            if (checkedItems.length) {
+                //
+            }
+            var reportObj = taskTimeReportOps.getJobTimeReportData(vault, checkedItems);
+            return reportObj;
+            //var jsonObj = {
+            //    statistics: [
+            //        { man: "刘建立", finished: 30, unfinished: 20, total: 50 },
+            //        { man: "王建设", finished: 20, unfinished: 50, total: 70 },
+            //        { man: "陈实功", finished: 20, unfinished: 52, total: 72 },
+            //        { man: "张实功", finished: 30, unfinished: 20, total: 72 },
+            //        { man: "总计", finished: 100, unfinished: 142, total: 242 }
+            //    ]
+            //}
+            //var jsonStr = JSON.stringify(jsonObj);
+            //var jsonObj;
+            //try {
+            //    jsonObj = JSON.parse(jsonStr);
+            //} catch (e) {
+            //    jsonObj = {}
+            //}
+            //return jsonObj;
+        }
+
+        function getTaskSrcData(vault, jsonObj) {
+            var taskObjs = taskTimeReportOps.getAllTasks(vault);
+            var tasks = taskTimeReportOps.tasks2CheckList(taskObjs);
+            var checkItems = null;
+            if (jsonObj && jsonObj.checkedTasks) {
+                checkItems = jsonObj.checkedTasks;
+            }
+            if (checkItems && checkItems.length > 0) {
+                for (var i = 0; i < tasks.length; i++) {
+                    for (var j = 0; j < checkItems.length; j++) {//{ "id": int, "label": string,isChecked: true  }
+                        if (tasks[i].id === checkItems[j].id) {
+                            tasks[i].isChecked = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return tasks;
+        }
+        function getChangedTasks(vault) {
+            var startDate = $('#startPicker').datepicker("getDate");
+            var endDate = $('#endPicker').datepicker("getDate");
+
+            var taskObjs = taskTimeReportOps.getTasksOnCondition(vault, startDate, endDate);
+            var list = taskTimeReportOps.tasks2CheckList(taskObjs);
+            for (var i = 0; i < list.length; i++) {
+                list[i].isChecked = true;
+            }
+            return list;
+        }
+        //获取当前日期和时间，字符串
+        function curentDateTime() {
+            var now = new Date();
+            var year = now.getFullYear();       //年
+            var month = now.getMonth() + 1;     //月
+            var day = now.getDate();            //日
+            var hour = now.getHours();   //小时
+            var mins = now.getMinutes(); // 分
+            var second = now.getSeconds(); // 秒
+
+            var clock = year + "-";
+            if (month < 10) clock += "0";
+            clock += month + "-";
+            if (day < 10) clock += "0";
+            clock += day + " ";
+            if (hour < 10) clock += "0";
+            clock += hour + ":";
+            if (mins < 10) clock += "0";
+            clock += mins + ":";
+            if (second < 10) clock += "0";
+            clock += second + "";
+            return (clock);
+        }
+        ///floatNum:浮点数值，dotNum:小数点位数
+        function converter(floatNum, dotNum) {
+            return floatNum ? new Number(floatNum.toFixed(dotNum)) : 0;
+        }
+    </script>
+</head>
+    <body>
+        <div>
+            <div class="page_rule">
+                工时数据来源备注
+            </div>
+            <div class="page_rule_wrap">
+                <a href="#" class="a_close">关闭</a>
+                <div class="page_rule_title title">
+                    任务工时数据来源
+                </div>
+                <div style="margin: 10px 0;">
+                    <label class="page_rule_title">注：</label>
+                    <span>任务工时数据来源于任务面板的</span>
+                    <span style="color: green;font-style: italic">预计工时</span>
+                    <span>属性，为了确保统计的精确度，建议项目经理提前完善所要统计任务的</span>
+                    <span style="color: green;font-style: oblique">预计工时</span>
+                    <span>。若统计结果出现小数，则只显示小数点后<span style="color: green;font-style: oblique">2位</span>。</span>
+                </div>
+            </div>
+        </div>
+        <div id="container">
+            <div id="header">
+                <div id="divMember" class="row show-grid">
+                    <div id="divPanl" class="divPanl">
+                        <div id="divTitle" class="date-start">项目任务</div> 
+                        <div id="dropdown-checkbox-task" class="dropdown-checkbox-task"></div>
+                    </div>
+                </div>
+                <div style="float: left">
+                    <div id="divPanlDate" class="divPanl">
+                        <div id="divTitleDate" class="date-start">起止日期</div>
+                        <input type="text" class="text-style datepicker" id="startPicker" disabled="disabled">
+                        <img id="imgStart" src="./images/date.png" />
+                    </div>
+
+                    <label id="lblSymbol">&nbsp;~&nbsp;</label>
+
+                    <div id="dateEnd" class="date-end">
+                        <input type="text" class="text-style datepicker" id="endPicker" disabled="disabled">
+                        <img id="imgEnd" src="./images/date.png" />
+                    </div>
+                </div> 
+            </div>
+
+            <div id="chatContent" style="float: right">
+                <div class="btn-update" id="update">更 新 报 表</div>
+                <div style="color: gray;font-size: 11px; float: left;">更新于<span id="lastdate"></span></div>
+            </div>
+
+            <div id="chartWrap" style="width:100%;margin-top: 20px;">
+                <canvas id="canvas" height="400" width="1000"></canvas>
+                <div class="color-tip">
+                    <input type="text" value="" /><span>已完成</span>
+                    <input type="text" value="" /><span>未完成</span>
+                </div>
+            </div>
+            <div id="tableWrap" style="width:100%;margin-top: 30px; ">
+                <table id="table1">
+                    <tr>
+                        <th style="width: 400px;height: 15px;text-align: center;">
+                            项目成员
+                        </th>
+                        <th style="width:300px;text-align: center">
+                            已完成工时
+                        </th>
+                        <th style="width:300px;text-align: center">
+                            未完成工时
+                        </th>
+                        <th style="width:300px;text-align: center">
+                            总计
+                        </th>
+                    </tr>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,251 @@
+﻿
+@{
+    ViewBag.Title = "工时统计";
+}
+
+<link rel="stylesheet" href="~/Scripts/jquery-ui-1.11.4.custom/jquery-ui.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="~/Content/dropdown-checkbox/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/dropdown-checkbox/bootstrap-dropdown-checkbox.css" />
+<link rel ="stylesheet" href="~/Content/oldstyles/login.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="~/Content/cc/workHour.css" />
+
+<script src="~/Scripts/jquery-ui-1.11.4.custom/jquery-ui.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.custom/jquery.datepicker-zh-CN.js" type="text/javascript"></script>
+<script src="~/Scripts/dropdown-checkbox/bootstrap-dropdown-checkbox.js"></script>
+<script src="~/Scripts/cc/workHour.js" type="text/javascript"></script>
+
+<style>
+      .foot-bottom {
+            position: absolute;
+            bottom: 0px;
+            height: 40px;
+            width: 100%;
+        }
+     
+</style>
+<script type="text/javascript">
+    $(function () {
+        CC.workHour.initDate(new Date(), new Date());       
+
+        //var status = CC.workHour.projStatus();
+        //CC.workHour.addOption2Select('projStatus', status, 'status_');
+        var projs = CC.workHour.projects();
+        //CC.workHour.addOption2Select('project', projs, 'project_');
+        CC.workHour.initDropdownCheckBox(projs);
+
+        //var tspans = timeSpans();
+        //var contentData = getProjectHourList();
+        //CC.workHour.addTableBody(contentData);
+
+        //CC.workHour.addTableHead(tspans);
+        //CC.workHour.addTableFoot(tspans.length, 10, 5);
+
+        $("#updateReport").click(function () {
+            var vaultGuids = [];
+            var cProjs = $('.dropdown-checkbox-project').dropdownCheckbox("checked");
+            for (var i = 0; i < cProjs.length; i++) {
+                vaultGuids.push(cProjs[i].id);
+            }
+            if (vaultGuids.length === 0) {
+                alert("请选择项目！");
+                return;
+            }
+            var showType = $('#showType').val();
+
+            var strStartDate = $("#startDate").val();
+            var strEndDate = $("#endDate").val();
+
+            if (!strStartDate || !strEndDate) {
+                alert("请填写起止日期！");
+                return;
+            }
+            if (!CC.workHour.isValidDate(strStartDate, '/')
+                || !CC.workHour.isValidDate(strEndDate, '/')) {
+                alert("日期格式不正确！");
+                return;
+            }
+            CC.workHour.emptyTable();
+            CC.workHour.addTip("");
+            CC.workHour.getReportData(vaultGuids, showType, strStartDate, strEndDate);
+        });
+        $("#exportReport").click(function () {
+            alert("暂未实现！");   
+            CC.workHour.addTip("");
+            return;
+            var csv = CC.workHour.getTableText('tableHour');
+            if (!csv) return;
+            CC.workHour.setFlie(csv);
+            
+        });
+
+        CC.workHour.addTip("暂无数据，请更新...");
+    });
+
+    //test
+    function timeSpans() {
+        return ["2016年1月", "2016年2月", "2016年3月"];
+    }
+    //test
+    function getProjectHourList() {
+        return [
+            {
+                ProjName: "测试项目001",
+                BudgetHours: 100,
+                ActualHours: 50,
+                UserList: [
+                {
+                    UserName: "张三",
+                    BudgetTotal: 50,
+                    ActualTotal: 30,
+                    BudgetHours: [
+                        {
+                            Title: "2016年1月",
+                            Hours: 0
+                        },
+                        {
+                            Title: "2016年2月",
+                            Hours: 20
+                        }, {
+                            Title: "2016年3月",
+                            Hours: 30
+                        }],
+                    ActualHours: [
+                        {
+                            Title: "2016年1月",
+                            Hours: 0
+                        },
+                        {
+                            Title: "2016年2月",
+                            Hours: 10
+                        }, {
+                            Title: "2016年3月",
+                            Hours: 20
+                        }]
+                }, {
+                    UserName: "李四",
+                    BudgetTotal: 50,
+                    ActualTotal: 20,
+                    BudgetHours: [
+                        {
+                            Title: "2016年1月",
+                            Hours: 25
+                        },
+                        {
+                            Title: "2016年2月",
+                            Hours: 0
+                        }, {
+                            Title: "2016年3月",
+                            Hours: 25
+                        }],
+                    ActualHours: [
+                        {
+                            Title: "2016年1月",
+                            Hours: 15
+                        },
+                        {
+                            Title: "2016年2月",
+                            Hours: 0
+                        }, {
+                            Title: "2016年3月",
+                            Hours: 5
+                        }]
+                }]
+            }, {
+                ProjName: "测试项目002",
+                BudgetHours: 100,
+                ActualHours: 60,
+                UserList: [
+                {
+                    UserName: "张三",
+                    BudgetTotal: 60,
+                    ActualTotal: 30,
+                    BudgetHours: [
+                        {
+                            Title: "2016年1月",
+                            Hours: 10
+                        },
+                        {
+                            Title: "2016年2月",
+                            Hours: 20
+                        }, {
+                            Title: "2016年3月",
+                            Hours: 30
+                        }],
+                    ActualHours: [
+                        {
+                            Title: "2016年1月",
+                            Hours: 0
+                        },
+                        {
+                            Title: "2016年2月",
+                            Hours: 10
+                        }, {
+                            Title: "2016年3月",
+                            Hours: 20
+                        }]
+                }]
+            }
+        ];
+    }
+</script>
+<div class="hour-wrap">
+    <!-- 当前位置 -->
+    <div id="currentWrap">
+        @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+        <span>>></span>
+        <a title="工时统计">工时统计</a>
+    </div>
+    <h3>项目工时统计</h3>
+    <div class="head-wrap">
+        @*<div class="head-item">
+            <label>项目状态</label>
+            <select id="projStatus" class="select">
+            </select>
+        </div>*@
+        <div class="head-item">
+            <div id="divContent" class="dropdown-checkbox-project"></div>
+        </div>
+        @*<div class="head-item">
+            <label>项目</label>
+            <select id="project" class="select"></select>
+        </div>*@
+        <div class="head-item">
+            <label class="label">单位选择</label>
+            <select id="showType" class="select">
+                <option id="type_1" value="1">月份</option>
+                <option id="type_0" value="0">季度</option>
+            </select>
+        </div>
+        <div class="head-item">
+            <span>起止日期</span>
+            <input type="text" class="text-date" id="startDate" disabled="disabled">
+            <span>~</span>
+            <input type="text" class="text-date" id="endDate" disabled="disabled">
+        </div>
+        <div class="button-style" id="exportReport">导 出 报 表</div>
+        <div class="button-style" id="updateReport">更 新 报 表</div>
+    </div>
+    <div class="table-wrap">
+        <table id="tableHour" class="table">
+            <thead>
+                <!--<tr>
+                        <th>
+                            Name
+                        </th>
+                    </tr>-->
+            </thead>
+            <tbody>
+                <!--<tr>
+                        <td></td>
+                    </tr>-->
+            </tbody>
+            <tfoot>
+                <!--<tr>
+                        <td></td>
+                    </tr>-->
+            </tfoot>
+        </table>
+        <div id="tip"></div>
+    </div>   
+</div>
+

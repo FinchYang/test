@@ -1,0 +1,106 @@
+﻿
+@{
+    var userName = User.Identity.GetUserName();
+    var homeHost = DBWorld.AecCloud.Web.AuthUtility.GetHomeHost().TrimEnd('/');
+    var loginUri = DBWorld.AecCloud.Web.AuthUtility.GetSSOLoginUri();
+    var registerUri = DBWorld.AecCloud.Web.AuthUtility.GetSSORegisterUri();
+    var tplHost = DBWorld.AecCloud.Web.AuthUtility.GetTemplateHost();
+    var knowledgeHost = DBWorld.AecCloud.Web.AuthUtility.GetKnowledgeHost();
+    var softHost = DBWorld.AecCloud.Web.AuthUtility.GetSoftwareHost();
+    var masterHost = DBWorld.AecCloud.Web.AuthUtility.GetMasterHost();
+    var projHost = DBWorld.AecCloud.Web.AuthUtility.GetProjHost();
+    var caseHost = DBWorld.AecCloud.Web.AuthUtility.GetCaseHost();
+    var ccHost = AecCloud.BaseCore.Utility.GetHost(Request.Url);
+}
+<link href="/Content/header.css" rel="stylesheet" type="text/css">
+<link href="/Content/layout.css" rel="stylesheet" type="text/css">
+<link href="/Content/CscecNormalize.css" rel="stylesheet" type="text/css">
+<header id="headerWrap">
+    <div class="headerWrap">
+        <div class="commodityTop">
+            <div class="webWidth">
+                <!--登陆-->
+                <div class="loginBar">
+                    @if (DBWorld.AecCloud.Web.AuthUtility.IsCookieAuthenticated())
+                    {
+                        <div class="loginIn">
+                            @*<span title="用户头像图标" class="commodityTopUserIcon"></span>*@
+                            <a href="@(homeHost)/Home" title="用户名">@(userName)</a>
+                            <a href="@Url.Action("MessageNotification", "NewReport")" title="消息通知">消息</a>
+                            <a href="@Url.Action("WorkWaitingList", "NewReport")" title="待办工作">待办</a>
+                            <a href="@(loginUri)?type=logout" title="退出登录">退出登录</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="loginFor">
+                            <a href="@(loginUri)?returnurl=@(Server.UrlEncode(Request.Url.AbsoluteUri))" title="登录">登录</a>
+                            <a href="@(registerUri)?returnurl=@(Server.UrlEncode(Request.Url.AbsoluteUri))" title="注册">注册</a>
+                        </div>
+                    }
+                </div>
+                <a href="@(homeHost)/home" title="我的工程云" class="commodityTopItem VIPManage">
+                    我的工程云
+                </a>
+                <a href="@(homeHost)/intro/aboutus" title="关于我们" class="commodityTopItem VIPManage">
+                    关于我们
+                </a>
+                <span class="commodityTopItem">客服热线：400-820-6808</span>
+                <span class="commodityTopItem">招商热线：13818662825&nbsp; 万经理</span>
+                <a href="@(homeHost)" title="DBWorld首页" class="right homePageLink">
+                    <span class="commodityTopHome"></span>
+                    DBWorld首页
+                </a>
+            </div>
+        </div>
+
+        @*<div class="webWidth" id="header">
+                <a href="@(My)" title="首页"><img src="~/Content/Images/storeLogo.png" alt="数造商城logo" class="storeLogo" /></a>
+            </div>*@
+        <nav id="nav">
+            <div class="webWidth navContent">
+
+                <div class="left knowledgeDocNav">
+                    <a href="@homeHost"><img src="/Content/Images/new/storeLogo.png" /></a>
+                </div>
+                <ul class="left navList">
+                    <li>
+                        <a href="@ccHost">
+                            首页
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@(tplHost)">
+                            协同
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@(knowledgeHost)">
+                            知识
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@(softHost)">
+                            软件
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@(masterHost)">
+                            专家
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@(projHost)">
+                            项目
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@(caseHost)">
+                            案例
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>

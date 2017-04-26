@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{20C99A6E-BD21-47E3-967D-36FE496A19E0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AecCloud.Service</RootNamespace>
+    <AssemblyName>AecCloud.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CustomMarshalers" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Apps\CloudService.cs" />
+    <Compile Include="Apps\ITasksService.cs" />
+    <Compile Include="Apps\IUserCloudService.cs" />
+    <Compile Include="Apps\TasksService.cs" />
+    <Compile Include="Apps\UserCloudService.cs" />
+    <Compile Include="Apps\ICloudService.cs" />
+    <Compile Include="Comparers.cs" />
+    <Compile Include="EmailSendingModel.cs" />
+    <Compile Include="EmailService.cs" />
+    <Compile Include="IEmailService.cs" />
+    <Compile Include="Projects\IProjectMemberService.cs" />
+    <Compile Include="Projects\IProjectService.cs" />
+    <Compile Include="Projects\ISharedFileService.cs" />
+    <Compile Include="Projects\ProjectMemberService.cs" />
+    <Compile Include="Projects\ProjectService.cs" />
+    <Compile Include="Projects\SharedFileService.cs" />
+    <Compile Include="Security\EncryptionService.cs" />
+    <Compile Include="Security\IEncryptionService.cs" />
+    <Compile Include="Users\IActiveDirectoryService.cs" />
+    <Compile Include="Users\IUserService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Users\UserExtension.cs" />
+    <Compile Include="Users\UserService.cs" />
+    <Compile Include="Users\WinActiveDirectoryService.cs" />
+    <Compile Include="Vaults\IMFilesPerformService.cs" />
+    <Compile Include="Vaults\IMFilesVaultService.cs" />
+    <Compile Include="Vaults\IMfilesWebService.cs" />
+    <Compile Include="Vaults\IUserVaultService.cs" />
+    <Compile Include="Vaults\IVaultAppService.cs" />
+    <Compile Include="Vaults\IVaultServerService.cs" />
+    <Compile Include="Vaults\IVaultTemplateService.cs" />
+    <Compile Include="Vaults\MFilesPerformService.cs" />
+    <Compile Include="Vaults\MFilesVaultService.cs" />
+    <Compile Include="Vaults\MfilesWebService.cs" />
+    <Compile Include="Vaults\MFilesWebServiceModels.cs" />
+    <Compile Include="Vaults\PerformanceRateModel.cs" />
+    <Compile Include="Vaults\UserVaultService.cs" />
+    <Compile Include="Vaults\VaultAndAppExtensions.cs" />
+    <Compile Include="Vaults\VaultAppService.cs" />
+    <Compile Include="Vaults\VaultServerService.cs" />
+    <Compile Include="Vaults\VaultTemplateService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AecCloud.BaseCore\AecCloud.BaseCore.csproj">
+      <Project>{2acc62af-1464-45b8-b449-2fe570a2f4f0}</Project>
+      <Name>AecCloud.BaseCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AecCloud.Core\AecCloud.Core.csproj">
+      <Project>{3b28d5b4-e0ee-4afa-820e-e204bee40242}</Project>
+      <Name>AecCloud.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AecCloud.Data\AecCloud.Data.csproj">
+      <Project>{a7f13188-6e8e-442a-8d72-fd16f44570a2}</Project>
+      <Name>AecCloud.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AecCloud.MfilesServices\AecCloud.MfilesServices.csproj">
+      <Project>{9375a5d1-68ae-4fa3-9d77-d15cef359030}</Project>
+      <Name>AecCloud.MfilesServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AecCloud.WebAPI.Models\AecCloud.WebAPI.Models.csproj">
+      <Project>{28c33d7e-77b7-4dcb-8b88-bdd55607737c}</Project>
+      <Name>AecCloud.WebAPI.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MFilesAPI">
+      <Guid>{B9C079AA-92DD-4FB4-A0E0-AA3198955B45}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @*<title>@Html.Title(true)</title>*@
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link type="image/x-icon" rel="icon" href="~/favicon.ico" />
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/css")
+    <link href="/Content/header.css" rel="stylesheet" type="text/css">
+    <link href="/Content/layout.css" rel="stylesheet" type="text/css">
+    <link href="/Content/base.css" rel="stylesheet" type="text/css">
+    <link href="/Content/nav.css" rel="stylesheet" type="text/css">
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    
+</head>
+<body>
+    @Html.Partial("~/Views/Shared/_Header.cshtml")
+    <div id="bodyConment">
+        @RenderBody()
+    </div>
+    @Html.Partial("~/Views/Shared/_Footer.cshtml")
+</body>
+</html>

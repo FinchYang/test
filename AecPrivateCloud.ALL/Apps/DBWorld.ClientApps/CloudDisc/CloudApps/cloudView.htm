@@ -1,0 +1,492 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>应用云计算平台</title>
+    <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/core.js"></script>
+    <script type="text/javascript" src="scripts/web.js"></script>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .clearfix:after {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .applistTable {
+            text-align: center;
+            width: 100%;
+        }
+
+        .applistTable li {
+            list-style: none;
+            text-align: left;
+        }
+
+        .TipDiv {
+            width: 320px;
+            height: 240px;
+            padding: 10px;
+            border-top: solid 5px #a6c9e2;
+            border-bottom: solid 5px #a6c9e2;
+            border-left: solid 1px #a6c9e2;
+            border-right: solid 1px #a6c9e2;
+            background: #ffffff;
+            z-index: 10;
+            position: absolute;
+            display: none;
+        }
+
+        #tips #close {
+            width: 20px;
+            height: 16px;
+            border: none;
+            z-index: 1;
+            left: 310px;
+            top: 0px;
+            position: absolute;
+            cursor: pointer;
+        }
+
+        #tips #refresh {
+            width: 20px;
+            height: 16px;
+            border: none;
+            z-index: 1;
+            left: 280px;
+            top: 0px;
+            position: absolute;
+            cursor: pointer;
+            display: none;
+        }
+
+        .applisttd {
+            height: 24px;
+            line-height: 24px;
+            width: 40%;
+            text-align: right;
+        }
+
+        .appdiv {
+            width: 140px;
+            height: 98px;
+        }
+
+        .appdiv img {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            margin: 15px 0 0 55px;
+        }
+
+        .appdiv span {
+            float: right;
+            width: 138px;
+            text-align: center;
+            margin-top: 10px;
+            display: inline-block;
+            word-break: normal;
+            word-wrap: break-word;
+        }
+
+        .org_box {
+            min-width: 300px;
+            height: 80px;
+            line-height: 30px;
+            margin-bottom: 30px;
+            background: #ffffff;
+            position: absolute;
+            border: 1px solid #000000;
+        }
+
+        .org_bot_cor {
+            width: 0;
+            height: 0;
+            font-size: 0;
+            border-width: 15px;
+            border-style: solid;
+            border-color: #000000 transparent transparent;
+            _border-color: #ffffff #000000 #000000;
+            overflow: hidden;
+            position: absolute;
+            left: 245px;
+            bottom: -30px;
+        }
+
+        .border_in {
+            border: 1px solid #121212;
+        }
+
+        .border_out {
+            border: 1px solid #F6F5F5;
+        }
+
+        #ctl00_cphMainRight_applistTable {
+            margin: 0px;
+            padding: 0px;
+            list-style-type: none;
+        }
+
+        #ctl00_cphMainRight_applistTable li {
+            float: left;
+            width: 142px;
+            height: 100px;
+        }
+
+        .placeHolder div {
+            background-color: white !important;
+            border: dashed 1px gray !important;
+            height: 98px;
+        }
+
+        .tab1 {
+            width: 100%;
+        }
+
+        .menu {
+            height: 30px;
+            border-right: #ccc solid 1px;
+            font-size: 14px;
+            border-right: #ccc solid 1px;
+            overflow: hidden;
+        }
+
+        .menu li {
+            float: left;
+            width: 150px;
+            text-align: center;
+            line-height: 30px;
+            height: 30px;
+            cursor: pointer;
+            border-left: #ccc solid 1px;
+            border-bottom: #ccc solid 1px;
+            color: #666;
+            overflow: hidden;
+            background: #E0E2EB;
+            list-style: none;
+        }
+
+        .menu li.off {
+            background: #fff;
+            color: #336699;
+            font-weight: bold;
+            border-bottom: none;
+        }
+
+        .menudiv {
+            border-left: #cccccc solid 1px;
+            border-right: #cccccc solid 1px;
+            border-top: 0;
+            background: rgb(247,247,247);
+        }
+
+        /* focus */
+        #focus {
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        #focus ul {
+            position: absolute;
+        }
+
+        #focus ul li {
+            float: left;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+
+        #focus ul li div {
+            position: absolute;
+            overflow: hidden;
+        }
+
+        #focus .btnBg {
+            position: absolute;
+            height: 20px;
+            left: 0;
+            bottom: 0;
+            background: #000;
+        }
+
+        #focus .title {
+            position: absolute;
+            height: 20px;
+            top: 0;
+            left: 0;
+            background: #000;
+            opacity: 0.5;
+            z-index: 999;
+            color: #fff;
+            padding-left: 5px;
+        }
+
+        #focus .btn {
+            position: absolute;
+            width: 780px;
+            height: 10px;
+            padding: 5px 10px;
+            right: 0;
+            bottom: 0;
+            text-align: right;
+        }
+
+        #focus .btn span {
+            display: inline-block;
+            _display: inline;
+            _zoom: 1;
+            width: 25px;
+            height: 10px;
+            _font-size: 0;
+            margin-left: 5px;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        #focus .btn span.on {
+            background: #fff;
+        }
+
+        #focus .preNext {
+            width: 45px;
+            height: 100px;
+            position: absolute;
+            background: url(image/sprite.png) no-repeat 0 0;
+            cursor: pointer;
+            top: 200px;
+        }
+
+        #focus .pre {
+            left: 0;
+        }
+
+        #focus .next {
+            right: 0;
+            background-position: right top;
+        }
+
+        .dsd {
+            
+        }
+        .cloud_wrap {
+        }
+
+        .cloud_header {
+        }
+
+        .cloud_header_style {
+            width: 100%;
+            background-color: rgb(1,125,199);
+        }
+
+        .cloud_img {
+        }
+
+        .video {
+        }
+
+        .img_logo {
+            width :40px; 
+            float: left;
+            margin-left: 10px;
+        }
+
+        .img_Title {
+            float: left; 
+            margin-top: 2px;
+            margin-left: 5px;
+        }
+
+        .appdiv_hover_style.appdiv_style {
+            background-color: rgb(202, 199, 199);
+        }
+
+        .appdiv_hover_style2.appdiv_style {
+            border-radius: 5px;
+            box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3), 0px -1px 0px rgba(255, 255, 255, 0.8), 0px 4px 10px rgba(0,0,0,0.6);
+        }
+
+        .appdiv_leave_style.appdiv_hover_style {
+            background: #F6F5F5;
+        }
+
+        .appdiv_leave_style2.appdiv_hover_style2 {
+            border-radius: 0px;
+            box-shadow: none;
+        }
+
+        .appdiv_style {
+            cursor: pointer;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+
+        .appdiv_span_style {
+            float: right;
+            width: 99%;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .applistTable_bkg {
+          background-color: rgb(247,247,247);
+        }
+       
+    </style>
+    <script type="text/javascript">
+       
+        function OnNewDashboard(dashboard) {
+            dashboard.Events.register(Event_Started, getDashboardStartedHandler(dashboard));
+        }
+        function getDashboardStartedHandler(dashboard) {
+            return function () {
+                var accountName = dashboard.CustomData.accountName;
+                var userName = "";
+                var domain = "";
+                //var pwd = "abcde12345!";
+                var account = accountName.split('\\');
+                if (account.length > 1) {
+                    userName = account[1];
+                    domain = account[0];
+                } else {
+                    userName = account[0];
+                }
+
+                defineHeight();
+                loadInfo();
+                $(".tab1 .menu li").click(function () {
+                    $(".tab1 .menu li").removeClass("off");
+                    $(this).addClass("off");
+                    var tempId = $(this).attr("id");
+                    $(".menudiv>div").hide();
+                    $("#con_" + tempId).show();
+                    $(window).resize(defineHeight);
+                });
+
+                $("#focus a").click(function () {
+                    return false;
+                });
+
+
+                $(".appdiv").hover(function () {
+                    if ($.browser.version == "8.0" || $.browser.version == "7.0" || $.browser.version == "6.0") {
+                        $(this).removeClass("appdiv_leave_style").addClass("appdiv_hover_style");
+                    } else {
+                        $(this).removeClass("appdiv_leave_style2").addClass("appdiv_hover_style2");
+                    }
+                }, function () {
+                    if ($.browser.version == "8.0" || $.browser.version == "7.0" || $.browser.version == "6.0") {
+                        $(this).addClass("appdiv_leave_style");
+                    } else {
+                        $(this).addClass("appdiv_leave_style2");
+                    }
+                });
+
+                $(".appdiv img").dblclick(function (e) {
+                    var applicationID = $(this).attr("id");
+                    var appName = $(this).attr("title");
+                    /*
+                    var tokenObj = $.parseJSON(dashboard.CustomData.token);
+                    var token = encodeURIComponent(tokenObj["access_token"]);
+                    //alert(token);
+                    var jsonStr = 'parames=' + JSON.stringify({
+                        action: 'GetApplicationCall',
+                        data: JSON.stringify({
+                            Domain: domain,
+                            Token: token,
+                            ApplicationID: applicationID,
+                            AppName: appName,
+                            ProjectName: '',
+                            FilePath: ''
+                        })
+                    });
+                    var res = webapi.openSoft(dashboard.CustomData.cloudUrl, "JSONAPI/JSONAPI.ashx", jsonStr);
+                    var resObj = $.parseJSON(res);
+                    alert(JSON.stringify(resObj.response));
+                    //jsonStr = encodeURIComponent(jsonStr);
+                    //window.location = dashboard.CustomData.cloudUrl + "/JSONAPI/JSONAPI.ashx?" + jsonStr;
+                    */
+                    domain = encodeURIComponent(domain);
+                    userName = encodeURIComponent(userName);
+                    var pwd = encodeURIComponent(dashboard.CustomData.password);
+                    appName = encodeURIComponent(appName);
+                    applicationID = encodeURIComponent(applicationID);
+                    var cloudUrl = dashboard.CustomData.cloudUrl;
+                    
+                    var appUrl = cloudUrl + "/Common/launch.aspx?Domain=" + domain + "&UserName=" + userName + "&Password=" + pwd
+                                + "&ApplicationID=" + applicationID + "&AppName=" + appName + "&ProjectName=&FilePath=";
+                    //alert(appUrl);
+
+                    window.location = appUrl;
+                    
+                });
+
+                function loadInfo() {
+                    if (!dashboard.CustomData.softs) return;
+                    var jsonRes = $.parseJSON(dashboard.CustomData.softs);
+                    if (jsonRes.status === 200) {
+                        //alert("成功：" + jsonRes.response);
+                        var jsonData = jsonRes.response; //$.parseJSON(jsonRes.response);
+                        var tempStr = "";
+                        //jsonData = [{ "ApplicationID": "Citrix.MPS.App.Farm1.Calculator", "AppName": "ANSYS CFX", "IconData": null }, { "ApplicationID": "Citrix.MPS.App.Farm1.Notepad", "AppName": "ANSYS CFD-Post", "IconData": null }];
+                        $.each(jsonData, function (i, item) {
+                            var imgUrl = item.IconPath;
+                            if (!imgUrl) {
+                                var iconType = 'jpg';
+                                if (item.IconType) {
+                                    iconType = item.IconType;
+                                }
+                                var imgData = item.IconData;
+                                if (imgData) {
+                                    imgUrl = 'data:image/'+iconType+';base64,' + imgData;
+                                }
+                            }
+                            tempStr += "<li name='仿真软件' class='file'>"
+                                + "<div class='appdiv appdiv_style'>"
+                                + "<img id='" + item.ApplicationID + "' title='" + item.AppName + "' width='32px' height='32px' src='" + imgUrl + "' name=''>"
+                                + "<span class='appdiv_span_style'>" + item.AppName + "</span>"
+                                + "</div>"
+                                + "</li>";
+                        });
+                        $(".applistTable").html(tempStr);
+                    } else {
+                        //alert("失败："+jsonRes.response);
+                    }
+                }
+
+                //浏览器大小改变时候重新定义高度
+                function defineHeight() {
+                    //设置最外层DIV高度为浏览器高度
+                    var h = $(window).height() - 1;
+                    $(".cloud_wrap").css("min-height", h + "px");
+                    $(".cloud_header").css("min-height", "40px");
+                    $(".applistTable").css("min-height", (h - 40) * 1 + "px");
+                };
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="cloud_wrap">
+        <div class="cloud_header cloud_header_style">
+            <img src="image/phicloud-logo512x512.png" alt="" class="img_logo" />
+            <img src="image/Title.png" alt="" class="img_Title" />
+        </div>
+        <div id="ctl00_cphMainRight_applistTable" class="applistTable clearfix applistTable_bkg" data-listidx="0" >
+        </div>
+        <div class="cloud_img">
+        </div>
+    </div>
+</body>
+</html>

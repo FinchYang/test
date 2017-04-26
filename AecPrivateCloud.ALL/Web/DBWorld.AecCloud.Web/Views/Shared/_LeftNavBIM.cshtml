@@ -1,0 +1,305 @@
+﻿@using DBWorld.AecCloud.Web
+@*@{
+    var canManageContractor = DBWorldCache.Get(User.Identity.GetUserId() + "canManageContractor");
+    var havetask = DBWorldCache.Get(User.Identity.GetUserId() + "havetask");
+    var havenotice = DBWorldCache.Get(User.Identity.GetUserId() + "havenotice");
+       <input id="canManageContractor" type="hidden" value=@canManageContractor />
+    <input id="havenotice" type="hidden" value=@havenotice />
+    <input id="havetask" type="hidden" value=@havetask />
+    var username = User.Identity.Name;
+    <input id="usernameforpermission" type="hidden" value=@username />
+}*@
+<script type="text/javascript">
+    $(function () {
+        //左侧导航点击效果
+        $(".asideWrap>a").hover(function () {
+            //点击a标签，当前标签紧挨着的下一个ul显示，其他的ul隐藏。
+            //$(this).siblings(".ul_list").hide().end().next(".ul_list").show("100");
+            //$(this).addClass("on").siblings().removeClass("on");
+            $(this).addClass("on");
+        }, function () {
+            $(this).removeClass("on");
+            //if ($(this).next(".ul_list").is(":visible")) {
+            //    return false;
+            //} else {
+            //    $(this).removeClass("on");
+            //}
+        });
+
+        $('.title-only').click(function() {
+            $(this).find('.UpDown').click();
+        });
+
+        $(".UpDown").click(function () {
+            $(this).parents("a").siblings(".ul_list").hide().end().next(".ul_list").show("100").end().addClass("on").siblings().removeClass("on");
+            $(this).parents(".asideWrap").find(".UpDown").html('<img src="/Content/Images/mdd/中建八局首页5.png" />');
+            $(this).html('<img src="/Content/Images/mdd/中建八局首页6.png" />');
+            return false;
+        });
+        //进入页面默认第一个展开
+        var url = function () { return "/"+document.location.href.replace(/^(?:\/\/|[^\/]+)*\//, "").toLowerCase(); }();
+        if (url === "/") {
+            $('#project-list').children('.UpDown').click();
+        } else if (url === "/model/index" || url === "/model") {
+            $('#model-list').children('.UpDown').click();
+        }
+        else {
+            $(".menuitems").each(function () {
+                var aUrl = $(this).attr('href').toLowerCase();
+                if (aUrl === url) {
+                    var $elem = $(this).parent().parent().prev().children('.UpDown');
+                    $elem.click();
+                    $elem.parent().removeClass("on");
+                    $(this).parent().addClass("on");
+                    return false;
+                }
+            });
+        }
+        
+        //$(".asideWrap .UpDown:first").click();
+
+    })
+</script>
+<style>
+    .indentation {
+        background-color: #008ad2;
+         list-style: none;
+    }
+    ul.indentation.ul_list {
+        padding:0;
+        margin-bottom:0;
+        /*border-bottom:2px solid #026395;*/
+    }
+    li.menulistyle {
+        background-color: #008ad2;
+        border-bottom: 1px solid #026395;
+        color: white!important;
+        padding-bottom: 6px !important;
+        padding-top: 1px !important;
+        padding-left: 28px;
+        /*border-top: 1px solid white;*/
+        font-size: 1em;
+        height: 2em;
+        /*margin-right: 5px;*/
+        /*background: linear-gradient(to right,silver,white);*/
+    }
+    
+    .menuitems {
+        padding-bottom: 5px;
+        height: 1.5em;
+        padding: inherit;
+    }
+ 
+    .asideWrap  {
+        height:1000px;
+        min-height:300px;
+    }
+
+    .nav-left {
+        margin-top:0;
+    }
+
+    .nav-title {
+        font-size:18px;
+        border-bottom:1px solid #026395;
+    }
+
+    .menulistyle .menuitems {
+        font-size:12px;
+        padding-left:5px;
+        
+    }
+
+    .menulistyle:hover {
+        background: url(/Content/Images/Navigations/select.png) no-repeat center;
+    }
+
+    a.menuitems img {
+        margin-top:-1px;
+    }
+
+    a.menuitems span {
+        padding-left:5px;
+        padding-top:2px;
+    }
+
+    a:focus {
+        text-decoration:none !important;
+    }
+
+</style>
+<aside class="left nav-left">
+    <div class="asideWrap" >
+        @*<img src="~/Content/Images/LeftTopBim.png" alt="BIM客户端图片" />*@
+
+        <a href="@Url.Action("Index", "BIM")" title="项目中心" class="nav-title" id="project-list">
+            <img src="~/Content/Images/mdd/中建八局首页1.png" alt="project center 图片"/>
+            项目中心
+
+            <div class="UpDown"><img src="/Content/Images/mdd/中建八局首页5.png"/>
+            </div>
+        </a>
+        <a href="@Url.Action("Index", "Model")" title="BIM模型中心" class="nav-title" id="model-list">
+            <img src="~/Content/Images/projects/bimzx.png" alt="bim model center 图片" />
+            模型中心
+
+            <div class="UpDown"><img src="/Content/Images/mdd/中建八局首页5.png" /></div>
+        </a>
+        <a href="javascript:void(0);" title="项目报表" class="nav-title title-only">
+            @*<a href="javascript:void(0);" title="项目报表" class="disabledLink" style="border-radius: 5px 20px 5px 20px;">*@
+            <img src="~/Content/Images/mdd/中建八局首页2.png" alt="project report 图片" />
+            项目报表
+
+            <div class="UpDown"><img src="/Content/Images/mdd/中建八局首页5.png" /></div>
+        </a>
+        <ul class="indentation ul_list">
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("ScheduleControlStatistics", "IntegratedManagement")" title="工期模块节点统计表">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>工期节点偏差分析</span>
+                </a>
+            </li>
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("ThreeControls", "NewReport")" title="三大控制点">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>三大控制点</span>
+                </a>
+            </li>
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("TimeLimitWarning", "NewReport")" title="工期预警">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>工期预警</span>
+                </a>
+
+            </li>
+          
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("PerformanceRate", "IntegratedManagement")" title="工期履约率统计">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>工期履约率</span>
+                </a>
+            </li>
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("SupervisorMeetingStatistics", "IntegratedManagement")" title="审核记录统计">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>审核记录统计</span>
+                </a>
+            </li>
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("SecureReport", "NewReport")" title="安全整改统计">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>安全整改统计</span>
+                </a>
+            </li>
+         
+           
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("SecureIssueList", "NewReport")" title="安全问题清单">
+                    <img src="~/Content/Images/Navigations/导航图标.png"/>
+                    <span>安全问题清单</span>
+                </a>
+            </li>
+          
+            @*<li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("CostWarning", "NewReport")" title="成本预警">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>成本预警</span>
+                </a>
+            </li>*@
+        </ul>
+        <a href="javascript:void(0);" title="我的工作空间" class="nav-title title-only">
+            <img src="~/Content/Images/mdd/中建八局首页3.png" alt="project workaround 图片" />
+            工作空间
+            <div class="UpDown"><img src="/Content/Images/mdd/中建八局首页5.png" /></div>
+        </a>
+        <ul class="indentation ul_list">
+            <li class="menulistyle">
+                <a class="menuitems" id="todoworklist" href="@Url.Action("WorkWaitingList", "NewReport")" title="待办工作">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>待办工作</span>
+                    <div class="notice-tip" id="todoworklist-tip"> </div>
+                </a>
+            </li>
+            <li class="menulistyle">
+                <a class="menuitems" id="noticelist" href="@Url.Action("MessageNotification", "NewReport")" title="消息通知">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>消息通知</span>
+                    <div class="notice-tip" id="noticelist-tip"> </div>
+                </a>
+            </li>
+
+        </ul>
+        <a href="javascript:void(0);" title="我的账户" class="nav-title title-only">
+            @*<a style="border-radius: 5px 20px 5px 20px;" href="@Url.Action("Personal", "Manage", new { InfoType = "personalInfo" })" style="" title="我的账户">*@
+            <img src="~/Content/Images/mdd/中建八局首页4.png" alt="project account 图片" />
+            我的账户
+            <div class="UpDown"><img src="/Content/Images/mdd/中建八局首页5.png" /></div>
+        </a>
+        <ul class="indentation ul_list">
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("UserInfoEdit", "Manage")" title="修改姓名">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>修改个人信息</span>
+                </a>
+            </li>
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("ChangePassword", "Manage")" title="修改密码">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>修改密码</span>
+                </a>
+            </li>
+        </ul>
+        <a href="javascript:void(0);" title="人员权限管理" class="nav-title title-only" style="display:none;" id="menu-permission">
+            <img src="~/Content/Images/mdd/人员权限.png" alt="" />
+            人员权限
+            <div class="UpDown"><img src="/Content/Images/mdd/中建八局首页5.png" /></div>
+        </a>
+        <ul class="indentation ul_list" style="display:none;" id="menu-permission-ul">
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("PermissionManagement", "Manage")" title="用户组人员设置">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>用户组人员设置</span>
+                </a>
+            </li>
+            <li class="menulistyle">
+                <a class="menuitems" href="@Url.Action("ErpPmSet", "Manage")" title="其他人员设置">
+                    <img src="~/Content/Images/Navigations/导航图标.png" />
+                    <span>其他人员设置</span>
+                </a>
+            </li>
+        </ul>
+        <a href="@Url.Action("ContractorList", "NewReport")" title="分包商管理" class="nav-title" style="display: none;" id="menu-contractor">
+            <img src="~/Content/Images/mdd/分包商管理.png" alt="" />
+            分包商管理
+            <div class="UpDown"><img src="/Content/Images/mdd/中建八局首页5.png" /></div>
+        </a>
+      
+        <script type="text/javascript">
+            function myfun() {
+                var canabc = document.getElementById("canManageContractor").value;
+                if (canabc == "true") {
+                    // document.getElementById("menu-contractor").style.left = "0%";
+                    //var nl = $('#menu-contractor').css('display');
+                    //if (nl === "none") $('#menu-contractor').style.display = "inherit";
+                    document.getElementById("menu-contractor").style.display = "inherit";
+                }
+                
+                if (document.getElementById("usernameforpermission").value == "admin") {
+                  //  document.getElementById("menu-permission").style.left = "0%";
+                    document.getElementById("menu-permission").style.display = "inherit";
+                }
+                if (document.getElementById("havenotice").value == "True") {
+                //    document.getElementById("noticelist-tip").style.left = "8em";
+                    document.getElementById("top-right-noticelist-tip").style.right = "15em";
+                }
+
+                if (document.getElementById("havetask").value == "True") {
+                  //  document.getElementById("todoworklist-tip").style.left = "8em";
+                    document.getElementById("top-right-todoworklist-tip").style.right = "9em";
+                }
+            }
+          
+            window.onload = myfun;
+        </script>
+    </div>
+</aside>

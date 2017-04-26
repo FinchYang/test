@@ -1,0 +1,617 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>项目概况</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <!-- Styles used on the dashboard -->
+    <link href="style/main.css" rel="stylesheet" />
+    <link href="style/projhome.css" rel="stylesheet" />
+    <link href="style/flatbutton.css" rel="stylesheet" />
+    <link href="scripts/jquery-ui-1.11.4.custom/jquery-ui.css" rel="stylesheet" />
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery.datepicker-zh-CN.js"></script>
+
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+    <script type="text/javascript" src="scripts/mf/client.js"></script>
+    <script type="text/javascript" src="scripts/mf/vault.js"></script>
+    <script type="text/javascript" src="scripts/md/base.js"></script>
+    <script type="text/javascript" src="scripts/md/mail.js"></script>
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/web.js"></script>
+    <script type="text/javascript" src="scripts/mf/ui.js"></script>
+    <script type="text/javascript" src="scripts/mf/objectOps.js"></script>
+    <script type="text/javascript" src="scripts/wsh.js"></script>
+    <script type="text/javascript" src="scripts/cc/tasks.js"></script>
+    <script type="text/javascript" src="scripts/cc/mail.js"></script>
+    <!-- Helper scripts -->
+    <script type="text/javascript" src="scripts/home_common.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/utilities.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/localization.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            //initialize();
+        });
+
+        var imageByteArray;
+
+        function initialize() {
+            $(".inputText").css("width", $(".container").width() - 110);
+            $("#inputDescription").css("width", $(".container").width() - 60);
+            $(".wrap").height($(window).height());
+            $(".datepicker").datepicker();
+
+            //按钮
+            $(".editeBtn button").click(function () {
+                //编辑点击事件
+                $("#inputName").removeAttr("disabled");
+                $("#inputDescription").removeAttr("readonly");
+                $("#inputDescription").css("color", "black");
+                $("#inputDescription").removeAttr("unselectable");
+                $("#inputBuild").removeAttr("disabled");
+                $("#inputDesign").removeAttr("disabled");
+                $("#inputConstruction").removeAttr("disabled");
+                $("#inputSupervisor").removeAttr("disabled");
+                $("#startPicker").removeAttr("disabled");
+                $("#endPicker").removeAttr("disabled");
+
+                $(".editeBtn").hide();
+                $(".saveBtn").show();
+                $("#coverImgTd").on("click", "#coverImg", function () {
+                    $("#coverImgFile").click();
+                });
+            });
+            $(".saveBtn button").click(function () {
+                $("#coverImgTd").off("click", "#coverImg");
+            });
+
+            $("#coverImgFile").change(function () {
+                $("#coverImg").height($("#coverImg").height());
+                $("#coverImg").attr("src", "file:///" + $("#coverImgFile").val());
+                if (imageByteArray && imageByteArray.length) {
+                    imageByteArray.splice(0, imageByteArray.length);
+                }
+                imageByteArray = wshUtils.getBinaryFileContentAsByteArray($("#coverImgFile").val());
+            });
+        }
+
+    </script>
+
+    <!-- Dashboard implementation -->
+    <script type="text/javascript">
+
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+
+        }
+
+        function getProjInfo(vdgHost, projId, token) {
+            $.support.cors = true;
+            var proj;
+            $.ajax({ 
+                    async: false,
+                    type: "GET",
+                    url: vdgHost + "/api/Project/AllProjects/" + projId,
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        Authorization: token.TokenType + " " + token.AccessToken,
+                        apikey: 'dbworldclient'
+                    },
+                    dataType: "json",
+                    //data: JSON.stringify(invitemode),
+                    success: function(d) {
+                        proj = d;
+                    },
+                    error: function(xmlHttpRequest, textStatus, errorThrown) {
+                        alert("获取项目信息失败：" + textStatus + " # Error: " + errorThrown);
+                    }
+                }
+            );
+
+            if (!proj) {
+                return;
+            }
+
+            return {
+                project: proj,
+                cover: proj.Cover
+            };
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+            dashboard.Window.SetDefaultSize(816.5, 502.5, true); //设置默认大小
+            dashboard.Window.Resizable = false;
+            dashboard.Window.Maximizable = false;
+            dashboard.Window.Minimizable = false;
+
+            
+
+            initialize();
+
+            var shellFrame = dashboard.Parent;
+            var vault = shellFrame.ShellUI.Vault;
+            var data = dashboard.CustomData;
+            var vdgHost = webapi.getApiHost(vault);
+            var gToken = $.parseJSON(data.token); //CC.getToken(vault);
+            gToken.AccessToken = gToken.access_token;
+            gToken.TokenType = gToken.token_type;
+            var projId = data.projId;
+            var ppInfo = getProjInfo(vdgHost, projId, gToken);
+            if (!ppInfo) {
+                dashboard.Window.Close();
+                return new function() {};
+            }
+            dashboard.CustomData.project = ppInfo.project;
+            //参入方
+            var parties = data.srcParties;
+
+            //任务
+            //var tasks = CC.task.GetAssignToMeTasks(vault);
+            //邮件
+            //var emails = CC.mail.getUnReadEmails(vault);
+
+            if (parties.length == 0) {
+                //没有参入方
+                $("#trBuild").hide();
+                $("#trDesign").hide();
+                $("#trConstruction").hide();
+                $("#trSupervisor").hide();
+                $("#trDescription").css("height", "70%");
+            }
+
+            
+            var coverRes = ppInfo.cover;
+            //alert(gToken);
+            loadProjectProperty(dashboard, coverRes);
+            // Return the event handler.
+            return function () {
+
+                //任务和邮件提示
+                //showTaskAndEmailTips(shellFrame, tasks.Count, emails.Count);
+
+                //
+                var projectInfo = {};
+                $("#saveBtn").click(function () {
+                    //保存点击事件
+                    $("#inputName").attr("disabled", "disabled");
+                    $("#inputDescription").attr("readonly", "readonly");
+                    $("#inputDescription").css("color", "#6d6d6d");
+                    $("#inputDescription").attr("unselectable", "on");
+                    $("#inputBuild").attr("disabled", "disabled");
+                    $("#inputDesign").attr("disabled", "disabled");
+                    $("#inputConstruction").attr("disabled", "disabled");
+                    $("#inputSupervisor").attr("disabled", "disabled");
+                    $("#startPicker").attr("disabled", "disabled");
+                    $("#endPicker").attr("disabled", "disabled");
+
+                    $(".saveBtn").hide();
+                    $(".editeBtn").show();
+
+                    projectInfo = saveProjectProperty(vdgHost, dashboard, gToken);
+                });
+                $("#giveUpBtn").click(function () {
+                    //放弃点击事件
+                    $("#inputName").attr("disabled", "disabled");
+                    $("#inputDescription").attr("readonly", "readonly");
+                    $("#inputDescription").css("color", "#6d6d6d");
+                    $("#inputDescription").attr("unselectable", "on");
+                    $("#inputBuild").attr("disabled", "disabled");
+                    $("#inputDesign").attr("disabled", "disabled");
+                    $("#inputConstruction").attr("disabled", "disabled");
+                    $("#inputSupervisor").attr("disabled", "disabled");
+                    $("#startPicker").attr("disabled", "disabled");
+                    $("#endPicker").attr("disabled", "disabled");
+
+                    $(".saveBtn").hide();
+                    $(".editeBtn").show();
+
+                    setProjectInfo(dashboard, gToken, projectInfo, coverRes);
+                });
+
+
+                $(".wrap").height($(window).height());
+                $("#right").height($(window).height());
+                $("#coverImg").height($("#right").height() * 0.7);
+
+                $(window).resize(function () {
+                    $(".inputText").css("width", $(".container").width() - 110);
+                    $("#inputDescription").css("width", $(".container").width() - 60);
+                    $(".wrap").height($(window).height());
+                    $("#right").height($(window).height());
+                    $("#coverImg").height($("#right").height() * 0.6);
+                });
+            };
+        }
+
+        function showTaskAndEmailTips(shellFrame, tasks, emails) {
+            //任务
+            if (tasks > 0) {
+                //背景色，文字描述，链接
+                $("#divTasks").css("background-color", "#39A9F0");
+                $("#txtTasks").html("您有待完成任务，");
+                $("#txtTasks").css("color", "#BCECFF");
+                $("#linkTasks").css("color", "white");
+                $("#linkTasks").html("请前往查看！");
+                $("#imgTasks").attr("src", "images/buttons/有新任务.png");
+                $("#linkTasks").click(function () {
+                    shellFrame.CurrentPath = "我的任务";
+                });
+            } else {
+                //背景色，文字描述，链接
+                $("#divTasks").css("background-color", "#B5B5B6");
+                $("#txtTasks").html("没有新任务，");
+                $("#txtTasks").css("color", "#E3E3E3");
+                $("#linkTasks").css("color", "white");
+                $("#linkTasks").html("派遣任务！");
+                $("#imgTasks").attr("src", "images/buttons/没有新任务.png");
+                $("#linkTasks").click(function () {
+                    MF.ui.createNewObjectWithWindow(shellFrame, MFBuiltInObjectTypeAssignment);
+                });
+            }
+
+            //邮件
+            if (emails > 0) {
+                //背景色，文字描述，链接
+                $("#divEmails").css("background-color", "#39A9F0");
+                $("#txtEmails").html("您有未读邮件，");
+                $("#txtEmails").css("color", "#BCECFF");
+                $("#linkEmails").css("color", "white");
+                $("#linkEmails").html("请前往查看！");
+                $("#imgEmails").attr("src", "images/buttons/有新邮件.png");
+                $("#linkEmails").click(function () {
+                    shellFrame.CurrentPath = "邮件系统\\收件箱";
+                });
+            } else {
+                //背景色，文字描述，链接
+                $("#divEmails").css("background-color", "#B5B5B6");
+                $("#txtEmails").html("没有新邮件，");
+                $("#txtEmails").css("color", "#E3E3E3");
+                $("#linkEmails").css("color", "white");
+                $("#linkEmails").html("新建邮件！");
+                $("#imgEmails").attr("src", "images/buttons/没有新邮件.png");
+                $("#linkEmails").click(function () {
+                    createNewEmail(shellFrame.ShellUI.Vault);
+                });
+            }
+        }
+
+        //新建邮件
+        function createNewEmail(vault) {
+            var vaultName = vault.Name;
+            var dbworldPath = CC.getInstallPath(vault);
+            var exePathSend = dbworldPath + '\\' + 'DBWorld.MailClient.exe';
+            wshUtils.runProgramWithUI(exePathSend, [vaultName, "0", "0"]);
+        }
+
+        //设置项目信息
+        function setProjectInfo(gDashboard, gToken, projectInfo, coverRes) {
+            if ($.isEmptyObject(projectInfo)) {
+                loadProjectProperty(gDashboard, coverRes);
+                return;
+            }
+
+            if (imageByteArray && imageByteArray.length) {
+                imageByteArray.splice(0, imageByteArray.length);
+            }
+
+            $("#inputName").val(projectInfo.Name);
+            $("#inputDescription").val(projectInfo.Description);
+            $("#inputConstruction").val(projectInfo.OwnerUnit);
+            $("#inputDesign").val(projectInfo.DesignUnit);
+            $("#inputBuild").val(projectInfo.ConstructionUnit);
+            $("#inputSupervisor").val(projectInfo.SupervisionUnit);
+            $('#startPicker').datepicker("setDate", projectInfo.StartDateUtc);
+            $('#endPicker').datepicker("setDate", projectInfo.EndDateUtc);
+            $("#coverImg").attr("src", "file:///" + projectInfo.CoverPath);
+        }
+
+        function loadProjectPropertyOld(gDashboard, gToken, coverRes) {
+            //shellframe
+            var shellFrame = gDashboard.Parent;
+            //vault
+            var vault = shellFrame.ShellUI.Vault;
+            //properties
+            var objAndProps = gDashboard.CustomData.objsAndProps;
+            var props = objAndProps.Properties;
+
+            if (!objAndProps.VersionData) {
+                return;
+            }
+
+            //项目名称
+            var projectName = objAndProps.VersionData.Title;
+            $("#inputName").val(projectName);
+            //项目描述
+            var descriptionPropId = MF.alias.propertyDef(vault, md.proj.propDefs.Description);
+            var description = props.SearchForProperty(descriptionPropId).Value.Value;
+            $("#inputDescription").val(description);
+            //建设单位
+            var constructionPropId = MF.alias.propertyDef(vault, md.proj.propDefs.ProprietorUnit);
+            var construction = props.SearchForProperty(constructionPropId).Value.Value;
+            $("#inputConstruction").val(construction);
+            // 设计时间
+            var designPropId = MF.alias.propertyDef(vault, md.proj.propDefs.DesignUnit);
+            var design = props.SearchForProperty(designPropId).Value.Value;
+            $("#inputDesign").val(design);
+            //施工单位
+            var buildPropId = MF.alias.propertyDef(vault, md.proj.propDefs.BuilderUnit);
+            var build = props.SearchForProperty(buildPropId).Value.Value;
+            $("#inputBuild").val(build);
+            //监理单位
+            var supervisorPropId = MF.alias.propertyDef(vault, md.proj.propDefs.SupervisorUnit);
+            var supervisor = props.SearchForProperty(supervisorPropId).Value.Value;
+            $("#inputSupervisor").val(supervisor);
+            //开始时间
+            var startDatePropId = MF.alias.propertyDef(vault, md.proj.propDefs.StartDate);
+            //shellFrame.ShellUI.ShowMessage(startDatePropId);
+            var startDate = props.SearchForProperty(startDatePropId).Value.Value;
+            $('#startPicker').datepicker("setDate", new Date(startDate));
+            //结束时间
+            var endDatePropId = MF.alias.propertyDef(vault, md.proj.propDefs.Deadline);
+            var endDate = props.SearchForProperty(endDatePropId).Value.Value;
+            $('#endPicker').datepicker("setDate", new Date(endDate));
+            //var coverRes = webapi.getProjectCover(vault, CC.getProjectId(vault), gToken);
+            //var cover = $.parseJSON(coverRes);
+            //if (cover.status === 200) {
+            //    $('#coverImg').attr('src', 'data:image/jpeg;base64,' + cover.response);
+            //}
+        }
+        function loadProjectProperty(gDashboard, cover) {
+            //shellframe
+            var shellFrame = gDashboard.Parent;
+            //vault
+            var vault = shellFrame.ShellUI.Vault;
+
+            var project = gDashboard.CustomData.project;
+
+            if (!project) {
+                return;
+            }
+
+            //项目名称
+            var projectName = project.Name;
+            $("#inputName").val(projectName);
+            //项目描述
+            var description = project.Description;
+            $("#inputDescription").val(description);
+            //建设单位
+            var construction = project.OwnerUnit;
+            $("#inputConstruction").val(construction);
+            // 设计单位
+            var design = project.DesignUnit;
+            $("#inputDesign").val(design);
+            //施工单位
+            var build = project.ConstructionUnit;
+            $("#inputBuild").val(build);
+            //监理单位
+            var supervisor = project.SupervisionUnit;
+            $("#inputSupervisor").val(supervisor);
+            //开始时间
+            var startDate = getLocalDate(project.StartDateUtc);
+            if (startDate) {
+                $('#startPicker').datepicker("setDate", startDate);
+            }
+            //结束时间
+            var endDate = getLocalDate(project.EndDateUtc);
+            if (endDate) {
+                $('#endPicker').datepicker("setDate", new Date(endDate));
+            }
+            if (cover) {
+                $('#coverImg').attr('src', 'data:image/jpeg;base64,' + cover);
+            }
+        }
+        function saveProjectProperty(vdgHost, gDashboard, gToken) {
+            //shellframe
+            var shellFrame = gDashboard.Parent;
+            //vault
+            var vault = shellFrame.ShellUI.Vault;
+            $.support.cors = true;
+            //项目Id
+            //var projectId = CC.getProjectId(vault);
+            var projectId = gDashboard.CustomData.projId;
+            if (!projectId) {
+                alert('未能获取ProjectId: ' + projectId);
+                return null;
+            }
+            if (!gToken) {
+                alert('未能获取Token: ' + gToken);
+                return null;
+            }
+            if (isValidDate($("#startPicker").val(), "-") == false
+                || isValidDate($("#endPicker").val(), "-") == false) {
+                alert("起止日期无效！");
+                return null;
+            }
+            //创建对象
+            var projectInfo = {
+                id: projectId,
+                Name: $("#inputName").val(),
+                Description: $("#inputDescription").val(),
+                OwnerUnit: $("#inputConstruction").val(),
+                DesignUnit: $("#inputDesign").val(),
+                ConstructionUnit: $("#inputBuild").val(),
+                SupervisionUnit: $("#inputSupervisor").val(),
+                StartDateUtc: new Date($("#startPicker").val()),//$("#startPicker").datepicker("getDate")
+                EndDateUtc: new Date($("#endPicker").val()),
+                CoverPath: $("#coverImgFile").val()
+            };
+            if (imageByteArray && imageByteArray.length) {
+                projectInfo.Cover = imageByteArray;
+            }
+
+            //更新对象
+            /*var info = webapi.updateProj(vault, projectInfo, gToken);
+            try {
+                var infoObj = $.parseJSON(info); //JSON.parse(info);
+                if (infoObj.status !== 200) {
+                    alert(infoObj.response.Message);
+                }
+            } catch (e) {
+                alert(info);
+            }*/
+
+            $.ajax({
+                    type: "POST",
+                    url: vdgHost + "/api/Project/Update",
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        Authorization: gToken.TokenType + " " + gToken.AccessToken,
+                        apikey: 'dbworldclient'
+                    },
+                    data: JSON.stringify(projectInfo),
+                    success: function() {
+                        alert('更新成功: ');
+                        gDashboard.Window.close();
+                    },
+                    error: function(xmlHttpRequest, textStatus, errorThrown) {
+                        alert("更新项目失败：" + textStatus + " # Error: " + errorThrown);
+                    }
+                }
+            );
+
+            return projectInfo;
+        }
+
+        function convertDateToUTC(date) {
+            //alert(date);
+            return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
+        }
+
+        function getLocalDate(utcDate) {
+            var date = null;
+            try {
+                date = new Date(utcDate.toLocaleString());
+            } catch (e) {
+            }
+            return date;
+        }
+        //判断日期的有效性
+        //参数：日期字符串(年/月/日)；日期分隔符
+        function isValidDate(date, flag) {
+            var bits = date.split(flag);
+            var d = new Date(bits[0], bits[1] - 1, bits[2]);
+            return d && (d.getMonth() + 1) == bits[1] && d.getDate() == Number(bits[2]);
+        };
+    </script>
+</head>
+
+<body>
+    <div class="wrap" style="margin-left:15px; margin-right: 15px;">
+        <div id="left" class="divHeight">
+            <div class="container edite">
+                <table cellpadding="0" cellspacing="0" border="0">
+
+                    <tr style="height: 10%">
+                        <td>
+                            <label style="background-color: #2477BB">项目名称</label>
+                            <input id="inputName" class="inputText" disabled="disabled" />
+                        </td>
+                    </tr>
+                    <tr id="trDescription" style="height: 30%; vertical-align: text-top">
+                        <td>
+                            <label style="background-color: #49A8E0; width: 30px; height: 120px">项目描述</label>
+                            <textarea id="inputDescription" class="inputText" readonly="readonly" unselectable="on"></textarea>
+                        </td>
+                    </tr>
+                    <tr id="trConstruction" style="height: 10%">
+                        <td>
+                            <label style="background-color: #2477BB">建设单位</label>
+                            <input id="inputConstruction" class="inputText" disabled="disabled" />
+                        </td>
+                    </tr>
+                    <tr id="trDesign" style="height: 10%">
+                        <td>
+                            <label style="background-color: #49A8E0">设计单位</label>
+                            <input id="inputDesign" class="inputText" disabled="disabled" />
+                        </td>
+                    </tr>
+                    <tr id="trBuild" style="height: 10%">
+                        <td>
+                            <label style="background-color: #2477BB">施工单位</label>
+                            <input id="inputBuild" class="inputText" disabled="disabled" />
+                        </td>
+                    </tr>
+                    <tr id="trSupervisor" style="height: 10%">
+                        <td>
+                            <label style="background-color: #49A8E0">监理单位</label>
+                            <input id="inputSupervisor" class="inputText" disabled="disabled" />
+                        </td>
+                    </tr>
+                    <tr style="height: 10%;">
+                        <td>
+                            <label style="background-color: #2477BB">起止日期</label>
+                            <div style="margin-right: 30px">
+                                <input type="text" class="dataTime datepicker" id="startPicker" disabled="disabled">
+                                <input type="text" class="dataTime finishDate datepicker" id="endPicker" disabled="disabled">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div id="mid" class="divHeight">
+
+        </div>
+
+        <div id="right" class="divHeight">
+            <div class="container edite">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <tr style="height: 60%; ">
+                        <td id="coverImgTd">
+                            <div>
+                                <img id="coverImg" src="" alt="封面" style="border: 1px solid #39A9F0; padding: 5px" />
+                                <input type="file" value="" style="display: none;" id="coverImgFile" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="height: 20%">
+                        <td>
+                            <div class="editeBtn">
+                                <button style="float: right; width: 80px;height: 30px;font-size: 14px;font-weight: bold;" class="button">编辑</button>
+                            </div>
+                            <div class="saveBtn">
+                                <button style="float: right; width: 80px;height: 30px;font-size: 14px;font-weight: bold;" class="button" id="giveUpBtn">放弃</button>
+                                <button style="float: right; width: 80px;height: 30px;font-size: 14px;font-weight: bold;" class="button" id="saveBtn">保存</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!--<tr style="height: 20%; font-size: 16px; font-weight: bold;">
+                        <td>
+                            <div class="tip">
+                                <div class="border">
+                                    <div id="divTasks">
+                                        <img id="imgTasks" style="margin: 0 5px 2px 0; vertical-align: middle" />
+                                        <span id="txtTasks"></span>
+                                        <a id="linkTasks" href="#"></a>
+                                    </div>
+                                    <div id="divEmails">
+                                        <img id="imgEmails" style="margin: 0 5px 2px 0; vertical-align: middle" />
+                                        <span id="txtEmails"></span>
+                                        <a id="linkEmails" href="#"></a>
+                                    </div>
+                                </div>
+                                <div class="out">
+                                    <div class="in"></div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>-->
+                </table>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

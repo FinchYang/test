@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+
+<link rel='stylesheet' type='text/css' href='css/jquery-ui-1.8.10.custom.css' />
+<link rel='stylesheet' type='text/css' href='css/mflist.css' />
+<script type='text/javascript' src='js/jquery-1.7.2.min.js'></script>
+<script type='text/javascript' src='js/jquery-ui-1.8.23.custom.min.js'></script>
+<script type='text/javascript' src='js/jquery/jquery.mousewheel.min.js'></script>
+<script type='text/javascript' src='js/jquery/jquery.splitter.js'></script>
+<script type='text/javascript' src='js/Base64.js'></script>
+<script type='text/javascript' src='js/Date/Date.js'></script>
+<script type='text/javascript' src='js/Date/date-zh-CN.js'></script>
+<script type='text/javascript' src='js/gantt/mfutils.js'></script>
+<script type='text/javascript' src='js/gantt/mflist.js'></script>
+<script type='text/javascript'>
+
+	var Dashboard, ShellUI, ShellFrame, Vault;
+
+    function OnNewDashboard(dashboard) {
+        Dashboard = dashboard;
+		ShellUI = GetShellUI(dashboard);
+		ShellFrame = GetShellFrame(dashboard);
+		Vault = ShellUI.Vault;
+		bindConsole();
+
+		$("#mflist").mflist({shellFrame:ShellFrame});
+		$(window).resize(function() {
+			$("#mflist").mflist("resize");
+		});		
+		
+    }
+	
+	
+    $(function () {
+		
+		if(false) {
+			$("#mflist").remove();
+			$("body").mflist({});
+		} else {
+
+		}
+		
+	});
+	
+	function bindConsole() {
+		var consoleOn = false, ctrlDown = false, shiftDown = false;
+		$('<a href="#">Console</a>').appendTo("body").click(function() {
+			if( consoleOn ) {
+				ShellFrame.BottomPane.ShowDefaultContent();
+			} else {
+				ShellFrame.BottomPane.ShowDashboard("console", window);
+			}
+			
+			consoleOn = !consoleOn;
+		});	
+		
+		$(document).keydown(function(e) {
+			switch(e.which) {
+				case 16: shiftDown = true; break;
+				case 17: ctrlDown = true; break;
+				case 67: // "C" key
+					if( ctrlDown && shiftDown ) {
+						if( consoleOn ) {
+							ShellFrame.BottomPane.ShowDefaultContent();
+						} else {
+							ShellFrame.BottomPane.ShowDashboard("console", window);
+						}
+						consoleOn = !consoleOn;
+						break;
+					}
+			}			
+		}).keyup(function(e) {
+			switch(e.which) {
+				case 16: shiftDown = false; break;
+				case 17: ctrlDown = false; break;    
+			}
+		});	
+	}	
+	
+</script>
+</head>
+<body>
+	<div id="mflist" style="margin:10px 0px 0px 10px; height:400px; width:80%; border:1px solid black;"></div>
+</body>
+</html>

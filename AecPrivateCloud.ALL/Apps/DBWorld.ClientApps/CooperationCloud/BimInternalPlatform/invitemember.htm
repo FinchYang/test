@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>邀请成员</title>
+    <link href="style/main.css" rel="stylesheet" />
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <link href="style/flatbutton.css" rel="stylesheet" />
+    <!-- Helper scripts -->
+    <script type="text/javascript" src="scripts/home_common.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/utilities.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/localization.js"></script>
+    <script type="text/javascript" src="scripts/md/base.js"></script>
+    <script type="text/javascript" src="scripts/web.js"></script>
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/cc/member.js"></script>
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+    <script type="text/javascript" src="scripts/mf/client.js"></script>
+    <script type="text/javascript" src="scripts/mf/vault.js"></script>
+    
+    <!--script-->
+    <script type="text/javascript">
+        function OnNewDashboard(dashboard) {
+            dashboard.Window.SetDefaultSize(350, 300, false); //设置默认大小
+            dashboard.Window.Resizable = false;
+            dashboard.Window.Maximizable = false;
+            dashboard.Window.Minimizable = false;
+            dashboard.Window.Title = "";
+
+            var data = dashboard.CustomData;
+            var parts = data.SrcParts;
+            var bidProjId = data.bidProjId;
+
+            if (parts.length == 0) {
+                $('.select-options').hide();
+
+            } else {
+                for (var i = 0; i < parts.length; i++) {
+                    if (parts[i].Title !== data.SelectedPart) {
+                        $('#selOptions').append('<option>' + parts[i].Title + '</option>');
+                    } else {
+                        $('#selOptions').append('<option selected="selected">' + parts[i].Title + '</option>');
+                    }
+                }
+            }
+
+            $('#btnOK').click(function() {
+                data.SelectedPart = $("#selOptions").val();
+                data.InviteEmail = $("#inputEmail").val();
+                $.support.cors = true;
+
+                var vault = data.Vault;
+                var tokenStr = CC.getToken(vault);
+                
+                var projectId = CC.getProjectId(vault);
+                if (!projectId) {
+                    return;
+                }
+                if (!tokenStr) {
+                    return;
+                }
+                var token = $.parseJSON(tokenStr);
+                token.AccessToken = token.access_token;
+                token.TokenType = token.token_type;
+                var vdgHost = webapi.getApiHost(vault);
+                var partErr = false;
+                var partyRes;
+                if (parts.length > 0) {
+
+                    $.ajax({ //http://stackoverflow.com/questions/6323338/jquery-ajax-posting-json-to-webservice
+                            async: false,
+                            type: "POST",
+                            url: vdgHost + "/api/Project/GetPartyByName/?name=" + partyName,
+                            contentType: "application/json; charset=utf-8",
+                            headers: {
+                                Authorization: token.TokenType + " " + token.AccessToken
+                            },
+                            dataType: "json",
+                            //data: JSON.stringify(invitemode),
+                            success: function(d) {
+                                partyRes = d;
+                            },
+                            error: function(xmlHttpRequest, textStatus, errorThrown) {
+                                //alert("邀请成员失败：" + textStatus + " # Error: " + errorThrown);
+                                partErr = true;
+                            }
+                        }
+                    );
+                    if (partErr) {
+                        return;
+                    }
+                    //var partyRes0 = webapi.getPartyFromName(vault, data.SelectedPart, tokenStr);
+                    //partyRes = $.parseJSON(partyRes0);
+                    //if (partyRes.status !== 200) {
+                    //    alert(partyRes.response.Message);
+                    //    return;
+                    //}
+                }
+                if (partyRes) {
+                    var partyId = partyRes.Id;
+                }
+                //创建邀请对象
+                var invitemode = {
+                    InviteEmail: data.InviteEmail,
+                    Email: CC.getUserEmail(vault),
+                    TokenJson: tokenStr,
+                    ProjectName: CC.getProjectName(vault),
+                    ProjectId: projectId,
+                    UserId: CC.getUserId(vault),
+                    BidProjId: bidProjId
+                }
+                if (parts.length === 0) {
+                    invitemode.PartyId = 0;
+                    invitemode.PartyName = "";
+                } else {
+                    invitemode.PartyId = partyId;
+                    invitemode.PartyName = data.SelectedPart;
+                }
+                invitemode.MFUserId = MF.vault.getCurrentUserId(vault);
+
+                
+
+                //发送邀请成员请求
+                
+                
+                
+                $.ajax({
+                    type: "POST",
+                    url: vdgHost + "/api/Invite",
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        Authorization: token.TokenType + " " + token.AccessToken,
+                        apikey: 'dbworldclient'
+                    },
+                    data: JSON.stringify(invitemode),
+                    success: function () {
+                        alert('邀请成功: ');
+                        data.Cancelled = false;
+                        dashboard.Window.close();
+                    },
+                    error: function (xmlHttpRequest, textStatus, errorThrown) {
+                        alert("邀请成员失败：" + "该成员可能已被邀请！"); //+ textStatus + " # "
+                    }
+                }
+                );
+
+                ////发送邀请成员请求
+                //var info = webapi.inviteMember(vault, invitemode, tokenStr);
+                //try {
+                //    var infoObj = $.parseJSON(info); //JSON.parse(info);
+                //    if (infoObj.status !== 200) {
+                //        alert(infoObj.response.Message);
+                //    } else {
+                //        alert("邀请发送成功！");
+                //    }
+                //} catch (e) {
+                //    alert(info);
+                //}
+                //data.Cancelled = false;
+                //dashboard.Window.close();
+            });
+
+            $('#btnCancel').click(function () {
+                //取消
+                data.Cancelled = true;
+                dashboard.Window.close();
+            });
+        }
+
+    </script>
+
+</head>
+    <body>
+        <div style="height: 35px; background: url(images/title_selectParts.png) no-repeat left top; padding-left: 20px; padding-top: 8px; ">
+            <span style="font-size: 18px; font-weight: bold; color: white; text-align: center">邀请成员</span>
+        </div>
+        <div style="text-align: center; width: 100%">
+            <div style="margin-top: 20px;">
+                <label style="font-size: 18px; font-weight: bold; color: #39A9F0">邀请伙伴一起加入吧！</label>
+            </div>
+
+            <div class="select-options" style="margin-top: 20px">
+                <label>请选择邀请的参与方</label>
+                <select style="width: 155px; height: 23px" size="1" id="selOptions"></select>
+            </div>
+
+            <div style="margin-top: 10px">
+                <label>通过邮箱邀请新成员</label>
+                <input style="width: 150px; height: 18px" id="inputEmail" />
+            </div>
+
+            <div style="margin-top: 20px">
+                <button class="button" id="btnOK" style="width: 60px">确定</button>
+                <button class="button" id="btnCancel" style="width: 60px">取消</button>
+            </div>
+        </div>
+    </body>
+</html>

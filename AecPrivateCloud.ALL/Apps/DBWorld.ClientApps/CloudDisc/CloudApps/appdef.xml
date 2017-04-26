@@ -1,0 +1,38 @@
+﻿<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.m-files.com/schemas/appdef.xsd">
+	<guid>F101258B-FD65-4199-B22F-240B507C0DCC</guid>
+	<name>我的云盘App</name>
+	<version>1.16</version>
+	<description>DBWorld我的云盘App</description>
+	<publisher>Cad Simula</publisher>
+	<copyright>(c) Cad Simula 2014</copyright>
+	<required-mfiles-version>10.0.3683.0</required-mfiles-version>
+	<modules>
+		<module environment="shellui" event-priority="1">
+      <file>scripts\core.js</file>
+      <file>scripts\web.js</file>
+      <file>scripts\cmdCallback.js</file>
+      <file>scripts\softConfig.js</file>
+			<file>home.js</file>
+		</module>
+	</modules>
+	<dashboards> 
+    <dashboard id="cloudView">
+      <content>cloudView.htm</content>
+      <trusted-content>http://192.168.2.101</trusted-content>
+      <trusted-content>http://www.dbworld.cn</trusted-content>
+      <trusted-content>http://files.dbworld.cn</trusted-content>
+      <trusted-content>http://test.files.dbworld.cn</trusted-content>
+      <trusted-content>http://vapp.dbworld.cn</trusted-content>
+      <trusted-content>http://211.152.38.103</trusted-content>
+    </dashboard>
+    <dashboard id="webSharing">
+      <content>webSharing.htm</content>
+      <trusted-content>http://www.dbworld.cn</trusted-content>
+    </dashboard>
+    <dashboard id="cate">
+      <content>catalog.htm</content>
+      <trusted-content>http://www.dbworld.cn</trusted-content>
+    </dashboard>
+	</dashboards>
+</application>

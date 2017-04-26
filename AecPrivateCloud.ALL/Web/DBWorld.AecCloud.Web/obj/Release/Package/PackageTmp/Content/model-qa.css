@@ -1,0 +1,87 @@
+﻿/*
+ * 问题反馈相关样式
+ */
+.model-question {
+    position: absolute;
+    top: 8px;
+    left: 0px;
+    width: 100%;
+    height: 95%;
+    min-width: 240px;
+}
+    .qa-search {
+        margin-top: 0;
+        margin-left: 0;
+        width:19%;
+        /*height: 54px;*/
+        background-color: white;
+        min-width: 200px;
+        width: 100%;
+        display:inline-block;
+    }
+    .qa-search>select {
+        height: 30px;
+        line-height: 30px;
+        float: left;
+    }
+    .qa-search>img {
+        /*margin-left: -4px;*/
+        padding-bottom: 1px;
+        height: 32px;width: 31px;
+        float: left;
+    }
+    .qa-search>img:hover {
+        cursor: pointer;
+        /*透明度*/
+        opacity: 0.70;
+        filter: alpha(opacity=70);
+    }
+    #qa-class,#qa-state {
+        font-weight: bold;
+    }
+    #qaTableWrap {
+        margin-top: -7px;
+        margin-left: 0;
+        padding: 0;
+        height: 100%;
+        background-color: white;
+        width:100%;
+        min-width: 240px;
+        overflow:auto;
+    }
+
+    #qaTableWrap>table {
+        width: 99%;
+        margin: 0 1px 5px 0;
+        color: black;
+    }
+    #qaTableWrap tbody a:hover {
+        cursor: pointer;
+        /*透明度*/
+        opacity: 0.50;
+        filter: alpha(opacity=50);
+    }
+    #qaTableWrap th {
+        font-weight:bold;
+        font-size: 15px;
+        vertical-align: middle;
+        color: wheat;
+        min-width: 60px;
+    }
+     
+    #qaTableWrap td {      
+        text-align: left;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+    #qaTableWrap th:last-child, #qaTableWrap td:last-child{
+        min-width: 20px;
+        width: 25px;
+        text-indent: 0;
+    }
+    #qaTableWrap td>img {
+        margin: 0;
+        height: 24px;
+        width: 24px;
+        cursor: pointer;
+    }

@@ -1,0 +1,509 @@
+﻿/**
+    ** time : 2014 - 11 - 27
+    ** pro ： ACCLOUD
+    ** author : 肖颖
+    ** main : ACCLOUD 头部、导航样式
+**/
+
+
+/*头部*/
+header {
+    /*border-bottom: 2px solid #ccc;*/
+    background: #fff;
+    /*height: 71px;*/
+    min-width: 760px;
+}
+
+.headerContent {
+    position: relative;
+    z-index: 10;
+    height:71px;
+}
+
+header .headerContent {
+    padding-top:10px;
+}
+/*关注我们*/
+.followUs {
+    color: #1a83cb;
+    position: absolute;
+    right: 0;
+    top: 20px;
+    width: 200px;
+    /*height: 30px;
+    line-height: 30px;*/
+    overflow: hidden;
+}
+
+
+.AELogo img {
+    vertical-align: bottom;
+    /*width: 500px;
+    height: 68px;*/
+}
+
+.AELogo {
+    position: absolute;
+    left: 0px;
+    /*width: 400px;*/
+    /*color: #1a83cb;
+    font-size: 1.65em;
+    font-weight: bold;*/
+    /*max-width: 500%;
+    max-height: 500%;*/
+}
+
+
+/*电话号码*/
+.AECloudTel {
+    color: #fff;
+    font-size: 2em;
+    text-align: right;
+    position: absolute;
+    right: 250px;
+    top: 33px;
+    z-index: 10;
+}
+
+/*站内搜索*/
+
+.AESearching {
+    height: 50px;
+    position: absolute;
+    right: 0px;
+    top: 30px;
+    text-align: right;
+    width: 460px;
+}
+
+    .AESearching input {
+        border-radius: 2px;
+        border: 1px solid #ccc;
+        color: #999;
+        font-size: 12px;
+        height: 21px;
+        float: right;
+        line-height: 21px;
+        padding: 4px 10px;
+        width: 180px;
+    }
+
+    .AESearching a {
+        background: url(/Content/images/search-button-new.png) no-repeat 0 0;
+        border-radius: 0 2px 2px 0;
+        border: 1px solid #ccc;
+        float: right;
+        height: 29px;
+        margin-left: -2px;
+        width: 33px;
+    }
+
+    .AESearching input.submit {
+        background: url(/Content/Images/search-button-new.png) no-repeat 0 0;
+        border-radius: 0 2px 2px 0;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        height: 31px;
+        margin-left: -5px;
+        width: 33px;
+    }
+
+    .AESearching a:hover {
+        text-decoration: underline;
+    }
+
+/*分隔线*/
+.headerStep {
+    border-top: 1px solid #0b4da2;
+    border-bottom: 1px solid #238bc9;
+}
+
+
+
+
+
+.indexRoll {
+    background: #1066b7;
+    background: linear-gradient( top,#2497d9,#1066b7);
+    background: -moz-linear-gradient( top,#2497d9,#1066b7);
+    background: -webkit-linear-gradient( top,#2497d9,#1066b7);
+    background: -o-linear-gradient( top,#2497d9,#1066b7);
+    padding-bottom: 20px;
+}
+
+.indexRollContent {
+    height: 420px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+/*焦点图*/
+.AERollWrap {
+    background: #54C4F2;
+    border-radius: 10px;
+    padding: 5px;
+    height: 330px;
+    margin-top: 40px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.roll {
+    background: #fff;
+    position: absolute;
+    border-radius:10px 3px 3px 10px;
+    left: 5px;
+    top: 5px;
+    height: 320px;
+    overflow: hidden;
+    padding: 10px 10px 0 10px;
+}
+
+.loginDiv {
+    background: #f2f2f2;
+    border-radius: 3px;
+    height: 290px;
+    width: 230px;
+    position: absolute;
+    right: 22px;
+    top: 25px;
+}
+
+.loginDivContent {
+    position: relative;
+    height: 100%;
+}
+
+    .loginDivContent .loginBtn {
+        position: absolute;
+        bottom: 10px;
+        left: 40px;
+    }
+/*登录之后*/
+.loginDivPersonal {
+    display: none;
+}
+/*登录*/
+.indexLoginTitle {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.loginUl {
+    padding: 10px 10px 10px 15px;
+}
+
+    .loginUl li {
+        padding-left: 30px;
+    }
+
+        .loginUl li .formInput {
+            width: 150px;
+        }
+
+.loginName {
+    background: url('/Content/Images/loginName.png') no-repeat 0 5px;
+}
+
+.loginPassword {
+    background: url('/Content/Images/loginPassword.png') no-repeat 1px 5px;
+}
+
+.agreement label {
+    line-height: 12px;
+    font-size: 12px;
+}
+
+.agreement input {
+    margin-right: 3px;
+    height: 12px;
+    vertical-align: middle;
+    width: 12px;
+}
+
+.agreement label a {
+    color: #1a83cb;
+}
+
+.loginBtn {
+    text-align: center;
+}
+
+    .loginBtn .submitBtn {
+        display: inline-block;
+        margin: 10px 5px;
+        width: 70px;
+    }
+
+    .loginBtn .submitA {
+        width: 80px;
+    }
+/*轮转图*/
+
+#container {
+    margin: 0 auto;
+    position: relative;
+    height: 320px;
+}
+
+.flexslider .slides img {
+    display: block;
+}
+.flexslider .slides {
+    height:300px;
+    overflow:hidden;
+}
+.flexslider {
+    height: 320px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+    .flexslider .slides li {
+        position: relative;
+    }
+
+.flexslider-container {
+    position: relative;
+}
+
+.flex-caption {
+    top: 70px;
+    right: 30px;
+    width: 230px;
+    color: rgb(0, 0, 0);
+    position: absolute;
+    max-height: 230px;
+    overflow: hidden;
+}
+
+.flex-direction-nav li a {
+    width: 22px;
+    height: 24px;
+    margin: -13px 0 0;
+    display: block;
+    position: absolute;
+    top: 50%;
+    cursor: pointer;
+    text-indent: -9999px;
+}
+
+    .flex-direction-nav li a.next {
+        background: url("/Content/Images/Navigations/next.png") no-repeat;
+        right: 10px;
+    }
+
+    .flex-direction-nav li a.prev {
+        background: url("/Content/Images/Navigations/prev.png") no-repeat;
+        left: 10px;
+    }
+
+.flex-control-nav {
+    margin-left: -31px;
+    position: absolute;
+    top: 305px;
+    left: 50%;
+}
+
+    .flex-control-nav li {
+        margin: 0 0 0 5px;
+        float: left;
+    }
+
+        .flex-control-nav li:first-child {
+            margin: 0;
+        }
+
+        .flex-control-nav li a {
+            width: 13px;
+            height: 13px;
+            display: block;
+            background: url(/Content/Images/bg_control_nav.png) no-repeat 0 0;
+            cursor: pointer;
+            text-indent: -9999px;
+        }
+
+            .flex-control-nav li a:hover {
+                background-position: 0 -13px;
+            }
+
+            .flex-control-nav li a.active {
+                background-position: 0 -26px;
+                cursor: default;
+            }
+
+.flex-caption .captionTitle {
+    color: #1a83cb;
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.flex-caption span {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.flex-caption a {
+    font-size: 18px;
+}
+
+.captionTitle.yellowTitle {
+    color: #fab114;
+}
+
+.whiteWord p {
+    color: #fff;
+}
+
+
+/*主导航*/
+.headerNavContent {
+    position: absolute;
+    top: 80px;
+    right: 0;
+}
+
+nav {
+    box-sizing: border-box;
+    height: auto;
+    min-width: 340px;
+    width: 340px;
+}
+
+/*.headerNavContent > nav {
+    min-width: 340px;
+    width: 340px;
+}*/
+
+.navLeft, .navRight {
+    height: 40px;
+    width: 31px;
+}
+
+
+.navContent {
+    margin-left:auto;
+    height: 40px;
+}
+
+.navTable {
+    /*display: table;*/
+    display: inline-block;
+    list-style: none;
+    width: 100%;
+    text-align: right;
+}
+
+
+    .navContent ul li {
+        /*display: table-cell;
+        float: left;
+        display: block;
+        _float: left;
+        _display: inline;*/
+        grid-column-align: stretch;
+        width: auto;
+    }
+
+        .navContent ul li > a {
+            color: #333;
+            display: block;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 8px 10px;
+        }
+
+            .navContent ul li > a:hover {
+                background-image: url('/Content/Images/navOn_bg.png');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                color: #fff;
+            }
+
+            .navTable > li {
+  display: inline-block;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.navContent .navOn {
+    background-image: url('/Content/Images/navOn_bg.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+    .navContent .navOn a {
+        color: #fff;
+    }
+
+.navTel img {
+    margin-right: 10px;
+}
+
+.navContent .navStep {
+    width: 10px;
+}
+
+/*二级导航*/
+.navContent .secondNav {
+    display: none;
+    position: fixed;
+    min-height: 150px;
+    margin-top: 5px;
+    min-width: 150px;
+    text-align: left;
+}
+
+.secondNavContent {
+    border-radius: 1px;
+    background: #333333;
+    padding: 10px 15px;
+}
+
+.threeNavContent {
+    background: rgba(44,44,44,0.9);
+    border: 1px solid #2c3a3d;
+    display: none;
+    min-height: 200px;
+    position: fixed;
+    padding: 10px 0;
+    width: 500px;
+    z-index: 11112;
+}
+
+    .threeNavContent .softwareSecondContent a {
+        color: #fff;
+    }
+
+.secondNavContent dl dt:first-child {
+    border-top: 0px;
+}
+
+.secondNavContent dl dt:last-child {
+    border-bottom: 0px;
+}
+
+.secondNavContent dl dt {
+    border-bottom: 1px solid #212121;
+    border-top: 1px solid #474747;
+    font-size: 13px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.secondNavContent a {
+    color: #fff;
+}
+
+    .secondNavContent a:hover {
+        text-decoration: underline;
+    }
+
+.navImgTop {
+    background: url(/Content/Images/secondImgTop.png) no-repeat 20px 0;
+    _background: red;
+    height: 9px;
+    width: 100%;
+}

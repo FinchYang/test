@@ -1,0 +1,63 @@
+﻿* {
+    margin: 0px;
+    padding: 0;
+}
+
+#fullareadiv {  
+    height: 90%;
+    border: 0px;
+}
+
+.img {
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin-top:5px;
+    margin-right: 5px;
+}
+.button div {
+    display: inline-block;
+}
+.button span {
+    float: left;
+    display: block;
+    line-height: 25px;
+    /*margin-top: 3px;*/
+}
+
+
+.button-panl {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    position: fixed; 
+}
+
+.button {
+    background-color: #39A9F0;
+    color: white;
+    height: 25px;
+    width: 100px;
+    float: left;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 5px;
+    text-align: center;
+    /*line-height: 25px;*/
+    font-size: 14px;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.button:active {
+    background-color: #C8C8C8;
+}
+
+#btnDel {
+    margin-left: 10px;
+}
+
+#btnAdd {
+    margin-left: 5px;
+}

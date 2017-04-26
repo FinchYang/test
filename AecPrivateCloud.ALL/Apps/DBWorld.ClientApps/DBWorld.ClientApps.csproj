@@ -1,0 +1,1090 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5E00A1D5-A1A1-4B19-AC7F-BCF7DEAC1B45}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DBWorld.ClientApps</RootNamespace>
+    <AssemblyName>DBWorld.ClientApps</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CloudDisc\CloudApps\AecCloud.BaseCore.dll" />
+    <Content Include="CloudDisc\CloudApps\cloudView.htm" />
+    <Content Include="CloudDisc\CloudApps\DBWorld.MfilesNetCore.dll" />
+    <Content Include="CloudDisc\CloudApps\home.js" />
+    <Content Include="CloudDisc\CloudApps\image\calendar.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.3dsmax20142.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Abaqus2.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Adobe Acrobat 9 Pro2.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Ansys2.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.ARCHIBUS2.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.AutoCAD 20102.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Autodesk 3ds Max 202.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Lumion 4022.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.MFiles2.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Microsoft Excel 2012.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Microsoft PowerPoin2.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Microsoft Project 22.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Microsoft Word 20102.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Navisworks20142.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Renfang2.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Revit 20132.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Revit20142.png" />
+    <Content Include="CloudDisc\CloudApps\image\Citrix.MPS.App.Farm1.Rhinoceros 50 64-bi2.png" />
+    <Content Include="CloudDisc\CloudApps\image\phicloud-logo512x512.png" />
+    <Content Include="CloudDisc\CloudApps\image\sprite.png" />
+    <Content Include="CloudDisc\CloudApps\image\Title.png" />
+    <Content Include="CloudDisc\CloudApps\image\title_bg.png" />
+    <Content Include="CloudDisc\CloudApps\Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CloudDisc\CloudApps\scripts\softConfig.js" />
+    <Content Include="CloudDisc\CloudApps\scripts\cmdCallback.js" />
+    <Content Include="CloudDisc\CloudApps\scripts\core.js" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\external\jquery\jquery.js" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-icons_222222_256x240.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-icons_454545_256x240.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-icons_888888_256x240.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\index.html" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\jquery-ui.css" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\jquery-ui.js" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\jquery-ui.min.css" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\jquery-ui.min.js" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.css" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.min.css" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.css" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.min.css" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery-ui-1.11.4.custom\jquery.datepicker-zh-CN.js" />
+    <Content Include="CloudDisc\CloudApps\scripts\jquery.min.js" />
+    <Content Include="CloudDisc\CloudApps\scripts\web.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CloudDisc\CloudApps\System.Net.Http.Formatting.dll" />
+    <Content Include="CloudDisc\CloudApps\WebConsole.exe" />
+    <Content Include="CloudDisc\CloudApps\webSharing.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\alltasks.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\appdef.xml" />
+    <Content Include="CooperationCloud\BimInternalPlatform\bimmodelbrowser.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\bimModelList.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\bimModelPlan.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\bimTreeDom.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\crowdsourceTask.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\documents.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\draft.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\dt_aggregation.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\ElementAnnex.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\个人文档.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\众包文档管理.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\全部任务列表.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\共享文档.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\初步设计.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\发件箱.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\工作空间.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\成员列表.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\我指派的任务.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\我的众包任务.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\指派给我的任务.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\收件箱.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\文件浏览.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\新建任务.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\新建众包任务.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\新建工作日志.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\新建文档.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\新建邮件.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\方案设计.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\施工图.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\查看工作日志.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\模型浏览.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\模型策划.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\模板库.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\草稿箱.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\通讯录.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\邀请成员.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\邮箱设置.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\项目成员.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\项目成员忙闲度.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\项目报表.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\icons\项目概况.ico" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\写信.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\删除.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\删除成员.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\删除联系人.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\回复.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\回复全部.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\导出任务列表.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\我最近访问的.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\指派给我的任务.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\收件箱.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\收信.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\收藏夹.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\新建任务.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\新建文件夹.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\新建文档.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\新建联系人.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\有新任务.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\有新邮件.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\没有新任务.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\没有新邮件.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\设置.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\转发.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\通讯录.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\邀请成员.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\邮件.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\buttons\邮件图标.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\calendar.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\collapse.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\date.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\deleteMember.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\expand.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\projectMember.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\revit2014.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\title_selectParts.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\title_treeDom.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\images\waiting.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\invitemember.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\Mail.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\mailcontacts.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\main.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\memberhoursreport.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\members.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\newmessage.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\ProgressBar.exe" />
+    <Content Include="CooperationCloud\BimInternalPlatform\projectcostreport.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\projhome.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\bootstrap\bootstrap.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\bootstrap\bootstrap.min.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\bootstrap\npm.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\alltasks.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\bimmodelbrowser.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\bimModelList.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\bimModelPlan.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\cmdCallbacks.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\core.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\crowdsourcing.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\documents.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\draft.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\dt_aggregation.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\invite.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\mail.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\mailcontacts.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\member.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\mfTreeDomOps.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\newmessage.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\project.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\public.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\reports\projectcostreport.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\reports\reportOps.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\reports\tasksstatusreport.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\reports\taskTimeReport.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\send.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\softConfig.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\tasks.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\cc\viewlog.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\chart\Chart.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\chart\legend.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\dropdown-checkbox\bootstrap-dropdown-checkbox.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\home_common.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\animated-overlay.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_222222_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\jquery-ui-1.10.0.custom.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\jquery-ui-1.10.0.custom.min.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\index.html" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\js\jquery-1.9.0.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\js\jquery-ui-1.10.0.custom.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.10.0.custom\js\jquery-ui-1.10.0.custom.min.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\external\jquery\jquery.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-icons_222222_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-icons_454545_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-icons_888888_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\index.html" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\jquery-ui.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\jquery-ui.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\jquery-ui.min.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\jquery-ui.min.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.min.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.min.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery-ui-1.11.4.custom\jquery.datepicker-zh-CN.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery.treeview\jquery.cookie.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery.treeview\jquery.treeview.edit.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\jquery.treeview\jquery.treeview.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\layout\jquery.layout.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\listing_common.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\md\base.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\md\bim.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\md\mail.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\md\report.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\mf\alias.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\mf\client.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\mf\command.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\mf\objectOps.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\mf\ui.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\mf\vault.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\UIControlLibrary\localization.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\UIControlLibrary\utilities.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\web.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\scripts\wsh.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\SelectParticipants.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\send.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\bimmodelbrowser.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\bootstrap\bootstrap-theme.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\bootstrap\bootstrap-theme.min.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\bootstrap\bootstrap.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\bootstrap\bootstrap.min.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\dropdown-checkbox\bootstrap-dropdown-checkbox.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\dropdown-checkbox\bootstrap.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\dt_aggregation.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\flatbutton.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\layout-default.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\mail.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\main.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\projhome.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\report.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\SelectParticipants.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\tasktimereport.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\ajax-loader.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\file.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\folder-closed.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\folder.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\minus.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\plus.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-black-line.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-black.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-default-line.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-default.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-famfamfam-line.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-famfamfam.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-gray-line.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-gray.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-red-line.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\images\treeview-red.gif" />
+    <Content Include="CooperationCloud\BimInternalPlatform\style\treeview\jquery.treeview.css" />
+    <Content Include="CooperationCloud\BimInternalPlatform\tasks.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\tasksstatusreport.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\taskStatusReport.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\tasktimereport.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\vaultUiEntry.js" />
+    <Content Include="CooperationCloud\BimInternalPlatform\viewlog.htm" />
+    <Content Include="CooperationCloud\BimInternalPlatform\WebConsole.exe" />
+    <Content Include="CooperationCloud\DesignTeam\AecCloud.BaseCore.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\dt_aggregation.htm" />
+    <Content Include="CooperationCloud\DesignTeam\alltasks.htm" />
+    <Content Include="CooperationCloud\DesignTeam\appdef.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\bimmodelbrowser.htm" />
+    <Content Include="CooperationCloud\DesignTeam\bimModelList.htm" />
+    <Content Include="CooperationCloud\DesignTeam\bimModelPlan.htm" />
+    <Content Include="CooperationCloud\DesignTeam\bimTreeDom.htm" />
+    <Content Include="CooperationCloud\DesignTeam\crowdsourceTask.htm" />
+    <Content Include="CooperationCloud\DesignTeam\DBWorld.MfilesNetCore.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\documents.htm" />
+    <Content Include="CooperationCloud\DesignTeam\draft.htm" />
+    <Content Include="CooperationCloud\DesignTeam\dt_designschedule.htm" />
+    <Content Include="CooperationCloud\DesignTeam\dtdesignplan.htm" />
+    <Content Include="CooperationCloud\DesignTeam\dt_extract.htm" />
+    <Content Include="CooperationCloud\DesignTeam\dt_projectplanning.htm" />
+    <Content Include="CooperationCloud\DesignTeam\dt_review.htm" />
+    <Content Include="CooperationCloud\DesignTeam\dt_setprofessional.htm" />
+    <Content Include="CooperationCloud\DesignTeam\ElementAnnex.htm" />
+    <Content Include="CooperationCloud\DesignTeam\icons\check.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\reject.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\专业配置.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\个人文档.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\众包文档管理.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\全部任务列表.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\共享文档.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\初步设计.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\发件箱.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\工作空间.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\归档文档.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\成员列表.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\我指派的任务.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\我的众包任务.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\指派给我的任务.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\收件箱.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\文件浏览.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\新建任务.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\新建众包任务.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\新建工作日志.ico" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\我最近访问的.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\指派给我的任务.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\收件箱.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\收藏夹.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\新建提资.png" />
+    <Content Include="CooperationCloud\DesignTeam\icons\新建文档.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\新建邮件.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\方案设计.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\施工图.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\查看工作日志.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\模型浏览.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\模型策划.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\模板库.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\管理文档.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\草稿箱.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\设计文档.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\设计策划.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\设计进度.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\通讯录.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\邀请成员.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\邮箱设置.ico" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\未读邮件.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\配置专业.png" />
+    <Content Include="CooperationCloud\DesignTeam\icons\项目成员.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\项目成员忙闲度.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\项目报表.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\项目概况.ico" />
+    <Content Include="CooperationCloud\DesignTeam\icons\项目策划.ico" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\写信.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\删除.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\删除成员.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\删除联系人.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\回复.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\回复全部.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\导出任务列表.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\收信.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\新建任务.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\新建文件夹.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\新建文档.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\新建联系人.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\有新任务.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\有新邮件.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\没有新任务.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\没有新邮件.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\设置.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\转发.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\通讯录.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\buttons\邀请成员.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\calendar.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\collapse.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\images\date.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\deleteMember.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\expand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\images\projectMember.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\revit2014.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\title_selectParts.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\images\title_treeDom.png" />
+    <Content Include="CooperationCloud\DesignTeam\images\waiting.gif" />
+    <Content Include="CooperationCloud\DesignTeam\invitemember.htm" />
+    <Content Include="CooperationCloud\DesignTeam\Mail.htm" />
+    <Content Include="CooperationCloud\DesignTeam\mailcontacts.htm" />
+    <Content Include="CooperationCloud\DesignTeam\main.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\memberhoursreport.htm" />
+    <Content Include="CooperationCloud\DesignTeam\members.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\ProgressBar.exe" />
+    <Content Include="CooperationCloud\DesignTeam\projectcostreport.htm" />
+    <Content Include="CooperationCloud\DesignTeam\projhome.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\bootstrap\bootstrap.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\bootstrap\bootstrap.min.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\bootstrap\npm.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\alltasks.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\bimmodelbrowser.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\bimModelList.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\bimModelPlan.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\cmdCallbacks.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\contextMenuCmdFns\dt_archiveFiles.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\contextMenuCmdFns\dt_sharingtocallfn.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\core.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\crowdsourcing.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\documents.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\draft.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\dtdesignplan.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\dt_designschedule.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\dt_projectplanning.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\dt_review.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\dt_setprofessional.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\dt_taskops.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\invite.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\mail.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\mailcontacts.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\member.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\mfTreeDomOps.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\project.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\public.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\reports\projectcostreport.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\reports\reportOps.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\reports\tasksstatusreport.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\reports\taskTimeReport.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\dt_reviews.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\contextMenuCmdFns\dt_copy2review.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\send.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\softConfig.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\tasks.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\viewlog.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\chart\Chart.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\chart\legend.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\dropdown-checkbox\bootstrap-dropdown-checkbox.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\cc\dt_aggregation.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\handsontable\handsontable.full.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\home_common.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\animated-overlay.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_flat_10_000000_40x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_glass_100_f6f6f6_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_glass_100_fdf5ce_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_glass_65_ffffff_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_gloss-wave_35_f6a828_500x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_highlight-soft_100_eeeeee_1x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_highlight-soft_75_ffe45c_1x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_222222_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_228ef1_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_ef8c08_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_ffd27a_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_ffffff_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\jquery-ui-1.10.0.custom.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\jquery-ui-1.10.0.custom.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\js\jquery-1.9.0.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\js\jquery-ui-1.10.0.custom.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.10.0.custom\js\jquery-ui-1.10.0.custom.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\external\jquery\jquery.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-icons_222222_256x240.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-icons_454545_256x240.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-icons_888888_256x240.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\index.html" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\jquery-ui.css" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\jquery-ui.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\jquery-ui.min.css" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\jquery-ui.min.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.css" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.min.css" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.css" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.min.css" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery-ui-1.11.4.custom\jquery.datepicker-zh-CN.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery.treeview\jquery.cookie.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery.treeview\jquery.treeview.edit.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\jquery.treeview\jquery.treeview.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\layout\jquery.layout.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\listing_common.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\md\base.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\md\bim.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\md\dt_designTeam.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\md\mail.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\md\report.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\mf\alias.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\mf\client.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\mf\command.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\mf\objectOps.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\mf\property.js" />
+    <Content Include="CooperationCloud\DesignTeam\scripts\mf\ui.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\mf\vault.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\UIControlLibrary\localization.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\UIControlLibrary\utilities.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\web.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\scripts\wsh.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\dt_selectdocplan.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\dt_sharingtolog.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\SelectParticipants.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\send.htm" />
+    <Content Include="CooperationCloud\DesignTeam\style\bimmodelbrowser.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\bootstrap\bootstrap-theme.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\bootstrap\bootstrap-theme.min.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\bootstrap\bootstrap.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\bootstrap\bootstrap.min.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\dropdown-checkbox\bootstrap-dropdown-checkbox.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\dropdown-checkbox\bootstrap.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\dtdesignplan.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\dt_aggregation.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\dt_designschedule.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\dt_extract.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\dt_projectplanning.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\dt_setprofessional.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\flatbutton.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\handsontable\handsontable.full.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\handsontable\handsontable.samples.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\layout-default.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\mail.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\main.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\style\projhome.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\style\report.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\SelectParticipants.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\style\tasktimereport.css" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\ajax-loader.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\file.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\folder-closed.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\folder.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\minus.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\plus.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-black-line.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-black.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-default-line.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-default.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-famfamfam-line.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-famfamfam.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-gray-line.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-gray.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-red-line.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\images\treeview-red.gif" />
+    <Content Include="CooperationCloud\DesignTeam\style\treeview\jquery.treeview.css" />
+    <Content Include="CooperationCloud\DesignTeam\System.Net.Http.Formatting.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\tasks.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\DesignTeam\tasksstatusreport.htm" />
+    <Content Include="CooperationCloud\DesignTeam\tasktimereport.htm" />
+    <Content Include="CooperationCloud\DesignTeam\vaultUiEntry.js" />
+    <Content Include="CooperationCloud\DesignTeam\viewlog.htm" />
+    <Content Include="CooperationCloud\DesignTeam\WebConsole.exe" />
+    <Content Include="CooperationCloud\Home\crowdsourceTask.htm" />
+    <Content Include="CooperationCloud\Home\dt_aggregation.htm" />
+    <Content Include="CooperationCloud\Home\ElementAnnex.htm" />
+    <Content Include="CooperationCloud\Home\icons\众包文档管理.ico" />
+    <Content Include="CooperationCloud\Home\icons\工作空间.ico" />
+    <Content Include="CooperationCloud\Home\icons\我的众包任务.ico" />
+    <Content Include="CooperationCloud\Home\icons\新建众包任务.ico" />
+    <Content Include="CooperationCloud\Home\icons\新建工作日志.ico" />
+    <Content Include="CooperationCloud\Home\icons\查看工作日志.ico" />
+    <Content Include="CooperationCloud\Home\icons\模型浏览.ico" />
+    <Content Include="CooperationCloud\Home\icons\模型策划.ico" />
+    <Content Include="CooperationCloud\Home\icons\模板库.ico" />
+    <Content Include="CooperationCloud\Home\icons\项目成员忙闲度.ico" />
+    <Content Include="CooperationCloud\Home\icons\项目报表.ico" />
+    <Content Include="CooperationCloud\Home\images\buttons\删除联系人.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\我最近访问的.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\指派给我的任务.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\收件箱.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\收藏夹.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\新建联系人.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\有新任务.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\有新邮件.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\没有新任务.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\没有新邮件.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\邮件.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\邮件图标.png" />
+    <Content Include="CooperationCloud\Home\images\date.png" />
+    <Content Include="CooperationCloud\Home\images\revit2014.png" />
+    <Content Include="CooperationCloud\Home\images\waiting.gif" />
+    <Content Include="CooperationCloud\Home\mailcontacts.htm" />
+    <Content Include="CooperationCloud\Home\memberhoursreport.htm" />
+    <Content Include="CooperationCloud\Home\newmessage.htm" />
+    <Content Include="CooperationCloud\Home\ProgressBar.exe" />
+    <Content Include="CooperationCloud\Home\projectcostreport.htm" />
+    <Content Include="CooperationCloud\Home\scripts\bootstrap\bootstrap.js" />
+    <Content Include="CooperationCloud\Home\scripts\bootstrap\bootstrap.min.js" />
+    <Content Include="CooperationCloud\Home\scripts\bootstrap\npm.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\alltasks.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\bimmodelbrowser.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\crowdsourcing.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\draft.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\dt_aggregation.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\mailcontacts.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\newmessage.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\reports\projectcostreport.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\reports\reportOps.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\reports\tasksstatusreport.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\reports\taskTimeReport.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\send.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\softConfig.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\viewlog.js" />
+    <Content Include="CooperationCloud\Home\scripts\chart\legend.js" />
+    <Content Include="CooperationCloud\Home\scripts\dropdown-checkbox\bootstrap-dropdown-checkbox.js" />
+    <Content Include="CooperationCloud\Home\scripts\md\base.js" />
+    <Content Include="CooperationCloud\Home\scripts\md\bim.js" />
+    <Content Include="CooperationCloud\Home\scripts\md\mail.js" />
+    <Content Include="CooperationCloud\Home\scripts\jquery.treeview\jquery.cookie.js" />
+    <Content Include="CooperationCloud\Home\scripts\md\report.js" />
+    <Content Include="CooperationCloud\Home\style\bimmodelbrowser.css" />
+    <Content Include="CooperationCloud\Home\scripts\chart\Chart.js" />
+    <Content Include="CooperationCloud\Home\style\bootstrap\bootstrap-theme.css" />
+    <Content Include="CooperationCloud\Home\style\bootstrap\bootstrap-theme.min.css" />
+    <Content Include="CooperationCloud\Home\style\bootstrap\bootstrap.css" />
+    <Content Include="CooperationCloud\Home\style\bootstrap\bootstrap.min.css" />
+    <Content Include="CooperationCloud\Home\style\dropdown-checkbox\bootstrap-dropdown-checkbox.css" />
+    <Content Include="CooperationCloud\Home\style\dropdown-checkbox\bootstrap.css" />
+    <Content Include="CooperationCloud\Home\style\dt_aggregation.css" />
+    <Content Include="CooperationCloud\Home\style\report.css" />
+    <Content Include="CooperationCloud\Home\style\tasktimereport.css" />
+    <Content Include="CooperationCloud\Home\tasksstatusreport.htm" />
+    <Content Include="CooperationCloud\Home\tasktimereport.htm" />
+    <Content Include="CooperationCloud\Home\vaultUiEntry.js" />
+    <Content Include="CooperationCloud\Home\viewlog.htm" />
+    <Content Include="CooperationCloud\Home\WebConsole.exe" />
+    <None Include="App.config" />
+    <Content Include="CooperationCloud\Home\bimTreeDom.htm" />
+    <Content Include="CooperationCloud\Home\bimmodelbrowser.htm" />
+    <Content Include="CooperationCloud\Home\bimModelList.htm" />
+    <Content Include="CooperationCloud\Home\icons\文件浏览.ico" />
+    <Content Include="CooperationCloud\Home\images\title_treeDom.png" />
+    <Content Include="CooperationCloud\Home\scripts\cc\bimModelList.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\bimModelPlan.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\mfTreeDomOps.js" />
+    <None Include="CooperationCloud\BimInternalPlatform\KillBarProgress.bat" />
+    <None Include="CooperationCloud\BimInternalPlatform\style\bootstrap\bootstrap-theme.css.map" />
+    <None Include="CooperationCloud\BimInternalPlatform\style\bootstrap\bootstrap.css.map" />
+    <None Include="CooperationCloud\DesignTeam\KillBarProgress.bat" />
+    <None Include="CooperationCloud\DesignTeam\style\bootstrap\bootstrap-theme.css.map" />
+    <None Include="CooperationCloud\DesignTeam\style\bootstrap\bootstrap.css.map" />
+    <None Include="CooperationCloud\Home\KillBarProgress.bat" />
+    <None Include="CooperationCloud\Home\style\bootstrap\bootstrap-theme.css.map" />
+    <None Include="CooperationCloud\Home\style\bootstrap\bootstrap.css.map" />
+    <None Include="CooperationCloud\metadataAliasWithName.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CloudDisc\CloudApps\appdef.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="CloudDisc\CloudApps\catalog.htm" />
+    <Content Include="CloudDisc\CloudApps\scripts\catalog.js" />
+    <Content Include="CloudDisc\CloudApps\style\catalog.css" />
+    <Content Include="CooperationCloud\Home\AecCloud.BaseCore.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\alltasks.htm" />
+    <Content Include="CooperationCloud\Home\appdef.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="CooperationCloud\Home\bimModelPlan.htm" />
+    <Content Include="CooperationCloud\Home\DBWorld.MfilesNetCore.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\documents.htm" />
+    <Content Include="CooperationCloud\Home\draft.htm" />
+    <Content Include="CooperationCloud\Home\icons\个人文档.ico" />
+    <Content Include="CooperationCloud\Home\icons\全部任务列表.ico" />
+    <Content Include="CooperationCloud\Home\icons\共享文档.ico" />
+    <Content Include="CooperationCloud\Home\icons\初步设计.ico" />
+    <Content Include="CooperationCloud\Home\icons\发件箱.ico" />
+    <Content Include="CooperationCloud\Home\icons\成员列表.ico" />
+    <Content Include="CooperationCloud\Home\icons\我指派的任务.ico" />
+    <Content Include="CooperationCloud\Home\icons\指派给我的任务.ico" />
+    <Content Include="CooperationCloud\Home\icons\收件箱.ico" />
+    <Content Include="CooperationCloud\Home\icons\新建任务.ico" />
+    <Content Include="CooperationCloud\Home\icons\新建文档.ico" />
+    <Content Include="CooperationCloud\Home\icons\新建邮件.ico" />
+    <Content Include="CooperationCloud\Home\icons\方案设计.ico" />
+    <Content Include="CooperationCloud\Home\icons\施工图.ico" />
+    <Content Include="CooperationCloud\Home\icons\草稿箱.ico" />
+    <Content Include="CooperationCloud\Home\icons\通讯录.ico" />
+    <Content Include="CooperationCloud\Home\icons\邀请成员.ico" />
+    <Content Include="CooperationCloud\Home\icons\邮箱设置.ico" />
+    <Content Include="CooperationCloud\Home\icons\项目成员.ico" />
+    <Content Include="CooperationCloud\Home\icons\项目概况.ico" />
+    <Content Include="CooperationCloud\Home\images\buttons\写信.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\删除.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\删除成员.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\回复.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\回复全部.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\导出任务列表.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\收信.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\新建任务.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\新建文件夹.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\新建文档.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\设置.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\转发.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\通讯录.png" />
+    <Content Include="CooperationCloud\Home\images\buttons\邀请成员.png" />
+    <Content Include="CooperationCloud\Home\images\calendar.png" />
+    <Content Include="CooperationCloud\Home\images\deleteMember.png" />
+    <Content Include="CooperationCloud\Home\images\projectMember.png" />
+    <Content Include="CooperationCloud\Home\images\title_selectParts.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\invitemember.htm" />
+    <Content Include="CooperationCloud\Home\Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\cc\cmdCallbacks.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\cc\documents.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\invite.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\public.js" />
+    <Content Include="CooperationCloud\Home\scripts\cc\tasks.js" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\external\jquery\jquery.js" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-icons_222222_256x240.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-icons_454545_256x240.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-icons_888888_256x240.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\index.html" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\jquery-ui.css" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\jquery-ui.js" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\jquery-ui.min.css" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\jquery-ui.min.js" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.css" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.min.css" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.css" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.min.css" />
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.11.4.custom\jquery.datepicker-zh-CN.js" />
+    <Content Include="CooperationCloud\Home\scripts\jquery.treeview\jquery.treeview.edit.js" />
+    <Content Include="CooperationCloud\Home\scripts\jquery.treeview\jquery.treeview.js" />
+    <Content Include="CooperationCloud\Home\scripts\layout\jquery.layout.js" />
+    <Content Include="CooperationCloud\Home\scripts\listing_common.js" />
+    <Content Include="CooperationCloud\Home\scripts\mf\objectOps.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\SelectParticipants.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\send.htm" />
+    <Content Include="CooperationCloud\Home\style\flatbutton.css" />
+    <Content Include="CooperationCloud\Home\style\layout-default.css" />
+    <Content Include="CooperationCloud\Home\style\mail.css" />
+    <Content Include="CooperationCloud\Home\style\projhome.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\cc\core.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\cc\member.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\cc\project.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\style\main.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\members.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\projhome.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\web.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\style\SelectParticipants.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\style\treeview\images\ajax-loader.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\file.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\folder-closed.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\folder.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\minus.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\plus.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-black-line.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-black.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-default-line.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-default.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-famfamfam-line.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-famfamfam.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-gray-line.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-gray.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-red-line.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\images\treeview-red.gif" />
+    <Content Include="CooperationCloud\Home\style\treeview\jquery.treeview.css" />
+    <Content Include="CooperationCloud\Home\System.Net.Http.Formatting.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\tasks.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\main.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\home_common.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\mf\alias.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\mf\client.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\mf\command.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\mf\ui.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\mf\vault.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\images\collapse.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\images\expand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\animated-overlay.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_flat_10_000000_40x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_glass_100_f6f6f6_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_glass_100_fdf5ce_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_glass_65_ffffff_1x400.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_gloss-wave_35_f6a828_500x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_highlight-soft_100_eeeeee_1x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-bg_highlight-soft_75_ffe45c_1x100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_222222_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_228ef1_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_ef8c08_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_ffd27a_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\images\ui-icons_ffffff_256x240.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\jquery-ui-1.10.0.custom.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\css\ui-lightness\jquery-ui-1.10.0.custom.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\js\jquery-1.9.0.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\js\jquery-ui-1.10.0.custom.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\jquery-ui-1.10.0.custom\js\jquery-ui-1.10.0.custom.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\UIControlLibrary\localization.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\UIControlLibrary\utilities.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\scripts\wsh.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CooperationCloud\Home\Mail.htm" />
+    <Content Include="CooperationCloud\Home\scripts\cc\mail.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CloudDisc\CloudApps\icons\" />
+    <Folder Include="CooperationCloud\BimInternalPlatform\scripts\UIControlLibrary\images\" />
+    <Folder Include="CooperationCloud\DesignTeam\scripts\UIControlLibrary\images\" />
+    <Folder Include="CooperationCloud\Home\scripts\UIControlLibrary\images\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

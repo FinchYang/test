@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.m-files.com/schemas/appdef.xsd">
+  <guid>36B3C0A0-70C7-4C1B-BA5C-98B59E630C87</guid>
+  <name>安全台账</name>
+  <version>1.0</version>
+  <description>安全台账</description>
+  <publisher>CADSimula</publisher>
+  <copyright>(c) www.simuladesign.com 2016</copyright>
+  <required-mfiles-version>11.1.4310.131</required-mfiles-version>
+  <optional>true</optional>
+  <modules>
+    <module environment="shellui" event-priority="1">
+      <file>scripts\md.js</file>
+      <file>scripts\mf\alias.js</file>
+      <file>scripts\mf\objectOps.js</file>
+      <file>scripts\knowDocOps.js</file>
+      <file>scripts\doc-category.js</file>
+      <file>main.js</file>
+    </module>
+  </modules>
+  <dashboards>
+    <dashboard id="doccategory">
+      <content>securenotice.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>    
+  </dashboards>
+</application>

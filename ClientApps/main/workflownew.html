@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="scripts/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+    <link href="styles/workflow.css" rel="stylesheet"/>
+    <script src="scripts/jquery/jquery.js"></script>
+    <script src="scripts/bootstrap/js/bootstrap.js"></script>
+    <script src="scripts/cc/workflow_v2.js"></script>
+    <script src="scripts/cc/workflowui.js"></script>
+    <style type="text/css">
+     #wfnstates {
+        border: 2px solid orange;
+        background-color: white;
+    }
+     th {
+        background-color: #008AD2;
+        border: 2px solid orange;
+        text-align: center;
+        border-color: #FFFFFF;
+        color: #FFFFFF;
+        height: 50px;
+        line-height: 18px;
+    }
+
+    td {
+        border-color: #F0F0F0;
+        border: 2px solid orange;
+        height: 28px;
+        text-align: center;
+        word-break: break-all;
+        line-height: 18px;
+    }
+    </style>
+    <script type="text/javascript">
+        function OnNewDashboard(dashboard) {
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+        function getDashboardStartedHandler(dashboard) {
+            return function () {
+                var vault = dashboard.Vault;
+                var data = dashboard.CustomData;
+               var history=data.history;
+                 $("#wfnstates tr").remove();
+               for(var i=0;i<history.length;i++){
+                    var html="<tr>";
+                    html+="<td>"+(history.length-i)+"</td>";
+                      html+="<td>"+history[i].User+"</td>";
+                    html+="<td>"+history[i].Time+"</td>";
+                    html+="<td>"+history[i].State+"</td>";
+              //       html+="<td>"+history[i].MFBuiltInPropertyDefStateTransition+"</td>";
+                    html+="<td>"+history[i].MFBuiltInPropertyDefSignatureManifestation+"</td>";
+                    html+="<td>"+history[i].MFBuiltInPropertyDefWorkflowAssignment+"</td>";
+                     html+="<td>"+history[i].MFBuiltInPropertyDefAssignmentDescription+"</td>";
+                    html+="</tr>";
+                    $("#wfnstates").append(html);
+               }                             
+            }
+        }
+    </script>
+</head>
+    <body>
+       
+        <div >
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>步骤</th>
+                                     <th>用户</th>
+                                    <th>时间</th>
+                                    <th>状态</th>
+                                       <!--<th>转换</th>-->
+                                    <th>签名</th>
+                                    <th>独立任务</th>
+                                     <th>工作流任务</th>
+                                </tr>
+                            </thead>
+                            <tbody id='wfnstates'>
+                               
+                            </tbody>
+                        </table>
+                    </div>
+         
+    </body>
+</html>

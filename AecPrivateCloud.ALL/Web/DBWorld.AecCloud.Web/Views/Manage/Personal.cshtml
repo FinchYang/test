@@ -1,0 +1,115 @@
+﻿@model BIMModel
+
+@{
+    ViewBag.Title = "Personal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script type="text/javascript">
+    $(function () {
+        //项目状态修改确认
+        $(".projectListBtn").on("click", "dl dt", function () {
+            $(this).parents(".projectListBtn").next().fadeIn("fast");
+        });
+
+        //当我的项目中没有项目的时候显示该信息
+        var myProject = $('<div class="myProjectNo">抱歉，您没有启动中的项目，你可以<a href="@Url.Action("Index", "BIM")" title="点击更多" class="asideMore">点击更多</a>查看更多项目！！！</div>');
+        if ($(".myProject ul li").length > 0) {
+            if ($(".myProjectNo").length > 0) {
+                $(".myProjectNo").remove();
+            }
+        } else {
+            $(".myProject").prepend(myProject);
+        }
+
+    })
+</script>
+<!-- 当前位置 -->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="登录" name="antiture">用户信息</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavPrivatePartiale")
+    <!-- 右边内容 -->
+    <section class="right">
+        <div class="secondContent">
+            <div class="title borBottom secondTitle">
+                我的项目
+                <a href="@Url.Action("Index", "BIM")" title="点击更多" class="asideMore right">点击更多>></a>
+            </div>
+            <div class="myProject">
+                <div class="projectContent projectWrap clearfix" id="projectList">
+                    <ul>
+                        @foreach (var item in Model.ProjectDto)
+                        {
+                            if (item.Status.Id == 2)//此处显示立项和启动的
+                            {
+                                <li id="project_@item.Id">
+                                    <div class="projectListWrap">
+                                        <div class="projectListImg">
+                                            <a href="@Url.Action("ProjectDetail", "BIM", new { projectId = @item.Id })">
+                                                <img src="/BIM/GetImage?projectId=@item.Id" alt="项目图片" />
+                                            </a>
+                                            <span></span>
+                                        </div>
+                                        <div class="projectListBtn">
+                                            <dl>
+                                                <dt> 立项 </dt>
+                                                <dt class="projectListOn"> 启动 </dt>
+                                                <dt> 暂停 </dt>
+                                                <dt> 结束 </dt>
+                                            </dl>
+                                        </div>
+                                        <div class="projectListBtnConfirm">
+                                            确定要修改项目状态吗？
+                                            <p><a href="javascript:void(0);" title="确定" name="sure">确定</a><a href="javascript:void(0);" title="取消" name="cancel">取消</a></p>
+                                        </div>
+                                    </div>
+                                    <div class="projectName">
+                                        <a href="@Url.Action("ProjectDetail", "BIM", new { projectId = @item.Id })" title="@item.Name">
+                                            @item.Name
+                                        </a>
+                                    </div>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="title secondTitle">
+                我的文档
+                <a href="javascript:void(0);" title="点击更多" class="asideMore right">点击更多>></a>
+            </div>
+            <div class="building">
+                此版块正在建设中，敬请下一期的精彩展现
+            </div>
+            <div class="title secondTitle">
+                我的应用
+                <a href="javascript:void(0);" title="点击更多" class="asideMore right">点击更多>></a>
+            </div>
+            <div class="building">
+                此版块正在建设中，敬请下一期的精彩展现
+            </div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".asideWrap .UpDown").eq("0").click();
+    })
+</script>
+<script src="/Scripts/oldscripts/commonMethod.js"></script>
+<script src="/Scripts/oldscripts/JuqeryCookie.js"></script>
+<script src="/Scripts/oldscripts/BIMIndex.js"></script>
+<script src="/Scripts/oldscripts/BIM.js"></script>
+<link href="/Content/oldstyles/BIMClient.css" rel="stylesheet" />
+<link href="/Content/oldstyles/BIMMaster.css" rel="stylesheet" />
+<link href="/Content/oldstyles/BIMPopup.css" rel="stylesheet" />
+<link href="/Content/Site.css" rel="stylesheet" />
+<script src="/Scripts/oldscripts/jquery.form.js"></script>

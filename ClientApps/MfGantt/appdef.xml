@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.m-files.com/schemas/appdef.xsd">
+	<guid>40034A4E-6066-4BFF-8F76-FF3E5A81FD0B</guid>
+	<name>甘特视图</name>
+	<version>1.2.4</version>
+	<description>把视图转换为甘特图!</description>
+	<publisher>M-Files</publisher>	
+	<copyright>(c) M-Files 2012-2014</copyright>
+	<required-mfiles-version>9.0.0000.0</required-mfiles-version>
+	<optional>true</optional>
+	<enabled-by-default>true</enabled-by-default>	
+	<modules>
+		<module environment="shellui">
+			<file>gantt_shellui.js</file>
+		</module>
+		<module environment="vaultcore">
+			<file>json2.js</file>
+			<file>gantt_vaultcore.js</file>
+		</module>	
+	</modules>
+	<dashboards>
+		<dashboard id="gantt">
+			<content>gantt_dashboard.html</content>
+		</dashboard>
+		<dashboard id="conf">
+			<content>conf_dashboard.html</content>
+		</dashboard>			
+	</dashboards>
+</application>

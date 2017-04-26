@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>任务完成状态统计</title>
+    
+    <!-- Styles used on the dashboard -->
+    <link href="style/main.css" rel="stylesheet" />
+    <link href="style/taskstatusreport.css" rel="stylesheet" />
+    <link href="style/flatbutton.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap-dropdown-checkbox.css" />
+    <link href="scripts/jquery-ui-1.11.4.custom/jquery-ui.css" rel="stylesheet" />
+    <link href="scripts/jquery-ui-1.11.4.custom/jquery-ui.min.css" rel="stylesheet" />
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery.datepicker-zh-CN.js"></script>
+    <script type="text/javascript" src="scripts/chart/Chart.js"></script>
+    <script src="scripts/dropdown-checkbox/bootstrap-dropdown-checkbox.js"></script>
+    
+    <script type="text/javascript">
+        $(function() {
+            $(".datepicker").datepicker({
+                changeMonth: true,  //月份下拉列表
+                changeYear: true,  //月份下拉列表
+                showMonthAfterYear: true,
+                dateFormat: "yy-mm-dd",
+            });
+        });
+
+        var pieData = [
+				{
+				    value: 300,
+				    color: "#F7464A",
+				    highlight: "#FF5A5E",
+				    label: "Red"
+				},
+				{
+				    value: 50,
+				    color: "#46BFBD",
+				    highlight: "#5AD3D1",
+				    label: "Green"
+				},
+				{
+				    value: 100,
+				    color: "#FDB45C",
+				    highlight: "#FFC870",
+				    label: "Yellow"
+				},
+				{
+				    value: 40,
+				    color: "#949FB1",
+				    highlight: "#A8B3C5",
+				    label: "Grey"
+				},
+				{
+				    value: 120,
+				    color: "#4D5360",
+				    highlight: "#616774",
+				    label: "Dark Grey"
+				}
+
+        ];
+
+        window.onload = function () {
+            var ctx = document.getElementById("chart-area").getContext("2d");
+            window.myPie = new Chart(ctx).Pie(pieData);
+        };
+
+    </script>
+</head>
+    <body>
+        <div id="container">
+            <div id="header">
+                起始日期：<input type="text" class="dataTime datepicker" id="startPicker">
+                终止日期：<input type="text" class="dataTime finishDate datepicker" id="endPicker">
+                <button class="button">更新报表</button><br>
+            
+                项目名称：
+                <ul class="nav navbar-nav">
+                    <li class="dropdown-checkbox-task dropdown-checkbox dropdown collapse"></li>
+                </ul>
+            </div>
+
+            <div id="chatContent">
+                <canvas id="chart-area" width="300" height="300" />
+            </div>
+
+            <div id="tableContent">
+                <table id="tasktable">
+                    <tr style="height: 33px; color: white;">
+                        <th style="width: 160px;">任务完成状态</th>
+                        <th style="width: 160px;">数目</th>
+                    </tr>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+
+    
+    <script>
+        function list(size, checked) {
+            var result = [];
+            for (var i = 0; i < size; i++) {
+                result.push({
+                    id: i,
+                    label: 'Item #' + i,
+                    isChecked: checked === undefined ? !!(Math.round(Math.random() * 1)) : checked
+                });
+            }
+            return result;
+        }
+
+        var widget, alt;
+
+        var tab = [
+          { id: "1", label: "Forever.", isChecked: true },
+          { id: "2", label: "I love cheese.", isChecked: true },
+          { id: "3", label: "Meat for all", isChecked: false },
+          { id: "4", label: "Again and again", isChecked: true },
+          { id: "5", label: "Hey bro!", isChecked: true },
+          { id: "6", label: "It's working?", isChecked: false },
+          { id: "7", label: "Horse", isChecked: true },
+          { id: "8", label: "z-index", isChecked: true },
+          { id: "9", label: "language scala", isChecked: true },
+          { id: "10", label: "Yahoo", isChecked: true },
+          { id: "11", label: "yellow", isChecked: true },
+          { id: "12", label: "Gooooooooooogle", isChecked: true },
+          { id: "13", label: "NO WAY!", isChecked: false },
+          { id: "14", label: "2 times?", isChecked: true }
+        ];
+
+        function p(wat) {
+            return '<p>' + JSON.stringify(wat) + '</p>';
+        }
+
+        function updateStatus() {
+            var $p = $('p.status').empty();
+
+            $p.append(p(widget.checked()));
+            $p.append(p(alt.checked()));
+        }
+
+        $('.dropdown-checkbox-task').dropdownCheckbox({
+            data: tab,
+            autosearch: true,
+            title: "My Dropdown Checkbox",
+            hideHeader: false,
+            showNbSelected: true,
+            templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Example Dropdown <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
+        });
+
+        $('.dropdown-checkbox-task').dropdownCheckbox("append",
+          { id: "15", label: "added by itself", isChecked: true });
+
+        $('.alternate-behaviour').dropdownCheckbox({
+            data: list(3000, false),
+            autosearch: true,
+            title: "Alternate behaviour",
+            hideHeader: false,
+            showNbSelected: true,
+            maxItems: 500,
+            alternate: true,
+            templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Alternate Behaviour <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
+        });
+
+        widget = $('.dropdown-checkbox-task').data('dropdownCheckbox');
+        alt = $('.alternate-behaviour').data('dropdownCheckbox');
+
+        $('body').on('change:dropdown-checkbox checked checked:all check:all uncheck:all check:checked uncheck:checked', updateStatus());
+
+    </script>
+</html>

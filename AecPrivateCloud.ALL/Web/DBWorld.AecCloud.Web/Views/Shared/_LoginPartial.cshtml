@@ -1,0 +1,136 @@
+﻿@using DBWorld.AecCloud.Web
+@{
+    var canManageContractor = DBWorldCache.Get(User.Identity.GetUserId() + "canManageContractor");
+    var havetask = DBWorldCache.Get(User.Identity.GetUserId() + "havetask");
+    var havenotice = DBWorldCache.Get(User.Identity.GetUserId() + "havenotice");
+    <input id="canManageContractor" type="hidden" value=@canManageContractor />
+    <input id="havenotice" type="hidden" value=@havenotice />
+    <input id="havetask" type="hidden" value=@havetask />
+    var username = User.Identity.Name;
+    <input id="usernameforpermission" type="hidden" value=@username />
+    <input id="useridforpermission" type="hidden" value=@User.Identity.GetUserId() />
+}
+<style>
+        /*span img {
+            width: 32px !important;
+            height: 32px !important;
+        }*/
+         .to-right-notice-tip {
+            /*border-sizing: border-box;*/
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            right: -999em;
+            position: absolute;
+            color: white;
+             padding-bottom: 10px;
+            background-color: red;
+            display: inline;
+        }
+
+         a.thumbnail-header {
+             padding-top:0px;
+             border:none;
+             display: inline-block;
+         }
+
+        .thumbnail-header img {
+           margin: auto;
+           vertical-align: middle; 
+           display: inline-block;
+        }
+
+        .anchor-img {
+            margin-top:-2px !important;
+        }
+        .loginIn li span img {
+            -ms-border-radius:16px;
+            border-radius:16px;
+        }
+</style>
+@{   
+
+    var isAuthed = User.Identity.IsAuthenticated;
+    if (isAuthed)
+    {
+        var userName = AuthUtility.GetFullname(User);
+         using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
+         {
+             <ul class="loginIn">
+                 <li>
+                     <span ><img src="/BIM/GetUserImage?userId=@User.Identity.GetUserId()" width="32" height="32" alt="用户头像" /></span>
+                     @Html.ActionLink(userName, "UserInfoEdit", "Manage")
+                 </li>
+                 <li class="anchor-img">
+                     <a class="thumbnail-header" href="@Url.Action("MessageNotification", "NewReport")" title="消息通知">
+                         <img src="~/Content/Images/users/消息.png" alt="消息通知" />
+                         <div class="to-right-notice-tip" id="top-right-noticelist-tip"> </div>
+                         <span>消息</span>
+                     </a>
+                 </li>
+                 <li class="anchor-img">
+                     <a class="thumbnail-header" href="@Url.Action("WorkWaitingList", "NewReport")" title="待办工作">
+                         <img src="~/Content/Images/users/待办.png" alt="待办工作" />
+                         <div class="to-right-notice-tip" id="top-right-todoworklist-tip"> </div>
+                         <span>待办</span>
+                     </a>
+                 </li>
+                 <li class="anchor-img">
+                     <a class="thumbnail-header" href="javascript:document.getElementById('logoutForm').submit()">
+                         <img src="~/Content/Images/users/退出.png" alt="退出"/>
+                         <span>退出</span>
+                     </a>
+                 </li>
+             </ul>
+     <input id="AecuserIdInDatabase" type="hidden" value=@AuthUtility.GetUserName(User) />
+             @*<input id="canManageContractor" type="hidden" value=@canManageContractor />
+    <input id="havenotice" type="hidden" value=@havenotice />
+    <input id="havetask" type="hidden" value=@havetask />*@
+         }
+    }
+    else
+    {
+         <div class="navbar-right">
+             <ul class="loginIn">
+                 @{
+                     
+                     //var loginLink = loginUri + "?returnurl=" + host;
+                     //var registerLink = registerUri + "?returnurl=" + host;
+
+                     <li>
+                         @Html.ActionLink("登录", "LogOn","Account")
+                         @*<a href="@loginLink">登录</a>*@
+                     </li>
+                     @*<li><a href="@registerLink">注册</a></li>*@
+                 }
+             </ul>
+         </div>
+     }
+}
+<script type="text/javascript">
+    function myfun() {
+        var canabc = document.getElementById("canManageContractor").value;
+        if (canabc == "true") {
+            // document.getElementById("menu-contractor").style.left = "0%";
+            //var nl = $('#menu-contractor').css('display');
+            //if (nl === "none") $('#menu-contractor').style.display = "inherit";
+             document.getElementById("menu-contractor").style.display = "inherit";
+        }
+
+        if (document.getElementById("usernameforpermission").value == "admin") {
+            //  document.getElementById("menu-permission").style.left = "0%";
+            document.getElementById("menu-permission").style.display = "inherit";
+        }
+        if (document.getElementById("havenotice").value == "True") {
+            //    document.getElementById("noticelist-tip").style.left = "8em";
+            document.getElementById("top-right-noticelist-tip").style.right = "15em";
+        }
+
+        if (document.getElementById("havetask").value == "True") {
+            //  document.getElementById("todoworklist-tip").style.left = "8em";
+            document.getElementById("top-right-todoworklist-tip").style.right = "9em";
+        }
+    }
+
+    window.onload = myfun;
+</script>

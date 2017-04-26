@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification", "MFilesNotificationCom\Notification.csproj", "{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfNotification.Core", "Notification.Core\MfNotification.Core.csproj", "{347EA559-7756-45B3-9E7E-F2C0B5A247AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2076E01A-EFDE-40D5-86C8-24EF7FD878B9}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D3BACCA9-502C-4FF2-A034-9C9F5FA5891D}.Release|x86.ActiveCfg = Release|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{347EA559-7756-45B3-9E7E-F2C0B5A247AA}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

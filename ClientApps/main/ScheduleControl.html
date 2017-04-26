@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta charset="utf-8" />
+
+<!-- Styles used on the dashboard -->
+<style>
+	table {
+		border-collapse:collapse;
+		width:800px;
+		text-align:center;
+		font-size:14px;
+	}
+	#TableHead td{
+		border: none;
+	}
+	td{
+		border:1px solid #000;
+		vertical-align: middle;
+		overflow:hidden;
+		ext-overflow:ellipsis
+	}
+	.inputText {
+     width: 99%; 
+     border:0;
+	}
+	img{
+		height: 16px;
+	}
+	.hiddenTr{
+		display: none;
+	}
+	#add-btn{
+		
+		width:100px;
+	}
+	#AddItem{
+		width:200px;
+		margin-left: 500px;
+	}
+	#apply-btn{
+		margin-left: 270px;
+		margin-top: 10px;
+	}
+	.datePicker{
+		text-align: center;
+		border:0;
+		width:120px;
+	}
+	.daySelect{
+		width: 99%;
+		text-overflow:ellipsis;
+	}
+	.dayInput{
+		width: 99%;
+		border:0;
+		text-align: center;
+		text-overflow:ellipsis;
+	}
+	option{
+		text-align: center;
+	}
+	
+
+</style>
+<link rel="stylesheet" href="styles\jquery-ui.min.css">
+<!-- Include the jQuery Core library -->
+<script type="text/javascript" src="scripts\jquery\jquery.js"></script>
+<script type="text/javascript" src="scripts\jquery\jquery-ui.min.js"></script>
+<script type="text/javascript" src="scripts\jquery\jquery.datepicker-zh-CN.js"></script>
+<script src="scripts/md/bim.js"></script>
+<script src="scripts/mf/alias.js"></script>
+<script src="scripts/mf/objectOps.js"></script>
+<script src="scripts/mf/client.js"></script>
+<script src="scripts/mf/vault.js"></script>
+<script src="scripts/mf/objectOps.js"></script>
+<script src="scripts/mf/mfProperty.js"></script>
+<script type="text/javascript" src="ScheduleControl.js"></script>
+<script type="text/javascript">
+	"use strict";
+	var shellFrame;
+	var vault;
+	var thisDashBoard;
+	function OnNewDashboard( dashboard ) {
+		dashboard.Events.Register( Event_Started, getDashboardStartedHandler( dashboard ) );
+	}
+	function getDashboardStartedHandler( dashboard ) {
+		return function () {
+			thisDashBoard = dashboard;
+			dashboard.Window.SetDefaultSize( 900, 800, true );
+			dashboard.Window.Title = "工期模块节点计划";
+			shellFrame = dashboard.CustomData.shellFrame;
+			vault = shellFrame.ShellUI.Vault;
+			//单体列表内容
+			model.GetSingleBodyList(shellFrame);
+		}		
+	}
+	$(document).ready(function() {  
+		//日期控件 
+	   $('.selectDate').datepicker({
+			inline: true,
+			changeMonth: true,
+			changeYear:true
+	   });   
+	   $('.selectDate').change(function(){
+		   model.loadTable(shellFrame);}); 
+		//单体选择事件
+	   $('#sBodySelect').click(function(){
+		  if($('#sBodySelect option').size() == 0 ){
+			   alert("库中没有单体 请先创建单体！");
+		   }
+	   });
+	   $('#sBodySelect').change(function(){
+		   if($('#sBodySelect option:selected').text() != ""){			   
+			   var name = $('#sBodySelect option:selected').text() + "工期模块节点计划";
+			   $('#name').val(name);			
+			   model.GetBidAndComeinDateFromSB(shellFrame);		   
+			   model.loadTable(shellFrame);
+		   }		   
+	   });
+	   //确定按钮事件
+	   $('#apply-btn').click(function(){
+		   if($('#mainTable tr').length == 0){
+			   alert("页面中没有工期节点，请先加载工期节点！");
+			   return;
+		   }
+		   var version = $('#version').val();
+		   if(version == "无"){//第一次提交
+				var msg = "提交数据需要花费数秒钟，完成后会自动退出！\n‘取消’键返回页面";
+				if(confirm(msg)){
+					version = 1;
+					model.createObj(shellFrame,version);
+					//关闭当前窗口
+					close(thisDashBoard); 
+				}
+		   }else{//升版
+		   		var msg = "服务器已经保存有该单体的工期模块节点计划,是否需要更新数据？\n提交数据需要花费数秒钟，完成后会自动退出！\n‘返回’键返回页面";
+				if(confirm(msg)){
+					   var clickedButton = shellFrame.ShowMessage({
+					caption: "版本更新",
+					message: "是否要升级版本?",
+					icon: "question",
+					button1_title: "是",
+					button2_title: "否",
+					defaultButton: 2,
+					timeOutButton: 2,
+					timeOut: 10
+					});
+					if(clickedButton == 1){
+						version = parseInt(version) +1;
+					}
+					model.createObj(shellFrame,version);
+					//关闭当前窗口
+					close(thisDashBoard); 
+				}
+		   }
+
+	   });
+	   	//增加节点事件
+		$('#add-img').click(function(){			
+			var trid = $('#AddItem').find("option:selected").val(); 
+			//判断子节点的母节点是否删除
+			var hasMontherNode = false;
+			if(!trid) return;
+			if(trid.indexOf('_') != -1){
+				var montherId = trid.substring(0,trid.indexOf('_'));
+				//遍历
+				$("#AddItem option").each(function(){
+					if($(this).val() == montherId){
+						alert("添加子节点前 必选先添加母节点！");
+						hasMontherNode = true;
+						return;
+					}					
+				});
+			}
+			if(hasMontherNode){
+				return;
+			}
+			var id = "#" + trid;
+			$(id).removeClass('hiddenTr'); 
+			$('#AddItem').find("option:selected").remove();			
+		});	
+	 });
+        //关闭dashboard
+        function close(dashboard) {
+            if (dashboard.IsPopupDashboard)
+                dashboard.Window.Close();
+            else {
+                dashboard.Parent.ShowDefaultContent();
+                dashboard.Parent.Visible = false;
+            }
+        }
+</script>
+</head>
+<body>
+<div id="content" style="margin:auto; width:800px;">
+	<div id="head">
+		<div id = "oneBody">
+			<span>单体： <select style="width:200px;" id="sBodySelect"></select></span>
+			&nbsp;&nbsp;
+			<span>中标日：<input type="text" style="width:80px;" id="bidDate" class="selectDate" readonly="readonly"/> </span>
+			&nbsp;&nbsp;
+			<span>进场日：<input type="text" style="width:80px;" id="comeinDate" class="selectDate" readonly="readonly"/> </span>
+			&nbsp;&nbsp;
+			<span width="100">当前版本：<input id = "version" type="text" style="width:30px;" value="无" readonly="readonly"/>
+		</div>
+		<!--<br/>-->
+		<div>
+			<!--<span width="300">名称：<input id = "name" type="text" style="width:360px;" readonly="readonly"/> </span>-->
+			<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+			<!--<span width="100">当前版本：<input id = "version" type="text" style="width:30px;" value="无" readonly="readonly"/> </span>-->
+		</div>			
+	</div>
+	<br/>
+	<div id="main">
+		<table id="TableHead">
+			<tr style="background-color:#009DD9;color:#FFFFFF;">
+				<td width="10%">删除节点</td>
+				<td width="10%">编号</td>
+				<td width="35%">节点名称</td>
+				<td width="15%">计划开始时间</td>
+				<td width="15%">计划工期（天）</td>
+				<td width="15%">计划完成时间</td
+			</tr>
+		</table>
+		<div style="overflow-y:auto;overflow-x:hidden; height:600px">
+			<table id = "mainTable">		
+			</table>
+		</div>		
+	</div>
+	<br/>
+	<div id="foot">
+		
+		<select id ="AddItem"></select>
+		&nbsp;
+		<img id = 'add-img' src = 'ico/增加.ico'> 增加节点</img>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button style="width:60px;" id="apply-btn">提交</button>
+	</div>
+</div>
+</body>

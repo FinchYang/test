@@ -1,0 +1,264 @@
+﻿@{
+    ViewBag.Title = "AboutUs";
+    //Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/oldstyles/loading.css" rel="stylesheet" type="text/css" />
+@*<link href="~/Content/oldstyles/header.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/base.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/layout.css" rel="stylesheet" type="text/css" />*@
+<link href="~/Content/oldstyles/second.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/oldstyles/footer.css" rel="stylesheet" type="text/css" />
+@*<link href="~/Content/oldstyles/login.css" rel="stylesheet" type="text/css" />*@
+<script src="~/Scripts/oldscripts/Mfile.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/jquery.flexslider-min.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/commonMethod.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/kefu.js"></script>
+
+<script src="~/Scripts/jquery.mousewheel.min.js"></script>
+<script src="~/Scripts/oldscripts/youdao.js" type="text/javascript"></script>
+
+<style>
+    
+    .doc {
+    width: 100%;
+    overflow: hidden;
+    /*padding-top: 190px;*/
+}
+
+.docTableTitle.title {
+    font-size: 30px;
+}
+
+.docTable {
+    table-layout: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+    .docTable tr td {
+        font-size: 16px;
+        line-height: 36px;
+        padding: 50px;
+        overflow: hidden;
+        width: 50%;
+    }
+
+        .docTable tr td:first-child {
+            text-align: right;
+        }
+
+        .docTable tr td:last-child {
+            text-align: left;
+        }
+
+
+     .topNav div[class^=top] {
+         border-radius: 10px;
+         background: #F7F7F7;
+         color:#666;
+         float: left;
+         margin: 0 5px;
+         font-weight: bold;
+         height: 100px;
+         padding: 10px 0;
+         width: 145px;
+         text-align: center;
+     }
+
+    .topNav div[class^=top] img {
+        opacity: 0.7;
+    }
+
+    .topNav div[class^=top]:hover {
+        border-left: none;
+        background: #f8f8f8;
+        color: #1a83cb;
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+
+    .topNav div:first-child {
+        border-left: none;
+    }
+
+    .topNav {
+        margin: 0 auto;
+        width: 1180px;
+        height: 190px;
+    }
+
+    .sectionTopWord {
+        color: #fff;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 40px;
+        height: 40px;
+        text-align: center;
+    }
+
+    .sectionTopTitle {
+        background: #fff;
+        border-radius: 0 0 10px 10px;
+        padding: 10px 0;
+    }
+
+    .topNav .sectionTopTitle .design {
+        width: 1025px;
+        margin: 0 auto;
+    }
+
+    .topNav .design div[class^=top] {
+        width: 135px;
+    }
+
+    .topNav .sectionTopTitle .client {
+        width: 775px;
+        margin: 0 auto;
+    }
+
+    .topNav .sectionTopTitle .aboutUs {
+        width: 785px;
+        margin: 0 auto;
+    }
+</style>
+
+<!--当前位置-->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="关于我们" name="">关于我们</a>
+</div>
+
+<div class="toTop" title="返回顶部"></div>
+
+<div id="content" class="clearfix">
+    <div class="topNav">
+        <div id="top2">
+            <div class="sectionTopWord">关于我们</div>
+            <div class="sectionTopTitle clearfix">
+                <div class="aboutUs clearfix">
+                    <div class="top3">
+                        <img src="~/Content/Images/about/aboutUsTop1.png" />
+                        <p>关于我们</p>
+                    </div>
+                    <div class="top4">
+                        <img src="~/Content/Images/about/aboutUsTop2.png" />
+                        <p>服务网络</p>
+                    </div>
+                    <div class="top5">
+                        <img src="~/Content/Images/about/aboutUsTop3.png" />
+                        <p>资质与荣誉</p>
+                    </div>
+                    <div class="top6">
+                        <img src="~/Content/Images/about/aboutUsTop4.png" />
+                        <p>知识产权</p>
+                    </div>
+                    <div class="top7">
+                        <img src="~/Content/Images/about/aboutUsTop5.png" />
+                        <p>科研成果</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="doc" id="top3">
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td>
+                    <img src="~/Content/Images/client/index1.png" />
+                </td>
+                <td>
+                    <div class="title marginBottom docTableTitle">
+                        关于我们
+                    </div>
+                    <p>
+                        
+                        上海众宸信息科技有限公司是一家专业从事工程建设行业（勘察设计、施工、制造及管理）信息协同云平台产品咨询、开发、销售及相关工程技术服务的高新技术公司。公司由同济大学计算风工程团队创立，公司规模近150人，技术研发人员超过100人，其中20%拥有硕博士学位
+                    </p>
+                    <p>
+                        2015年由上海斐讯数据通信技术有限公司投资并创立工程建设云计算平台(DBWorld)，以互联网模式打造的工程建设行业最大的协同工作云平台，服务工程建设项目的所有参与方，形成工程行业互联网工作模式及生态圈，提高工程从业人员的协同工作能力、效率和质量，促进整个建设行业的变革和生产效能的提升
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="doc" id="top4">
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td>
+                    <div class="title marginBottom docTableTitle">
+                        全国的数据中心与服务网络
+                    </div>
+                    <p>
+                        依托斐讯云(PhiCloud)数据中心，DBWorld<br />工程云平台面向全国提供线上与线下服务
+                    </p>
+                </td>
+                <td>
+                    <img src="~/Content/Images/about/aboutDistrict.png" style="height:auto; width:80%; margin:0 auto" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="doc" id="top5">
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td>
+                    <img src="~/Content/Images/about/qualifaction.png" style="width:100%;height:auto;" />
+                </td>
+                <td>
+                    <div class="title marginBottom docTableTitle">
+                        资质与荣誉：
+                    </div>
+                    <p>
+                        公司是上海市“双软认证”企业，获得科技部与上海市“中小企业创新基金”资助、上海市“人才发展基金”资助，获得上海市科技进步三等奖1项
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+
+        
+    </div>
+    <div class="doc" id="top6">
+
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td>
+                    <div class="title marginBottom docTableTitle">
+                        知识产权：
+                    </div>
+                    <p>
+                        近年来公司获得了十余项软件著作权，主要是<br />工程云计算相关的产品，包括CAD软件、BIM软<br />件、CAE软件、数据管理软件和协同管理软件等
+                    </p>
+                </td>
+                <td>
+                    <img src="~/Content/Images/about/registration.png" style="height:100%;width:auto;" />
+                </td>
+            </tr>
+        </table>
+
+        
+    </div>
+    <div class="doc" id="top7">
+
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td>
+                    <img src="~/Content/Images/about/book.png" style="height:100%; width:auto;" />
+                </td>
+                <td>
+                    <div class="title marginBottom docTableTitle">
+                        科研成果：
+                    </div>
+                    <p>
+                        公司团队参加了住建部及上海市10余项重大课题研究，在CAD/BIM/CAE等领域发表了多本专著，具有大量前沿技术成果
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        
+    </div>
+</div>

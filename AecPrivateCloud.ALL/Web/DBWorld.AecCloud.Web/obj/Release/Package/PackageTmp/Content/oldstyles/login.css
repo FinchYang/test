@@ -1,0 +1,177 @@
+﻿/**
+    ** time : 2014 - 11 - 27
+    ** pro ： AECLOUD
+    ** author : 肖颖
+    ** main : AECLOUD网站登录注册样式表
+**/
+
+
+
+/*导航上的位置显示*/
+.loginIn {
+    color: #fff;
+    /*position:fixed;*/
+    right: 0;
+    top: 5px;
+}
+
+form#logoutForm {
+    margin-top:10px;
+    margin-right:10px;
+}
+
+.loginBar a {
+    color: #fff;
+    font-size: 12px;
+}
+
+    .loginBar a:hover {
+        text-decoration: underline;
+    }
+/*首页登录成功后的欢迎标语*/
+.loginIn.indexLogin{
+    margin-top:70px;
+    width:250px;
+    text-align:center;
+}
+.loginIn.indexLogin li {
+    float:none;
+}
+
+.indexLogin li{
+    color:#1a83cb;
+    text-align:center;
+}
+    .indexLogin li:first-child {
+        margin-top:30px;
+    }
+    .indexLogin li:last-child {
+        line-height:40px;
+        padding:10px 15px;
+    }
+
+/*登录成功用户名显示*/
+.loginIn li {
+   float: left;
+   margin: 0 8px;
+}
+
+.loginIn a {
+    color: black;
+    vertical-align: bottom;
+    padding-top:2px;
+}
+
+.loginIn a span {
+    vertical-align: bottom;
+}
+
+.loginOut {
+    border-radius: 2px;
+    background: #fcc10f;
+    padding: 2px 10px;
+}
+
+/*登录 注册*/
+.loginTitle {
+    color: #1a83cb;
+    font-size: 20px;
+}
+
+    .loginTitle span.haveLogin {
+        color: #ff2828;
+        font-weight: normal;
+        font-size: 0.6em;
+    }
+
+        .loginTitle span.haveLogin a {
+            background: #1069b9;
+            color: #fff;
+            display: inline-block;
+            font-size: 1.25em;
+            height: 30px;
+            line-height: 30px;
+            margin-left: 10px;
+            text-align: center;
+            width: 70px;
+        }
+
+.loginStep {
+    background: #eee;
+    color: #333;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 10px;
+    margin: 20px 0;
+}
+
+.subBtn {
+    background-image: url('/Content/Images/btnBg.gif');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    font-family:"微软雅黑";
+    font-size: 16px;
+    height: 35px;
+    width: 100px;
+}
+
+    .subBtn:hover {
+        text-decoration: underline;
+    }
+
+    .subBtn:active {
+        padding: 1px 0 0 1px;
+    }
+
+.formUl li {
+    line-height: 22px;
+    margin-bottom: 20px;
+}
+
+.formLabel, .formLabel2 {
+    display: inline-block;
+    padding-right: 10px;
+    width: 90px;
+}
+
+.letterTwo {
+    letter-spacing: 21px;
+}
+
+.formInput {
+    outline: none;
+    height: 22px;
+    line-height: 22px;
+    padding: 2px 5px;
+    width: 250px;
+}
+
+.formTextarea {
+    height: 100px;
+    line-height: 22px;
+    padding: 2px 5px;
+    margin-left: 3px;
+    width: 250px;
+    resize:none;
+}
+
+.formKnow, .formLoginIn {
+    margin-left: 104px;
+    margin-bottom: 20px;
+}
+
+.forget {
+    color: #1a83cb;
+    margin-left: 10px;
+}
+
+
+
+/*自动登陆*/
+.Autologon {
+    line-height:16px;
+    margin-right:20px;
+}

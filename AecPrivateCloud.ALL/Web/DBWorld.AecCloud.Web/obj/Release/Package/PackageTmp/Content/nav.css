@@ -1,0 +1,172 @@
+﻿/**
+    ** time : 2015 - 4 - 21
+    ** pro ： 6月新版本
+    ** author : 肖颖、刘甦
+    ** main : 导航版块
+**/
+/*导航*/
+#nav {
+    background: #3589c4;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    height: 80px;
+    line-height: 80px;
+    min-width: 1170px;
+}
+
+.navContent {
+    height: 40px;
+}
+
+.knowledgeDocNav {
+    cursor: pointer;
+    width: 25%;
+    text-align: center;
+    position: relative;
+}
+
+
+
+.navContent ul li {
+    float: left;
+}
+
+    .navContent ul li a {
+        display: block;
+        color: #fff;
+        padding: 0 25px;
+    }
+
+.navList li a:hover, .navList li a.on {
+    background: #2b77ac;
+}
+
+/*二级导航*/
+.menuInner {
+    border-top: 1px solid #3fc2ec;
+    background: #3fc2ec;
+    display: none;
+    position: absolute;
+    left: 0px;
+    top: 40px;
+    width: 100%;
+    z-index: 1000000;
+}
+
+.menuItem {
+    /*border-bottom: 1px solid #0097c7;
+    border-top: 1px solid #30c2f0;*/
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 2%;
+    padding-left: 5%;
+    text-align: left;
+    width: 85%;
+}
+
+    .menuItem h3 {
+        display: block;
+        position: relative;
+    }
+
+.menuItemIcon {
+    background-image: url('Images/new/menuItemIcon.png');
+    background-repeat: no-repeat;
+    display: block;
+    height: 7px;
+    position: absolute;
+    left: 200px;
+    top: 11px;
+    width: 5px;
+}
+
+.menuItemIconWhite {
+    background-position: 0 0;
+}
+
+.menuItemIconBlue {
+    background-position: -4px 0;
+}
+
+.menuItem h3 a {
+    color: #fff;
+    font-size: 14px;
+}
+
+.menuItem:hover {
+    background: #f7f7f7;
+    color: #3fc2ec;
+}
+
+    .menuItem:hover h3 a {
+        color: #3fc2ec;
+        text-decoration: none;
+    }
+
+.categoryItem {
+    border-bottom: 1px solid #3fc2ec;
+    border-right: 1px solid #3fc2ec;
+    background: #f7f7f7;
+    cursor: default;
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 216px;
+    overflow: hidden;
+    z-index: 1000000;
+}
+
+    .categoryItem dl {
+        font-weight: normal;
+        overflow: hidden;
+        position: relative;
+        padding-left: 110px;
+        padding-right: 20px;
+        min-height:30px;
+    }
+
+        .categoryItem dl dt {
+            display: block;
+            font-weight: 700;
+            line-height: 20px;
+            padding: 8px 10px 0 20px;
+            width: 70px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            overflow: hidden;
+        }
+
+            .categoryItem dl dt a {
+                color: #575757;
+                width: 100%;
+            }
+
+        .categoryItem dl dd {
+            left: 84px;
+            border-top: 1px solid #e8e8e8;
+            overflow: hidden;
+            padding: 4px 0;
+            text-align: left;
+        }
+
+        .categoryItem dl:first-child dd {
+            border-top: none;
+        }
+
+        .categoryItem dl dd a {
+            border-right: 1px solid #e8e8e8;
+            float: left;
+            height: 18px;
+            line-height: 18px;
+            margin: 4px 8px 4px 0;
+            padding-right: 8px;
+            white-space: nowrap;
+        }
+
+            .categoryItem dl dd a:hover, .categoryItem dl dd a.on, .categoryItem dl dt a:hover {
+                color: #f39800;
+                text-decoration: none;
+            }

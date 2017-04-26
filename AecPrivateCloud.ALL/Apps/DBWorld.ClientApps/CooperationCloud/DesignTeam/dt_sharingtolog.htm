@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style type="text/css"></style>
+        <link rel="stylesheet" type="text/css" href="style/SelectParticipants.css" />
+        <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap-dropdown-checkbox.css" />
+        <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+        <script src="scripts/dropdown-checkbox/bootstrap-dropdown-checkbox.js"></script>
+        <style type="text/css">
+            #wrap {
+                background: #ffffff;
+                border: 1px solid #666;
+                height: 380px;
+                width: 400px;
+                overflow: hidden;
+            }
+
+            .title_wrap {
+                margin-bottom: 40px;
+            }
+
+            .desc {
+                margin-top: 15px;
+            }
+
+                .desc > label {
+                    margin: 5px 0 10px 30px;
+                    font-weight: bold;
+                }
+
+                .desc > input {
+                    margin-left: 10px;
+                    width: 220px;
+                }
+
+                .desc > select {
+                    margin-left: 10px;
+                    width: 220px;
+                }
+                .desc > span {
+                    margin-left: 30px;
+                    width: 220px;
+                }
+                #sm-displine {
+                    margin-left: 40px;
+                }
+
+            .btn {
+                margin-top: 40px;
+                margin-left: 80px;
+            }
+        </style>
+
+        <script type="text/javascript">
+            function OnNewDashboard(dashboard) {
+                dashboard.Window.SetDefaultSize(401.5, 381.5, true); //设置默认大小
+                dashboard.Window.Resizable = false;
+                dashboard.Window.Maximizable = false;
+                dashboard.Window.Minimizable = false;
+
+                var customdata = dashboard.CustomData;
+                var displines = customdata.Disciplines;
+                var phases = customdata.Phases;
+                var users = customdata.Users;
+
+                for (var i = 0; i < phases.length; i++) {
+                    var item = phases[i];
+                    var option = $('<option></option>').val(item.id).text(item.label);
+                    $("#sm-phase").append(option);
+                }
+                
+                for (var j = 0; j < displines.length; j++) {
+                    item = displines[j];
+                    option = $('<option></option>').val(item.id).text(item.label);
+                    $("#sm-displine").append(option);
+                }
+                $('#dropdown-checkbox-users').dropdownCheckbox({
+                    data: getUsers(),
+                    autosearch: true,
+                    title: "Dropdown Checkbox",
+                    hideHeader: false,
+                    showNbSelected: true,
+                    templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">选择项目成员...<span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
+                });
+                //for text
+                $('#btnSure').click(function () {
+                    if ($("#log-title").val() == "") {
+                        alert("请填写记录名称！");
+                        return;
+                    }
+                    var checkedItems = $('#dropdown-checkbox-users').dropdownCheckbox("checked");
+                    if (checkedItems.length === 0) {
+                        alert("请选择待提资的成员！");
+                        return;
+                    }
+                    customdata.LogTitle = $("#log-title").val();
+                    customdata.SelectedPhase = {
+                        id: $("#sm-phase option:selected").val(),
+                        label: $("#sm-phase option:selected").text()
+                    };
+                    customdata.SelectedDiscipline = {
+                        id: $("#sm-displine option:selected").val(),
+                        label: $("#sm-displine option:selected").text()
+                    };
+                    for (var k = 0; k < checkedItems.length; k++) {
+                        customdata.SelectedUsers.push(checkedItems[k]);
+                    }
+                    customdata.Cancelled = false;
+                    dashboard.Window.close();
+                });
+                $('#btnCancel').click(function () {
+                    customdata.Cancelled = true;
+                    dashboard.Window.close();
+                });
+                function getUsers() {
+                    //{ "id": int, "label": string,isChecked: true  }
+                    var res = [];
+                    for (var k = 0; k < users.length; k++) {
+                        var u = users[k];
+                        res.push({ id: u.id, label: u.label, isChecked: false });
+                    }
+                    return res;
+                }
+            }
+        </script>
+        <script type="text/javascript">
+            /*
+            $(function () {
+                var phases = getPhases();
+                for (var i = 0; i < phases.length; i++) {
+                    var item = phases[i];
+                    var option = $('<option></option>').val(item.ID).text(item.Title);
+                    $("#sm-phase").append(option);
+                }
+                var displines = getDisplines();
+                for (var j = 0; j < displines.length; j++) {
+                    item = displines[j];
+                    option = $('<option></option>').val(item.ID).text(item.Title);
+                    $("#sm-displine").append(option);
+                }
+                $('#dropdown-checkbox-users').dropdownCheckbox({
+                    data: getUsers(),
+                    autosearch: true,
+                    title: "Dropdown Checkbox",
+                    hideHeader: false,
+                    showNbSelected: true,
+                    templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">选择项目成员...<span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
+                });
+                //for text
+                $('#btnSure').click(function() {
+                    //var sId = $("#selectmenu option:selected").val();
+                    //var sTitle = $("#selectmenu option:selected").text();
+                    var p = $("#sm-phase option:selected").text();
+                    var d = $("#sm-displine option:selected").text();
+                    var checkedItems = $('#dropdown-checkbox-users').dropdownCheckbox("checked");
+                    alert(p + "\r\n" + d + "\r\n" + checkedItems.length);
+                });
+                $('#btnCancel').click(function () {
+
+                });
+            });
+
+            function getPhases() {
+                var res = [];
+                res.push({ ID: 1, Title: "阶段1" });
+                res.push({ ID: 2, Title: "阶段2" });
+                return res;
+            }
+            function getDisplines() {
+                var res = [];
+                res.push({ ID: 1, Title: "专业1" });
+                res.push({ ID: 2, Title: "专业2" });
+                return res;
+            }
+            function getUsers() {
+                //{ "id": int, "label": string,isChecked: true  }
+                var res = [];
+                res.push({ id: 1, label: "用户1", isChecked: false });
+                res.push({ id: 2, label: "用户2", isChecked: false });
+                res.push({ id: 3, label: "用户3", isChecked: false });
+                res.push({ id: 4, label: "用户4", isChecked: false });
+                res.push({ id: 5, label: "用户5", isChecked: false });
+                res.push({ id: 6, label: "用户6", isChecked: false });
+                res.push({ id: 7, label: "用户7", isChecked: false });
+                res.push({ id: 8, label: "用户8", isChecked: false });
+                res.push({ id: 9, label: "用户9", isChecked: false });
+                res.push({ id: 10, label: "用户10", isChecked: false });
+                res.push({ id: 11, label: "用户11", isChecked: false });
+                res.push({ id: 12, label: "用户12", isChecked: false });
+
+                return res;
+            }
+            */
+        </script>
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="title_wrap">提资记录</div>
+            <div class="desc">
+                <label>提资给: </label>
+                <span id="dropdown-checkbox-users"></span>
+            </div>
+            <div class="desc">
+                <label>记录名称: </label>
+                <input id="log-title" type="text" />
+            </div>           
+            <div class="desc">
+                <label>设计阶段: </label>
+                <select id="sm-phase">
+                    <!--<option>Slower</option>-->
+                </select>
+            </div>
+            <div class="desc">
+                <label>专业: </label>
+                <select id="sm-displine">
+                </select>
+            </div>           
+            <div class="btn">
+                <input id="btnSure" type="button" value="确定" />
+                <input id="btnCancel" type="button" value="取消" />
+            </div>
+        </div>
+    </body>
+</html>

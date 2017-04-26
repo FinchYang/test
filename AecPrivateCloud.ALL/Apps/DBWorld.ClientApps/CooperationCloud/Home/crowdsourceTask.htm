@@ -1,0 +1,311 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>众包任务</title>
+
+    <!-- Styles used on the dashboard -->
+    <link href="style/main.css" rel="stylesheet" />
+    <!--<link href="style/mail.css" rel="stylesheet" />-->
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <!-- Helper scripts -->
+    <script type="text/javascript" src="scripts/UIControlLibrary/utilities.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/localization.js"></script>
+    <script type="text/javascript" src="scripts/home_common.js"></script>
+    <script type="text/javascript" src="scripts/listing_common.js"></script>
+    
+    <script type="text/javascript" src="scripts/md/base.js"></script>
+    <script type="text/javascript" src="scripts/mf/vault.js"></script>
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+    <script type="text/javascript" src="scripts/cc/public.js"></script>
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/mf/client.js"></script>
+    <script type="text/javascript" src="scripts/mf/objectOps.js"></script>
+    <script type="text/javascript" src="scripts/cc/crowdsourcing.js"></script>
+    <script type="text/javascript" src="scripts/web.js"></script>
+    
+    <style type="text/css">
+        /*begin*/
+        .list-nav {
+            list-style-type: none;
+        }
+        .list-nav-item {
+            cursor: pointer;
+            /*display: inline-block;*/
+            float: left;
+            text-align: center;
+        }
+
+        /*工具栏背景 左下角、右下角圆角*/
+        .contentDiv {
+            position: absolute;
+            bottom: 0;
+            margin-left: 5%;
+            margin-right: 20%;
+            background: #30A9F1;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #fff;
+            overflow: hidden;
+            position: absolute;
+            min-width: 630px;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            box-shadow: 2px 2px #2276BC;
+        }
+
+        /*工具栏背景 左上角、右上角圆角*/
+        .contentDiv2 {
+            position: absolute;
+            bottom: 0;
+            margin-left: 5%;
+            margin-right: 20%;
+            background: #30A9F1;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #fff;
+            overflow: hidden;
+            position: absolute;
+            min-width: 394px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            box-shadow: 2px 2px #2276BC;
+            /*display: none;*/
+        }
+        /*end*/
+
+        .list-nav-item:hover {
+            background-color: #23C5FF;
+        }
+
+        .list-nav-item:first-child {
+            padding-left: 15px;
+        }
+
+        .list-nav-item:last-child {
+            padding-right: 10px;
+        }
+
+        ol {
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .vr-symbol {
+            font-size: 1.2em;
+        }
+
+    </style>
+    <script type="text/javascript">
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+            //var cd = dashboard.CustomData;
+            //alert(cd.objsAndProps.Count);
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+
+                var folderId = dashboard.CustomData.viewId;     //父文件夹ID
+                var subFoloderIds = dashboard.CustomData.subViewIds;   //子文件夹ID
+                var subFolderPaths = dashboard.CustomData.viewsPath;//子文件夹路径
+
+                // Shortcuts.
+                var shellFrame = dashboard.Parent;
+                var loc = new localization();
+                var additionalSectionShown = false;
+
+                initializeLayout(dashboard, shellFrame);
+
+                //动态添加HTML标签
+                var ids = CC.crowdsourcing.insertHtml(subFolderPaths.length, "listings");
+
+                //根据路径创建对应Listing 例："邮件系统\\收件箱"
+                for (var i = 0; i < subFolderPaths.length; i++) {
+                    var listing = createListingForPath(shellFrame, loc, $('#' + ids[i]), subFolderPaths[i],
+                        function (container, objectsCount) {
+                            // Specify the relative height of this listing.
+                            var heightNumber = 20;
+                            if (objectsCount <= 2)
+                                heightNumber = 15;
+                            if (objectsCount <= 1)
+                                heightNumber = 10;
+                            if (objectsCount > 20)
+                                heightNumber = 30;
+                            container.data("heightNumber", heightNumber);
+                            additionalSectionShown = true;
+                        });
+                    if (listing) CC.SetListingTheme(listing);
+                    //listing.Events.Register(MFiles.Event.SelectionChanged, getListingSelectionChangedHandler(shellFrame));
+                }
+
+                //设置listing中 Header Div 的宽度
+                for (var item in ids) {
+                    //publicUtils.SetDivWidth(ids[item] + "c", 9.16);
+                }
+
+                //获取vault对象
+                var vault = shellFrame.ShellUI.Vault;
+
+                try {
+                    for (var k = 0; k < subFoloderIds.length; k++) {
+                        var folderDefs = publicUtils.getFolderDefs(folderId, subFoloderIds[k], "view");
+                        var showProps = CC.crowdsourcing.getHeadCols(vault);
+                        publicUtils.SetListingHeader(folderDefs, shellFrame, showProps);
+                        //CC.crowdsourcing.setListingHeader(shellFrame, folderId, subFoloderIds[k]);
+                    }
+                } catch (e) {
+                    //alert(e.message);
+                }
+                // Listen to the ActiveListingChanged event.
+                shellFrame.Events.Register(MFiles.Event.ActiveListingChanged, getActiveListingChangedHandler(shellFrame));
+
+                // Resize panes.
+                $(window).resize(resized);
+                resized();
+
+                //是否显示按钮
+                var isPm = CC.userRole.isPM(vault);
+                //alert(isPm);
+                if (isPm) {//项目经理：可见命令组
+                    $('#btnGroup').addClass("contentDiv2");
+                    var olDom = $('<ol class="list-nav"><li class="list-nav-item" id="btnNewTask"><img alt="新建众包任务" src="images/buttons/写信.png" />&nbsp;新建众包任务&nbsp;&nbsp;&nbsp;</li>' +
+                        '<li class="list-nav-item" id="btnPublishTask"><span class="vr-symbol">|&nbsp;</span><img alt="发布众包任务" src="images/buttons/回复全部.png" />&nbsp;发布众包任务&nbsp;&nbsp;</li>' +
+                        '<li class="list-nav-item" id="btnViewBid"><span class="vr-symbol">|&nbsp;</span><img alt="查看招投标进展" src="images/buttons/转发.png" />&nbsp;查看招投标进展</li></ol>');
+                    olDom.appendTo($('#btnGroup'));
+                } else {
+                    //$('#btnGroup').css("display", "none");
+                }
+
+                $('#btnNewTask').click(function () {
+                    CC.crowdsourcing.createTask(shellFrame);
+                });
+                $('#btnPublishTask').click(function () {
+                    var selObjVersAndPros = shellFrame.ActiveListing.CurrentSelection.ObjectVersionsAndProperties;
+                    if (selObjVersAndPros.count == 1) {
+                        var classId = MF.alias.classType(vault, md.crowdSrcTask.classAlias);
+                        var sItem = selObjVersAndPros.Item(1).VersionData;
+                        if(sItem.Class !== classId) return shellFrame.ShellUI.ShowMessage("请选择待发布的众包任务！");
+                        var props = selObjVersAndPros.Item(1).Properties;
+
+                        var propIdPubId = MF.alias.propertyDef(vault, md.crowdSrcTask.propDefs.PublishID);
+                        var publishId = props.SearchForProperty(propIdPubId).Value.DisplayValue;
+                        if (publishId) return shellFrame.ShellUI.ShowMessage("所选众包任务已发布！");
+
+                        var propIdState = MF.alias.propertyDef(vault, md.crowdSrcTask.propDefs.CrowdSrcState);
+                        var state = props.SearchForProperty(propIdState).Value.DisplayValue;
+                        if (state === "编辑中") {
+                            var projId = CC.getProjectId(vault);
+                            var creatorId = CC.getUserId(vault);
+                            var title = sItem.Title;
+                            var propIdDesc = parseInt(MFBuiltInPropertyDefAssignmentDescription);
+                            var desc = props.SearchForProperty(propIdDesc).Value.DisplayValue;
+                            var propIdBudget = MF.alias.propertyDef(vault, md.crowdSrcTask.propDefs.Budget);
+                            var budget = props.SearchForProperty(propIdBudget).Value.Value;
+                            var propIdLoc = MF.alias.propertyDef(vault, md.crowdSrcTask.propDefs.Area);
+                            var location = props.SearchForProperty(propIdLoc).Value.DisplayValue;
+                            var propIdStartUtc = MF.alias.propertyDef(vault, md.crowdSrcTask.propDefs.StartDate);
+                            var startUtc = props.SearchForProperty(propIdStartUtc).Value.Value;
+                            var propIdEndUtc = MFBuiltInPropertyDefDeadline;
+                            var endUtc = props.SearchForProperty(propIdEndUtc).Value.Value;
+                            var propIdBidEndUtc = MF.alias.propertyDef(vault, md.crowdSrcTask.propDefs.BidInvitingDeadline);
+                            var bidEndUtc = props.SearchForProperty(propIdBidEndUtc).Value.Value;
+                            
+                            var srcData = {
+                                "ProjId": projId,
+                                "CreatorId": creatorId,
+                                "Title": title,
+                                "Desc": desc,
+                                "Budget": budget,
+                                "Location": location,
+                                "StartUtc": new Date(startUtc),
+                                "EndUtc": new Date(endUtc),
+                                "BidEndUtc": new Date(bidEndUtc)
+                            }
+                            var host = webapi.getApiHost(vault);//"http://192.168.2.35:8080/"
+                            //alert(srcData.ProjId + "-" + srcData.CreatorId + "-" + srcData.Title + "-" + srcData.StartUtc + "\r\n" + host);
+                            var token = CC.getToken(vault);
+                            var apiRes = webapi.createContactProj(vault, srcData, token);
+                            var resObj = $.parseJSON(apiRes);
+                            if (resObj.status !== 200) {
+                                alert(resObj.response);
+                            } else {
+                                publishId = resObj.response.ProjectId;
+                                CC.crowdsourcing.publishTask(shellFrame, sItem, publishId);
+                            }
+                            //var apiUrl = host + "api/Project/Contract";
+                            //$.ajax({
+                            //    type: "POST",
+                            //    url: apiUrl,
+                            //    contentType: "application/json; charset=utf-8",
+                            //    //dataType: "json",
+                            //    data:srcData,
+                            //    async: true,
+                            //    success: function (data) {
+                            //        //alert("成功！");
+                            //        publishId = data;
+                            //        CC.crowdsourcing.publishTask(shellFrame, sItem, publishId);
+                            //    },
+                            //    error: function (xmlHttpRequest, textStatus, errorThrown) {
+                            //        alert("获取失败：(status:" + xmlHttpRequest.status + ", readyState:" + xmlHttpRequest.readyState +
+                            //                ", textStatus:" + textStatus + ", errorThrown: " + errorThrown + ")");
+                            //    }
+                            //});
+                        } else {
+                            shellFrame.ShellUI.ShowMessage("请选择待发布的众包任务！");
+                        }
+                    } else {
+                        shellFrame.ShellUI.ShowMessage("请选择一个待发布的众包任务！");
+                    }
+                });
+                $('#btnViewBid').click(function () {                 
+                    var selObjVersAndPros = shellFrame.ActiveListing.CurrentSelection.ObjectVersionsAndProperties;
+                    if (selObjVersAndPros.count == 1) {
+                        var classId = MF.alias.classType(vault, md.crowdSrcTask.classAlias);
+                        var sItem = selObjVersAndPros.Item(1).VersionData;
+                        var props = selObjVersAndPros.Item(1).Properties;
+                        var propIdPubId = MF.alias.propertyDef(vault, md.crowdSrcTask.propDefs.PublishID);
+                        var publishId = props.SearchForProperty(propIdPubId).Value.DisplayValue;
+                        if (sItem.Class === classId && publishId) {
+                            var prefix = webapi.getProjWebHost(vault);//"http://prj.dbworld.cn/";
+                            var url = prefix + publishId + ".html";
+                            openNewBrowserWindow(url);
+                        } else {
+                            shellFrame.ShellUI.ShowMessage("请选择已发布的众包任务！");
+                        }
+                    } else {
+                        shellFrame.ShellUI.ShowMessage("请选择已发布的众包任务！");
+                    }
+                });               
+            };
+        }
+    </script>
+</head>
+<body id="pageBody">
+    <div id="btnGroup">
+        <!--<ol class="list-nav">
+            <li class="list-nav-item" id="btnNewTask"><img alt="新建众包任务" src="images/buttons/写信.png" />&nbsp;新建众包任务&nbsp;&nbsp;&nbsp;</li>
+            <li class="list-nav-item" id="btnPublishTask"><span class="vr-symbol">|&nbsp;</span><img alt="发布众包任务" src="images/buttons/回复全部.png" />&nbsp;发布众包任务&nbsp;&nbsp;</li>
+            <li class="list-nav-item" id="btnViewBid"><span class="vr-symbol">|&nbsp;</span><img alt="查看招投标进展" src="images/buttons/转发.png" />&nbsp;查看招投标进展</li>
+        </ol>-->
+    </div>
+    <div id="fullareadiv" style="width: 100%; height: 90%; padding: 0px; margin: 0px 0px 0px 0px;  border: 0px;">
+        <div id="listings" class="mf-panel-container" style="width: 100%; height: 100%; padding: 0px;margin: 0px; border: 0px;">
+        </div>
+    </div>
+</body>
+</html>

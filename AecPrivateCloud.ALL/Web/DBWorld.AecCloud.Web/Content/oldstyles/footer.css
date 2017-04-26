@@ -1,0 +1,59 @@
+﻿/**
+    ** time : 2014 - 11 - 27
+    ** pro ： AECLOUD 网站
+    ** author : 肖颖
+    ** main : AECLOUD 底部样式
+**/
+
+footer {
+    /*background:#54C4F2;*/
+    padding-top: 20px;
+    margin: 0 auto;
+    /*font-size: 13px;*/
+    min-width:760px;
+}
+    footer > nav {
+        background:inherit;
+        padding-bottom:20px;
+        width:100%;
+    }
+
+    footer .nav_footer_title {
+        font-size: 16px;
+        font-weight:bold;
+    }
+
+    /*footer > nav .nav_footer {
+        width: 19%;
+    }*/
+
+        footer > nav .nav_footer a {
+            color: #fff;
+            display: block;
+            line-height: 25px;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align:center;
+        }
+
+            footer > nav .nav_footer a:hover {
+                text-decoration: underline;
+            }
+
+            .nav_footer.row {
+                text-align: right;
+            }
+
+.webInformation {
+    background:#43484e;
+    color: #fff;
+    font-size: 12px;
+    padding: 10px 0;
+    text-align: center;
+}
+
+    .webInformation span {
+        font-size: 14px;
+    }

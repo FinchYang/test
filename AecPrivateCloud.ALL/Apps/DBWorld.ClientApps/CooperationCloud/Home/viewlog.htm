@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>查看工作日志</title>
+    <!-- Styles used on the dashboard -->
+    <link href="style/main.css" rel="stylesheet" />
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <!-- Helper scripts --> 
+    <script type="text/javascript" src="scripts/home_common.js"></script>
+    <script type="text/javascript" src="scripts/listing_common.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/utilities.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/localization.js"></script>
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/mf/client.js"></script>
+    <script type="text/javascript" src="scripts/mf/ui.js"></script>
+    <script type="text/javascript" src="scripts/mf/objectOps.js"></script>
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+    <script type="text/javascript" src="scripts/cc/public.js"></script>
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/mf/client.js"></script>
+    <script type="text/javascript" src="scripts/md/report.js"></script>
+    <script type="text/javascript" src="scripts/cc/viewlog.js"></script>
+    
+    <script type="text/javascript">
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+ 
+                // Shortcuts.
+                var shellFrame = dashboard.Parent;
+                var loc = new localization();
+                var additionalSectionShown = false;
+                 
+                initializeLayout(dashboard, shellFrame);
+
+                //根据路径创建Listing
+                var listing = createListingForPath(shellFrame, loc, $("#listing_log"),  shellFrame.CurrentPath,
+                    function (container, objectsCount) {
+                        // Specify the relative height of this listing.
+                        var heightNumber = 20;
+                        if (objectsCount <= 2)
+                            heightNumber = 15;
+                        if (objectsCount <= 1)
+                            heightNumber = 10;
+                        if (objectsCount > 20)
+                            heightNumber = 30;
+                        container.data("heightNumber", heightNumber);
+                        additionalSectionShown = true;
+                    });
+
+                if (listing) CC.SetListingTheme(listing);
+
+                //获取vault对象
+                var vault = shellFrame.ShellUI.Vault;
+
+                //取出json文件中需要显示的列id 
+                var temp = CC.viewlog.GetArray(vault);
+                var folderDefs = shellFrame.CurrentFolder;
+                publicUtils.SetListingHeader(folderDefs, shellFrame, temp);
+
+                // Listen to the ActiveListingChanged event.
+                shellFrame.Events.Register(MFiles.Event.ActiveListingChanged, getActiveListingChangedHandler(shellFrame));
+
+                // Resize panes.
+                $(window).resize(resized);
+                resized();
+            };
+        }
+    </script>
+</head>
+<body>
+    <div id="fullareadiv" style="width: 100%; height: 100%; padding: 0px; margin: 0px; border: 0px;">
+        <div id="listings" class="mf-panel-container" style="width: 100%; height: 100%; padding: 0px;margin: 0px; border: 0px;">
+            <div id="listing_log" class="mf-panel" style="width: 100%; height: 50%; padding: 0px;margin: 0px; border: 0px; overflow: hidden;">
+                <div id="divlog">
+                </div>
+                <div class="mf-listing-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

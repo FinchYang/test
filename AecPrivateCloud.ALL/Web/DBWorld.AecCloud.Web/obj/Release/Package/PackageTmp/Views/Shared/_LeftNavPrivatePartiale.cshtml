@@ -1,0 +1,167 @@
+﻿<script type="text/javascript">
+    $(function () {
+        //左侧导航点击效果
+        $(".asideWrap>a").hover(function () {
+            //点击a标签，当前标签紧挨着的下一个ul显示，其他的ul隐藏。
+            //$(this).siblings(".ul_list").hide().end().next(".ul_list").show("100");
+            //$(this).addClass("on").siblings().removeClass("on");
+            $(this).addClass("on");
+        }, function () {
+            if ($(this).next(".ul_list").is(":visible")) {
+                return false;
+            } else {
+                $(this).removeClass("on");
+            }
+        });
+        //进入页面默认第一个展开
+        // $(".asideWrap>a:first").next("ul").show();
+
+        $(".UpDown").click(function () {
+            $(this).parents("a").siblings(".ul_list").hide().end().next(".ul_list").show("100").end().addClass("on").siblings().removeClass("on");
+            $(this).parents(".asideWrap").find(".UpDown").html('<img src="/Content/Images/asideup.png" />');
+            $(this).html('<img src="/Content/Images/asidedown.png" />');
+            return false;
+        });
+        //进入页面默认第一个展开
+        //$(".asideWrap .UpDown:first").click();
+    })
+</script>
+
+
+
+<style>
+    .indentation {
+        margin-left: 36px;
+        /*margin-top: 1px;
+        margin-bottom: 1px;*/
+        /*background-color: silver;*/
+        list-style: none;
+    }
+
+    li.menulistyle {
+        /*background-color: silver;*/
+        padding-bottom: 6px !important;
+        padding-top: 1px !important;
+        padding-left: 3px;
+        border-top: 1px solid white;
+        font-size: 1em;
+        height: 2em;
+        margin-right: 5px;
+        background: linear-gradient(to right,silver,white);
+        border-radius: 2px 8px;
+    }
+</style>
+
+<aside class="left">
+    <div class="asideWrap">
+        <img src="/Content/Images/leftTop.png" alt="" />
+        <a style="border-radius: 5px 20px 5px 20px;" href="@Url.Action("Personal", "Manage", new { InfoType = "personalInfo" })" style="" title="我的账户">
+            我的账户
+            <div class="UpDown"><img src="/Content/Images/asideup.png" /></div>
+        </a>
+        <ul class="indentation" >
+            <li class="menulistyle">
+                <a href="@Url.Action("UserInfoEdit", "Manage", new { InfoType = "personalInfo" })" title="修改姓名">
+                    修改个人信息
+                </a>
+            </li>
+            <li class="menulistyle">
+                <a href="@Url.Action("ChangePassword", "Manage", new { InfoType = "professionInfo" })" title="修改用户名、密码">
+                    修改密码
+                </a>
+            </li>
+            @*<li>
+                <a href="javascript:void(0);" title="我的收藏" class="disabledLink">
+                    我的收藏
+                </a>
+            </li>*@
+        </ul>
+        @*<a href="@Url.Action("Index", "BIM")" title="我的项目">
+            我的项目
+            <div class="UpDown"><img src="/Content/Images/asideup.png" /></div>
+        </a>
+        <ul class="ul_list">
+            <li>
+                <a href="javascript:void(0);" title="我的项目模板" class="disabledLink">
+                    我的项目模板
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" title="其他项目" class="disabledLink">
+                    其他项目
+                </a>
+            </li>
+        </ul>
+
+        <a href="javascript:void(0);" title="我的知识" class="disabledLink">
+            我的知识
+            <div class="UpDown"><img src="/Content/Images/asideup.png" /></div>
+        </a>
+        <ul class="ul_list">
+            <li>
+                <a href="javascript:void(0);" title="我的文档" class="disabledLink">
+                    我的文档
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" title="我的下载" class="disabledLink">
+                    我的下载
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" title="我的建议" class="disabledLink">
+                    我的建议
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" title="我的积分" class="disabledLink">
+                    我的积分
+                </a>
+            </li>
+        </ul>
+
+        <a href="javascript:void(0);" title="我的应用" class="disabledLink">
+            我的应用
+            <div class="UpDown"><img src="/Content/Images/asideup.png" /></div>
+        </a>
+        <ul class="ul_list">
+            <li>
+                <a href="javascript:void(0);" title="我的订单" class="disabledLink">
+                    我的订单
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" title="我的收益" class="disabledLink">
+                    我的收益
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" title="已购买应用" class="disabledLink">
+                    已购买应用
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" title="已发布应用" class="disabledLink">
+                    已发布应用
+                </a>
+            </li>
+        </ul>
+
+        <a href="javascript:void(0);" title="个性化设置" class="disabledLink">
+            个性化设置
+            <div class="UpDown"><img src="/Content/Images/asideup.png" /></div>
+        </a>
+        <ul class="ul_list">
+            <li>
+                <a href="javascript:void(0);" title="我的浏览记录" class="disabledLink">
+                    我的浏览记录
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" title="我的收益" class="disabledLink">
+                    我的评论
+                </a>
+            </li>
+        </ul>*@
+    </div>
+</aside>

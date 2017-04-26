@@ -1,0 +1,266 @@
+﻿@model PagedList.IPagedList<AecCloud.Service.Vaults.UnitPerformaceModel>
+@using System
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var homeUrl = AecCloud.BaseCore.Utility.GetHost(Request.Url);
+}
+
+<style>
+    #divTitle {
+        margin-top: 5px;
+        margin-right: 20px;
+        background-color: #FFFFFF;
+        width: 1000px;
+        height: 30px;
+    }
+
+    #corbar {
+        float: left;
+        margin-left: 8px;
+        margin-top: 3px;
+        width: 6px;
+        height: 24px;
+        background-color: #017EC1;
+    }
+
+    #title {
+        margin-top: 2px;
+        margin-left: 8px;
+        float: left;
+        font-weight: 500;
+        vertical-align: middle;
+        font-size: 16px;
+    }
+    td{
+        word-wrap:break-word;
+        text-align:center;
+            }
+    #mainContent {
+        margin-top: 0px;
+        width: 1000px;
+        height: 720px;
+        background-color: #FFFFFF;
+    }
+
+    #placeHolder1 {
+        margin-left: 15px;
+        width: 969px;
+        height: 5px;
+    }
+        th {
+        background-color: #008AD2;
+        text-align: center;
+        border-color: #FFFFFF;
+        color: #FFFFFF;
+        height: 30px;
+        line-height: 18px;
+    }
+   td {
+        border-color: #F0F0F0;
+        height: 28px;
+        text-align: center;
+        word-break: break-all;
+        line-height: 18px;
+    }
+</style>
+@functions{
+    public string GetCompanyPerformRate()
+    {
+        int num = 0;
+        double rate = 0.0;
+        foreach(var item in Model)
+        {
+            if(item.ProjPerformInfos.Count>0)
+            {
+                num++;
+                rate += item.PerformRate;
+            }
+       }
+       if(num>0)
+       {
+           return Math.Round(rate/num, 2).ToString() + "%";
+       }
+       else
+       {
+           return "-";
+       }
+    }
+    public string GetCompanyPerformRateRowspan()
+    {
+        var num = 0;
+        foreach (var item in Model)
+        {
+            if (item.ProjPerformInfos.Count > 0)
+            {
+                num += item.ProjPerformInfos.Count;
+            }
+            else
+            {
+                num++;
+            }
+        }
+        
+        return num.ToString();
+    }
+    public string FillEmptySpace(string str)
+    {
+        if (string.IsNullOrEmpty(str))
+        {
+            return "-";
+        }
+        else
+        {
+            return str;
+        }
+    }
+
+    public string StandardPerformRate(String rateStr)
+    {
+        var rateDouble = double.Parse(rateStr);
+        return Math.Round(rateDouble, 2).ToString() + "%";
+    }
+    public string StandRowSpan(string str)
+    {
+        int num = int.Parse(str);
+        if (num == 0)
+        {
+            num = 1;
+        }
+        return num.ToString();
+    }
+    
+}
+<div id="content">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section class="right">
+       @*<div><h4 class="noticetable">项目报表</h4></div>*@
+        <div id="divTitle">
+            <div id="corbar"></div>
+            <div id="title">项目报表 <img src="/Content/Images/mdd/副级导航.png" /> 单位工期履约率统计</div>
+        </div>
+        @*<div class="noticetable" style="margin-left: 1em">*@
+            <h5>
+                <span style="padding: 5px;"><a href="javascript:history.go(-1)">返回总表</a></span>
+            </h5>
+        @*</div>*@
+        <div id="mainContent">
+            <div style="overflow-x:auto;overflow-y:auto;height:450px;width:975px">
+                <table style="margin-left:12px;margin-top:-14px;">
+                    <caption>中建八局</caption>
+                    <thead style="background-color: #1a83cb;color: white;min-width:800px;">
+                        <tr>
+                            <th style="min-width: 60px;" rowspan="2">序列1</th>
+                            <th style="min-width: 80px;" rowspan="2">项目类别</th>
+                            <th style="min-width: 60px;" rowspan="2">序号2</th>
+                            <th style="min-width: 200px;" rowspan="2">项目名称</th>
+                            <th style="min-width: 240px;" colspan="3">合同情况</th>
+                            <th style="min-width: 80px;" rowspan=" 2">变更(调整)竣工时间</th>
+                            <th style="min-width: 80px;" rowspan="2">工期（日历天）</th>
+                            <th style="min-width: 520px;" colspan="5">工期成本情况</th>
+                            <th style="min-width: 200px;" rowspan="2">业主确认工期顺眼资料说明（附件）</th>
+                            <th style="min-width: 60px;" rowspan="2">是否预警</th>
+                            <th style="min-width: 200px;" rowspan="2">备注</th>
+                            <th style="min-width: 80px;" rowspan="2">项目工期履约率</th>
+                            <th style="min-width: 120px;" rowspan="2">按项目类别统计的履约率</th>
+                            <th style="min-width: 80px;" rowspan="2">公司工期履约率</th>
+                        </tr>
+                        <tr>
+                            <th style="min-width: 80px;">合同额(万元)</th>
+                            <th style="min-width: 80px;">开工日期</th>
+                            <th style="min-width: 80px;">竣工日期</th>
+                            <th style="min-width: 100px;">实际延误天数</th>
+                            <th style="min-width: 100px;">已获业主确认工期顺延天数</th>
+                            <th style="min-width: 100px;">未获业主确认工期顺延天数</th>
+                            <th style="min-width: 100px;">累计工期成本增加</th>
+                            <th style="min-width: 120px;">已获业主确认工期费用补偿金额</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td rowspan="@StandRowSpan(Html.DisplayFor(modeItem => item.ProjPerformInfos.Count).ToString())" )>@Html.DisplayFor(modeItem => item.Sn) </td>
+                            <td rowspan="@StandRowSpan(Html.DisplayFor(modeItem => item.ProjPerformInfos.Count).ToString())" )>@Html.DisplayFor(modeItem => item.ProjClass) </td> 
+                            @if (item.ProjPerformInfos.Count == 0)
+                            {
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                                <td>@("-") </td>
+                            }
+                            @foreach (var projInfo in item.ProjPerformInfos)
+                            {
+                                if (item.ProjPerformInfos[0].Equals(projInfo))
+                                {
+                                    <td>@Html.DisplayFor(modeItem => projInfo.Sn) </td>
+                                    <td>@Html.DisplayFor(modeItem => projInfo.ProjName) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ProjValue).ToString())</td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.StartDate).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.CompleteDate).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ChangedCompeteDate).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ProjPeroid).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.RealDelayTime).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ComfirmDelayTime).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.UncomfirmDelayTime).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.TotalProjValue).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ComfirmCompenValue).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ComfirmCompenExplain).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.IsWarning).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.Remark).ToString()) </td>
+                                    <td>@StandardPerformRate(Html.DisplayFor(modeItem => projInfo.PerformRate).ToString())</td>
+                                    <td rowspan="@StandRowSpan(Html.DisplayFor(modeItem => item.ProjPerformInfos.Count).ToString())">@StandardPerformRate((Html.DisplayFor(modeItem => item.PerformRate).ToString())) </td>
+                                }
+                            }
+                            @if (Model[0].Equals(item))
+                            {
+                                <td rowspan="@(GetCompanyPerformRateRowspan())">@(GetCompanyPerformRate())</td>
+                            }
+                        </tr>
+                        foreach (var projInfo in item.ProjPerformInfos)
+                        {
+
+                            if (!item.ProjPerformInfos[0].Equals(projInfo))
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modeItem => projInfo.Sn) </td>
+                                    <td>@Html.DisplayFor(modeItem => projInfo.ProjName) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ProjValue).ToString())</td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.StartDate).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.CompleteDate).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ChangedCompeteDate).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ProjPeroid).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.RealDelayTime).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ComfirmDelayTime).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.UncomfirmDelayTime).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.TotalProjValue).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ComfirmCompenValue).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.ComfirmCompenExplain).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.IsWarning).ToString()) </td>
+                                    <td>@FillEmptySpace(Html.DisplayFor(modeItem => projInfo.Remark).ToString()) </td>
+                                    <td>@StandardPerformRate(Html.DisplayFor(modeItem => projInfo.PerformRate).ToString())</td>
+                                </tr>
+                            }
+                        }
+                    }
+
+                </table>
+            </div>
+            </div>
+</section>
+</div>

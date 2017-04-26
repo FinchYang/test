@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "NewsDetails";
+}
+<script type="text/javascript">
+    $(function () {
+
+        var newId = getUrlParam("newsId");
+        var count = getUrlParam("count");
+        LoadNews(newId);
+
+        $("#prev_next").html("");
+        if (newId == count && newId == 1) {
+            return false;
+        }
+        else if (newId == count && newId != 1) {
+            $("#prev_next").append("<a href='#' class='next right' title='下一篇'>下一篇</a>");
+        }
+        else if (newId != count && newId == 1) {
+            $("#prev_next").append("<a href='#' class='prev left' title='上一篇'>上一篇</a>");
+        } else {
+            $("#prev_next").append("<a href='#' class='next right' title='下一篇'>下一篇</a>");
+            $("#prev_next").append("<a href='#' class='prev left' title='上一篇'>上一篇</a>");
+        }
+
+        //新闻和公告均采用得是倒叙的方式
+        $("#prev_next").on("click", "a", function () {
+            if ($(this).attr("class") == "prev left") {
+                location.href = "@Url.Content("/NewsAnnounce/NewsDetails")?newsId=" + (parseInt(newId) + 1) + "&count=" + count;
+            } else {
+                location.href = "@Url.Content("/NewsAnnounce/NewsDetails")?newsId=" + (parseInt(newId) - 1) + "&count=" + count;
+            }
+        });
+    });
+
+    function LoadNews(newId) {
+        $.post("/NewsAnnounce/GetDetails", { id: newId, type: "news" }, function (data) {
+            var res = strToJson(data);
+            $("#newsTitle").html(res.title);
+            $("#newsDate").html(res.date);
+            $("#newsContent").html(res.content);
+        });
+    }
+</script>
+
+
+<!--当前位置-->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "Home", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="新闻动态" name="current_news">新闻动态</a>
+</div>
+
+<div id="content" class="clearfix">
+    @Html.Partial("_LeftNavPartial")
+    <section class="right">
+        <!-- 内容版块 -->
+        <div class="secondContent">
+            <!--新闻内容-->
+            <div class="title NewsTitle marginBottom" id="newsTitle">
+
+            </div>
+            <div class="newTime blackTitle marginBottom" id="newsDate">
+
+            </div>
+            <div class="newContent marginBottom" id="newsContent">
+
+            </div>
+            <div class="newBtn clearfix" id="prev_next">
+                <a href="#" class="prev left" title="上一篇">上一篇</a>
+                <a href="#" class="next right" title="下一篇">下一篇</a>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+

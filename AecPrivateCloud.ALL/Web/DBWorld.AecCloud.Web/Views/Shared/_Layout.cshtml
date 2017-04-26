@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - DBWorldCloud</title>
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/CscecNormalize.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/loading.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/header.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/base.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/layout.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/second.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/footer.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/login.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/oldstyles/cscec82.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-3.1.1.min.js" type="text/javascript"></script>
+    @*<script src="~/Scripts/jquery-1.10.2.min.js" type="text/javascript"></script>*@
+    <script src="~/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/oldscripts/Mfile.js" type="text/javascript"></script>
+    <script src="~/Scripts/oldscripts/jquery.flexslider-min.js" type="text/javascript"></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    
+    <script src="~/Scripts/oldscripts/commonMethod.js" type="text/javascript"></script>
+    <script src="~/Scripts/oldscripts/kefu.js"></script>
+    <style type="text/css">
+        .foot-bottom {
+            /*position: absolute;*/
+            bottom: 0px;
+            height: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    @*<div id="online_qq_layer">
+        <div class="onlineHover">
+            <img class="zaixiankefu" src="~/Content/Images/floatShow.png" />
+        </div>
+        <div id="onlineService">
+            <div class="onlineMenu">
+                <ul>
+                    <li class="tli zixun">在线咨询</li>
+                </ul>
+                <h3 class="">
+                    <a title="在线QQ咨询_DBWorld" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2938784519&amp;site=qq&amp;menu=yes" target="_blank">
+                        QQ在线客服
+                    </a>
+                </h3>
+            </div>
+            <div class="onlineMenu">
+                <ul>
+                    <li class="tli phone">电话咨询</li>
+                </ul>
+                <h3 class="">400-820-6808</h3>
+            </div>
+            <div class="btmbg"></div>
+        </div>
+    </div>*@
+    <!-- online -->
+    <!--头部-->
+    <header>
+        <div class="headerContent ContentWrap" id="top1">
+            <div class="AELogo">
+                <a href="@Url.Action("Index", "BIM")" title="DBWorld首页">
+                    <img src="~/Content/Images/DBWorld-Logobig.png" alt="DBWorld logo图片" title="DBWorld logo图片" />
+                </a>
+            </div>
+            <div class="followUs" style="width: 500px;">
+                @Html.Partial("_LoginPartial")
+            </div>
+            @*<div class="headerNavContent">
+                @Html.Partial("_NavPartial")
+            </div>*@
+        </div>
+    </header>
+
+    <div class="body-container">
+        @RenderBody() 
+    </div>
+    <!-- 底部footer -->
+    <footer class="foot-bottom">
+        @*<nav class="clearfix ContentWrap">
+                <div class="nav_footer row">
+                    <ul class="list-inline">
+                        <li class="nav_footer_title col-md-2">
+                            <a href="@Url.Action("Index", "AECCloudClient")" title="DBWorld客户端"></a>
+                        </li>
+                        <li class="nav_footer_title col-md-2 col-md-offset-3">
+                            <a href="@Url.Action("Index", "BIM")" title="协同云"></a>
+                        </li>
+                        <li class="nav_footer_title col-md-2 col-md-offset-3">
+                            <a href="@Url.Action("AboutUs", "Help")" title="关于我们"></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>*@
+        @*<div class="webInformation">
+                Copyright<span>&copy;</span> 2002-2014 凯德版权所有 沪ICP备14022522号-1 沪B2-20100316 出版物经营许可证新出发沪批字第A-243号
+            </div>*@
+    </footer>
+    <!-- footer -->
+    
+    @RenderSection("scripts", required: false)
+</body>
+</html>

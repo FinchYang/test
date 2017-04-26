@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>安全台账</title>
+
+    <link rel="stylesheet" href="styles/jquery.treeview.css" />
+    <link rel="stylesheet" href="styles/main1.css" />
+    <link rel="stylesheet" href="styles/doc-category.css" />
+
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/jquery.layout.js"></script>
+    <script src="scripts/jquery.treeview/jquery.treeview.js"></script>
+    <script src="scripts/md.js"></script>
+    <script src="scripts/mf/alias.js"></script>
+    <script src="scripts/mf/client.js"></script>
+    <script src="scripts/mf/ui.js"></script>
+    <script src="scripts/mf/objectOps.js"></script>
+    <script src="scripts/UIControlLibrary/localization1.js"></script>
+    <script src="scripts/UIControlLibrary/home_common.js"></script>
+    <script src="scripts/UIControlLibrary/listing_common.js"></script>
+    <script src="scripts/knowDocOps.js"></script>
+    <script src="scripts/doc-category.js"></script>
+     <script src="laydate/laydate.js"></script>
+
+    <script>
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            var data = dashboard.CustomData;            
+            var shellFrame = dashboard.Parent;
+            var loc = new localization(); 
+            var vault = data.Vault;
+            var theview=null;
+            var thelist=null;
+           
+
+            initializeLayout(dashboard, shellFrame);            
+            //layout
+            initLayout();
+        
+         var FilterPrincipal = vault.ExtensionMethodOperations.ExecuteVaultExtensionMethod("GetFilterPrincipal", "");
+          var Principal = eval('(' + FilterPrincipal + ')'); //http://www.cnblogs.com/webflash/archive/2009/11/15/1603537.html
+           var htmlStr="<select id=\"PrincipalSelector\" >  <option value =\"0\" selected>全部</option> ";
+            for (var l = 0; l < Principal.length; l++){
+                htmlStr += " <option value=\""
+                    +  Principal[l].Id 
+                    + "\">" +  Principal[l].Name + "</option>";
+            }
+              htmlStr+="</select>";
+               $("#divPrincipal").append($(htmlStr));
+            var FilterReceiver = vault.ExtensionMethodOperations.ExecuteVaultExtensionMethod("GetFilterReceiver", "");
+          var Receiver = eval('(' + FilterReceiver + ')'); //http://www.cnblogs.com/webflash/archive/2009/11/15/1603537.html
+            htmlStr="<select id=\"ReceiverSelector\" >  <option value =\"0\" selected>全部</option> ";
+            for (var l = 0; l < Receiver.length; l++){
+                htmlStr += " <option value=\""
+                    +  Receiver[l].Id 
+                    + "\">" +  Receiver[l].Name + "</option>";
+            }
+              htmlStr+="</select>";
+                 htmlStr+=" <label for=\"startdate\">开始日期：</label><input id=\"startdate\" onclick=\"laydate()\" />"
+           htmlStr+=" <label for=\"enddate\">截止日期：</label><input id=\"enddate\" onclick=\"laydate()\" />"
+               $("#divReceiver").append($(htmlStr));
+            var date = new Date();
+    document.getElementById("startdate").value = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+      document.getElementById("enddate").value =  date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+      
+        
+
+            $("#btnOK").on("click", function(){
+               
+                var pid=document.getElementById("PrincipalSelector").value;
+                var rid=document.getElementById("ReceiverSelector").value;
+                var sdate=document.getElementById("startdate").value;
+                var edate=document.getElementById("enddate").value;
+                var sConditons = MFiles.CreateInstance("SearchConditions");
+                {
+                    var conditionClass = MFiles.CreateInstance("SearchCondition");//创建搜索条件
+                conditionClass.ConditionType = MFConditionTypeGreaterThanOrEqual;//搜索操作
+                conditionClass.Expression.DataPropertyValuePropertyDef = MF.alias.propertyDef(vault, "PropCheckDate")
+                            conditionClass.TypedValue.SetValue(MFDatatypeDate, sdate);//属性值
+                sConditons.Add(-1, conditionClass);
+                }
+                {
+                    var conditionClass = MFiles.CreateInstance("SearchCondition");//创建搜索条件
+                conditionClass.ConditionType = MFConditionTypeLessThanOrEqual;//搜索操作
+                conditionClass.Expression.DataPropertyValuePropertyDef = MF.alias.propertyDef(vault, "PropCheckDate")
+                            conditionClass.TypedValue.SetValue(MFDatatypeDate, edate);//属性值
+                sConditons.Add(-1, conditionClass);
+                }
+                if (pid!= 0) {
+                    var conditionClass = MFiles.CreateInstance("SearchCondition");//创建搜索条件
+                    conditionClass.ConditionType = MFConditionTypeEqual;//搜索操作
+                    conditionClass.Expression.DataPropertyValuePropertyDef = MF.alias.propertyDef(vault, "PropPrincipal")
+                    var lu=MFiles.CreateInstance("Lookup");
+                    lu.Item =pid;
+                    conditionClass.TypedValue.SetValue(MFDatatypeLookup, lu);//属性值
+                    sConditons.Add(-1, conditionClass);
+                } 
+                if (rid!= 0) {
+                    var conditionClass = MFiles.CreateInstance("SearchCondition");//创建搜索条件
+                    conditionClass.ConditionType = MFConditionTypeEqual;//搜索操作
+                    conditionClass.Expression.DataPropertyValuePropertyDef = MF.alias.propertyDef(vault, "PropSecureReceiver")
+                    var lu=MFiles.CreateInstance("Lookup");
+                    lu.Item =rid;
+                    var lus=MFiles.CreateInstance("Lookups");
+                    lus.add(-1,lu);
+                    conditionClass.TypedValue.SetValueToMultiSelectLookup( lus);//属性值
+                    sConditons.Add(-1, conditionClass);
+                } 
+                    
+                var otid=vault.GetMetadataStructureItemIDByAlias(MFMetadataStructureItemObjectType,"OtSecureAdjustNotice");
+                    theview = MF.ObjectOps.getTempSearchView(vault, "", otid, "", sConditons);
+
+                var viewPath = MF.ObjectOps.getSearchViewLoc(vault, theview);
+                var arry = viewPath.split("\\");
+                var tempView = "";
+                for (var i = 2; i < arry.length - 1; i++) {
+                    tempView += arry[i] + "\\";
+                }
+                var scoreIndex = SetListingHeader( theview.ID,vault) ;
+               thelist= CC.category.create_dashboard(shellFrame, loc, "fullareadiv", tempView, vault,  theview.ID);
+               MF.ui.resetTempSearchView(vault);
+               //alert(scoreIndex);
+            });
+    $("#btnPrint").on("click", function(){
+        var pid=document.getElementById("PrincipalSelector").value;
+                var rid=document.getElementById("ReceiverSelector").value;
+                var sdate=document.getElementById("startdate").value;
+                var edate=document.getElementById("enddate").value;
+                var input="{\"principal\":"+pid+",\"receiver\":"+rid+",\"startdate\":\""+sdate+"\",\"enddate\":\""+edate+"\"}";
+                
+    var FilterReceiver = vault.ExtensionMethodOperations.ExecuteVaultExtensionMethod("GetSecureNoticeV2", input);
+          var filedata = eval('(' + FilterReceiver + ')'); 
+          	var ObjVer  = MFiles.CreateInstance("ObjVer");
+              ObjVer.SetIDs (filedata.Objtype,filedata.Objid,filedata.Objversion);
+              	var FileVer   = MFiles.CreateInstance("FileVer");
+                  FileVer.ID=filedata.Fileid;
+                  FileVer.Version=filedata.Fileversion;
+              //   alert(filedata.objtype+"-"+filedata.objid+"-"+filedata.objversion+"-"+filedata.fileid+"-"+filedata.fileversion);
+              vault.ObjectFileOperations.OpenFileInDefaultApplication(0,ObjVer ,FileVer,MFFileOpenMethodOpen)
+              });
+            return function(){   
+            };
+        }  
+       
+        function SetListingHeader(viewid, vault) { 
+            var propDefIds=[];
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropSecureIssues"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropIssueCategory"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropCheckDate"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropSecureReceiver"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropZhengGaiQiXin"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropPrincipal"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropAdjustMeasure"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropAdjustMan"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropSecureAdjustDate"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropFuChaRen"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropRectificationCount"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropReviewDate"));
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropCountercheckDescription"));	
+            propDefIds.push( vault.PropertyDefOperations.GetPropertyDefIDByAlias( "PropRectificationConclusion"));				
+            var folderDefs = MFiles.CreateInstance("FolderDefs");
+            var folderDef = MFiles.CreateInstance("FolderDef");
+            folderDef.SetView(viewid);
+            folderDefs.Add(-1,folderDef);
+            var uiState = vault.ViewOperations.GetFolderUIStateForFolder(false, folderDefs, false);
+            uiState.ListingUIState.ViewMode = MFFolderListingViewModeDetails;
+            var nameColumn;
+            var scoreColumn;
+            var cols = [];
+            var allCount =  uiState.ListingUIState.Columns.Count;
+            for (var i = allCount; i >= 1; i--) {
+                uiState.ListingUIState.Columns.Item(i).Width =90;
+                var id = uiState.ListingUIState.Columns.Item(i).ID;
+                if (id === MFFolderColumnIdName) {
+                    uiState.ListingUIState.Columns.Item(i).Visible = true;
+                    nameColumn = uiState.ListingUIState.Columns.Item(i);
+                }
+                if (id === MFFolderColumnIdScore){
+                    uiState.ListingUIState.Columns.Item(i).Visible = true;
+                    scoreColumn = uiState.ListingUIState.Columns.Item(i);                    
+                }
+                if (isMember(propDefIds, id)) {
+               // if (isMember(propDefIds, id)){    //如果GetArray函数中包含的列，显示出来否则反之
+                   cols.push(uiState.ListingUIState.Columns.Item(i));
+                    uiState.ListingUIState.Columns.Item(i).Visible = true;
+                }
+                uiState.ListingUIState.Columns.Remove(i);                
+            }
+            for(var i = 0;i< cols.length;i++) {
+                cols[i].Position = i;
+                uiState.ListingUIState.Columns.Add(-1, cols[i]);
+            }
+            if (nameColumn) {
+                nameColumn.Position = cols.length;
+                uiState.ListingUIState.Columns.Add(-1, nameColumn);
+            }
+            if (scoreColumn) {
+                scoreColumn.Position = cols.length+1;
+                uiState.ListingUIState.Columns.Add(-1, scoreColumn);
+            }
+            // var index = 0;
+            // var scoreIndex = -1;
+            // for (var j = 1; j <= uiState.ListingUIState.Columns.Count; j++) {
+            //     if(uiState.ListingUIState.Columns.Item(j).ID ===MFFolderColumnIdScore){
+            //         scoreIndex = j;
+            //     }  
+            //     else if (uiState.ListingUIState.Columns.Item(j).Visible == true) {
+            //         uiState.ListingUIState.Columns.Item(j).Position = index++;
+            //     }
+            // }
+            // if (scoreIndex !== -1) {
+            //     uiState.ListingUIState.Columns.Item(scoreIndex).Position = index;
+            // }
+            vault.ViewOperations.SaveFolderUIStateForFolder(false, false, folderDefs, false, uiState);
+            return "ALL: "+ allCount + "; Score: " + uiState.ListingUIState.Columns.Count;
+        };
+     
+     function isMember(ids, id) {
+        for (var i = 0; i < ids.length; i++) { 
+            if (ids[i] === id) { 
+                return true;
+            }
+        }
+        return false;
+    };
+    </script>
+
+    <script>
+        function initLayout(){
+            $("body").layout({ 
+                west__size: 220,//pane的大小
+                spacing_open: 2, // ALL panes
+                spacing_closed: 8,//关闭时边框的间隙
+                togglerContent_open: "<div style='background:red; height: 50px;'></div>",
+                togglerContent_closed: "<div style='background:red; height: 50px;'></div>", //也可以用<img/>
+                togglerTip_open: "收起",
+                togglerTip_closed: "展开",
+                sliderTip: "显示/隐藏侧边栏",//在某个Pane隐藏后，当鼠标移到边框上显示的提示语。
+                resizerTip: "调整大小", //鼠标移到边框时，提示语
+                applyDemoStyles: true 
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="ui-layout-center">
+        <div class="div-center-head" id="search-head">
+            <div id="divPrincipal" style="float:left"><span>负责人</span></div>
+            <div id="divReceiver" style="float:left"><span>接收人</span></div>
+<div  style="float:left"> 
+                <button id="btnOK" >搜索</button>
+            </div>
+            <div  style="float:left"> 
+                <button id="btnPrint" >打印</button>
+            </div>
+        </div>
+        <div class="div-center-content">
+            <div id="fullareadiv"></div>
+        </div>
+    </div>
+</body>
+</html>

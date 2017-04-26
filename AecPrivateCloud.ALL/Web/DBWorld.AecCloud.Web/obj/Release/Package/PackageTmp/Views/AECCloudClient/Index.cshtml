@@ -1,0 +1,505 @@
+﻿@{
+    ViewBag.Title = "DBWorld云平台";
+}
+<script src="~/Scripts/jquery.mousewheel.min.js"></script>
+
+<style>
+    
+    .ContentWrap {
+        width:1163px !important;
+    }
+
+    div.body-container {
+        width: 1250px;
+        margin: 0 auto;
+    }
+
+     div#main-content {
+         width:1163px;
+         background-color:white;
+         border:none;
+         margin: 0 auto;
+     }
+
+    div.sectionTopTitle {
+        background: #fff;
+        border-radius: 0;
+        padding: 0;
+    }
+
+    div.topNav {
+        margin: 0 auto;
+        width: 100%;
+        height: 57px;
+    }
+
+    div#top2 {
+        margin: 0 auto;
+        width: 100%;
+        padding: 5px;
+        border-radius: 0;
+        overflow: hidden;
+    }
+
+
+    div.topNav div[class^=top] {
+        color:#3083eb;
+        float: left;
+        margin: 0 5px;
+        font-weight: bold;
+        height: 57px;
+        padding: 10px 0;
+        width: 220px;
+        text-align: center;
+        background-color:white;
+    }
+
+    div.topNav div[class^=top] img {
+        opacity: 1.0;
+        display: inline-block;
+    }
+
+    div.client div[class^=top] span {
+        opacity: 1.0;
+        display: inline-block;
+        vertical-align: middle;
+        padding-left:5px;
+    }
+
+    div.client div[class^=top] a {
+        opacity: 1.0;
+        display: inline-block;
+        vertical-align: bottom;
+        padding-left:5px;
+    }
+
+    div.client div[class^=top]:hover {
+        border-left: none;
+        background: #3083eb;
+        color: white;
+        cursor: pointer;
+        border-radius: 0;
+        /*transform: scale(1.05);*/
+    }
+
+    div#top2 {
+        margin: 0 auto;
+        padding: 5px;
+        overflow: hidden;
+        background: none;
+        border-radius: 0;
+    }
+
+    div.topNav .sectionTopTitle .client {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    div.doc {
+        width: 100%;
+        height:568px;
+        overflow: hidden;
+        border-top:1px solid #e5e5e5;
+        margin-top:5px;
+    }
+
+    table.docTable tr td {
+        border:none;
+        font-size: 16px;
+        line-height: 20px;
+        padding:0px 50px;
+        overflow: hidden;
+        width: 50%;
+    }
+
+    div.title {
+        color: #3083eb;
+        font-size: 1.425em;
+        font-family: "微软雅黑";
+        font-weight: bold;
+    }
+
+    td p {
+        font-size:14px;
+        color: lightgray;
+        padding-left:10px;
+    }
+
+    .client-btn {
+        display: inline-block;
+    }
+
+
+
+    .client-btn a {
+        background-color: #52ad30;
+        width:222px;
+        height:60px;
+        font-size:16px;
+        display: inline-block;
+        padding-top:20px;
+        padding-left:60px;
+    }
+
+    .client-btn a:hover {
+        text-decoration:none;
+        cursor: pointer;
+    }
+
+    .client-btn a:focus {
+        text-decoration:none;
+    }
+
+    .client-btn a span {
+        padding-left:15px;
+        color: white;
+    }
+
+    .client-btn div {
+        margin: 0 auto;
+        text-align: center;
+        margin-bottom:15px;
+        color: #3083eb;
+    }
+
+    div.down-btn {
+        margin-top:100px;
+        overflow: hidden;
+    }
+
+    .phone-qrcode {
+        display: inline-block;
+        vertical-align: middle; 
+    }
+
+    div.mobile-info {
+        margin-top:250px;
+    }
+
+    div.download-phone {
+        display: inline-block;
+        vertical-align: bottom;
+    }
+
+    .docTableTitle.title {
+        /*margin-top:50px;*/
+    }
+</style>
+
+<!--二级页面头部-->
+
+<div class="toTop" title="返回顶部"></div>
+
+<div id="main-content" class="clearfix">
+    <div class="topNav ">
+        <div id="top2">
+            <div class="sectionTopTitle clearfix">
+                <div class="client clearfix">
+                    <div class="top3">
+                        <img src="/Content/Images/client/下载pc1.png"/>
+                        <span>PC客户端32位</span>
+                    </div>
+                    <div class="top4">
+                        <img src="/Content/Images/client/下载pc1.png"/>
+                        <span>PC客户端64位</span>
+                    </div>
+                    <div class="top5">
+                        <img src="/Content/Images/client/下载安卓.png"/>
+                        <span>Anroid版</span>
+                    </div>
+                    <div class="top6">
+                        <img src="/Content/Images/client/下载ios.png"/>
+                        <span>iPhone版</span>
+                    </div>
+                    <div class="top7" id="down-manual">
+                        <img src="/Content/Images/client/clientTop5.png" />
+                        <span>用户手册下载</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="doc" id="top3">
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td>
+                    <img src="~/Content/Images/client/下载pctup.png" />
+                </td>
+                <td>
+                    <div class="title marginBottom docTableTitle">
+                        项目管理BIM云平台
+                    </div>
+                    <p>
+                        pc客户端下载
+                    </p>
+                    <br />
+                    <br />
+                    <p>
+                        pc版支持：Vista/Win7/Win8/Win10
+                    </p>
+                    <p>
+                        建议使用IE9及以上版本的浏览器
+                    </p>
+
+                    <div class="down-btn">
+                        <div class="client-btn left-btn">
+                            <div>PC客户端32位下载</div>
+                            <a href="@Url.Action("DownloadClient", "AECCloudClient", new {type = "x86"})" id="down-32"><img src="/Content/Images/client/下载biapo.png" /> <span>立即下载</span></a>
+                        </div>
+                        <div class="client-btn right-btn ">
+                            <div>PC客户端64位下载</div>
+                            <a href="@Url.Action("DownloadClient", "AECCloudClient", new { type = "x64" })" id="down-64"><img src="/Content/Images/client/下载biapo.png" /> <span>立即下载</span></a>
+                        </div>
+                        
+                    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+
+    <div class="doc" id="top4">
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td style="text-align: left;">
+                    <div class="title marginBottom docTableTitle">
+                        项目管理BIM云平台
+                    </div>
+
+                    <div class="mobile-info">
+                        <div class="download-phone">
+                            <p>
+                                DBWorld移动端Android系统
+                            </p>
+                            <p>
+                                若扫描后不能自动下载
+                            </p>
+                            <p>
+                                请选择"在浏览器中打开"下载
+                            </p>
+                            <p style="color: #3083eb;padding-top:5px;">
+                                Android版
+                            </p>
+                            <div class="client-btn">
+                                <a href="http://www.dbworld.cn/Installer/mfiles_v2.5.10.apk" target="_blank" id="down-android"><img src="/Content/Images/client/下载biapo.png" /> <span>立即下载</span></a>
+                            </div>
+                        </div>
+                        <img class="phone-qrcode" alt="Android下载" src="/Content/Images/client/down-Android-img.png" />
+                    </div>
+                    
+                </td>
+                <td>
+                    <img src="~/Content/Images/client/下载anctp.png" />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="doc" id="top5">
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td>
+                    <img src="~/Content/Images/client/下载iphon.png" />
+                </td>
+                <td>
+                    <div class="title marginBottom docTableTitle">
+                        项目管理BIM云平台
+                    </div>
+                    <div class="mobile-info">
+                        <div class="download-phone">
+                            <p>
+                                DBWorld移动端iPhone系统
+                            </p>
+                            <p>
+                                若扫描后不能自动下载
+                            </p>
+                            <p>
+                                @*请选择"在浏览器中打开"下载*@
+                                请在AppStore中直接搜索"m-files"下载
+                            </p>
+                            <p style="color: #3083eb;padding-top:5px;">
+                                iPhone版
+                            </p>
+                            <div class="client-btn">
+                                <a href="https://appsto.re/cn/WblVT.i?from=singlemessage" target="_blank" id="down-iphone"><img src="/Content/Images/client/下载biapo.png" /> <span>立即下载</span></a>
+                            </div>
+                        </div>
+                        <img class="phone-qrcode" alt="iPhone下载" src="/Content/Images/client/down-IOS-img.png" />
+                    </div>
+                    
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    @*<div class="doc" id="top6">
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td style="text-align: left;">
+                    <div class="title marginBottom docTableTitle">
+                        云应用
+                    </div>
+                    <p>
+                        DBWorld集成工程建筑行业常见CAD、CAE、BIM、有限元等常见工程设计软件、热门辅助插件以及常用办公软件，只需要简单“加载”，工程师、设计师、项目经理、施工单位和业主都可以直接预览、操作甚至编辑文档、模型、图纸等文件。
+                    </p>
+
+                </td>
+                <td>
+                    <img src="~/Content/Images/client/client_share.jpg" style="width: 100%;"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+
+    <div class="doc" id="top7">
+        <table cellpadding="0" cellspacing="0" border="0" class="docTable">
+            <tr>
+                <td style="text-align: left;">
+
+                    <div class="clientLink">是时候，改变更多了</div>
+
+                    <div class="clientLink">智慧的凝聚，让我们帮您更专业！</div>
+                    <div class="clientDownload" style="width: 320px; margin: 0 auto;" id="clientDown">
+                        <div class="submitBtn left" style="margin-right: 20px;" id="clientDown">
+                            <a href="@Url.Action("DownloadClient", "AECCloudClient", new {type = "x86"})" class="submitA" title="32位客户端下载">32位客户端下载</a>
+                        </div>
+                        <div class="submitBtn left">
+                            <a href="@Url.Action("DownloadClient", "AECCloudClient", new {type = "x64"})" class="submitA" title="64位客户端下载">64位客户端下载</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>*@
+
+
+</div>
+
+<script>
+
+    $(function () {
+        //点击效果（包括顶部导航、右侧导航）
+
+        var num = [1, 2, 3, 4, 5, 6]; //, 7, 8, 9
+        // num.length = topNum;
+        //alert($("#top2").height());
+        //返回顶部
+        $(".toTop").click(function () {
+            $("html,body").animate({ scrollTop: "0" }, 1000);
+            //$(".rightNav .top1").click();
+        });
+        //每一版的高度
+        var pt = 190;
+        //$(".doc").css("height", $(window).height() - pt);
+        var padTop = pt +"px";
+        var top2 = $("#top2").offset().top;
+        if (top2 <= $(window).scrollTop()) {
+            //$("#main-content .doc:first").css("paddingTop", padTop);
+            $.each(num, function (i, j) {
+                $(".top" + j + "").click(function () {
+                    if (j > 3) {
+                        j = j - 1;
+                    }
+                    $("#main-content .doc:first").css("paddingTop", padTop);
+                    $("html,body").animate({ scrollTop: $("#top" + j + "").offset().top }, 1000);
+                });
+            });
+        } else if (top2 > $(window).scrollTop()) {
+            //$("#main-content .doc:first").css("paddingTop", "0");
+            $.each(num, function (i, j) {
+                $(".top" + j + "").click(function () {
+                    if (j > 3) {
+                        j = j - 1;
+                    }
+                    $("#main-content .doc:first").css("paddingTop", "0");
+                    $("html,body").animate({ scrollTop: $("#top" + j + "").offset().top }, 1000);
+                });
+            });
+        }
+
+        //$(window).scroll(function() {
+        //    if (top2 <= $(window).scrollTop()) {
+        //        $("#main-content .doc:first").css("paddingTop", padTop);
+        //        $("#top2").addClass("posFix").css({ left: ($(window).width() - $("#top2").width()) / 2 });
+        //    } else if (top2 > $(window).scrollTop()) {
+        //        $("#main-content .doc:first").css("paddingTop", "0");
+        //        $("#top2").removeClass("posFix");
+        //    }
+        //});
+
+        $("#down-manual").click(function () {
+            window.open("/Installer/用户手册.pdf", '_blank');
+        });
+
+    });
+
+
+
+
+    //$(window).resize(function () {
+    //    //每一版的高度
+    //    $(".doc").css("height", $(window).height());
+    //});
+
+
+    //鼠标滚动效果、滚动条效果
+    //$(window).scroll(function () {
+    //    var topNum = $("[id^='top']").length;//获取当前页面拥有的锚点个数
+    //    var scrollTop = $(window).scrollTop();
+    //    for (var i = 1; i <= topNum; i++) {
+    //        if ($("#top" + i + "").offset().top <= scrollTop) {
+    //            $(".rightNav .top" + i + "").siblings().removeClass("anchor").end().addClass("anchor");
+    //        }
+    //    }
+    //    //$.each(num, function (i, j) {
+    //    //    if ($("#top" + j + "").offset().top <= scrollTop) {
+    //    //        $(".rightNav .top" + j + "").siblings().removeClass("anchor").end().addClass("anchor");
+    //    //    }
+    //    //});
+    //});
+
+    $("div.client>div").hover(function () {
+        var c = $(this).attr("class");
+        var path;
+        if (c === "top3") {
+            path = "/Content/Images/client/下载pc.png";
+        } else if (c === "top4") {
+            path = "/Content/Images/client/下载pc.png";
+        } else if (c === "top5") {
+            path = "/Content/Images/client/下载安卓1.png";
+        } else if (c === "top6") {
+            path = "/Content/Images/client/下载ios1.png";
+        } else if (c === "top7") {
+            path = "/Content/Images/client/下载1.png";
+        }
+        if (path) {
+            $(this).children().first().attr("src", path);
+        }
+    }, function () {
+        var c = $(this).attr("class");
+        var path;
+        if (c === "top3") {
+            path = "/Content/Images/client/下载pc1.png";
+        } else if (c === "top4") {
+            path = "/Content/Images/client/下载pc1.png";
+        } else if (c === "top5") {
+            path = "/Content/Images/client/下载安卓.png";
+        } else if (c === "top6") {
+            path = "/Content/Images/client/下载ios.png";
+        } else if (c === "top7") {
+            path = "/Content/Images/client/clientTop5.png";
+        }
+        if (path) {
+            $(this).children().first().attr("src", path);
+        }
+    });
+
+</script>
+

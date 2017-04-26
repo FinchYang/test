@@ -1,0 +1,451 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>任务完成状态统计</title>
+    
+    <style>
+        #table_font {
+            width: 100px;
+            text-align: center;
+        }
+
+        #divPanl {
+            width: 142px;
+            height: 18px;
+            margin-bottom: 14px;
+        }
+
+        #divTitle {
+            width: 55px;
+            height: 17px;
+            float: left;
+        }
+
+        #divContent {
+            width: 80px;
+            font-size: 11px;
+            float: left;
+            margin: 0 0 0 3px;
+        }
+
+        #divPanlDate {
+            width: 145px;
+            height: 18px;
+            float: left;
+            margin-left: -15px;
+        }
+
+        #divTitleDate {
+            width: 55px;
+            float: left;
+        }
+
+        #startPicker {
+            width: 69px;
+            height: 16px;
+            float: left;
+            margin: 0 0 0 3px;
+        }
+
+        #imgStart {
+            width: 16px;
+            height: 16px;
+            float: left;
+        }
+
+        #endPicker {
+            width: 70px;
+            height: 16px;
+            float: left;
+            margin: 0 0 0 3px;
+        }
+
+        #dateEnd {
+            width: 91px;
+            height: 18px;
+            float: left;
+        }
+
+        #imgEnd {
+            width: 16px;
+            height: 16px;
+            float: left;
+        }
+
+        #lblSymbol {
+            float: left;
+            color: #36A6EC;
+        }
+
+        #updateReport {
+            float: right;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        #divMember {
+            float: left;
+            margin-right: 35px;
+        }
+
+        #chatContent {
+            text-align: center;
+        }
+
+        #rowHead {
+            height: 15px;
+            color: white;
+        }
+    </style>
+     
+    <!-- Styles used on the dashboard -->
+    <link rel="stylesheet"  href="style/main.css" />
+    <link rel="stylesheet"  href="style/report.css" />
+    
+    <link rel="stylesheet" href="scripts/jquery-ui-1.11.4.custom/jquery-ui.css" />
+    <link rel="stylesheet" href="style/flatbutton.css" />
+    <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap-dropdown-checkbox.css" />
+    <link rel="stylesheet" href="style/bootstrap/bootstrap.min.css">
+    
+    <!-- Include the jQuery Core library -->
+    <script src="scripts/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <script src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script src="scripts/jquery-ui-1.11.4.custom/jquery.datepicker-zh-CN.js"></script>
+    
+    <!-- Include the App library -->
+    <script src="scripts/chart/Chart.js"></script>
+    <script src="scripts/chart/legend.js"></script>
+    <script src="scripts/dropdown-checkbox/bootstrap-dropdown-checkbox.js"></script>
+    <script src="scripts/bootstrap/bootstrap.min.js"></script>
+
+    <script src="scripts/md/report.js"></script>
+    <script src="scripts/md/base.js"></script>
+    <script src="scripts/mf/alias.js"></script>
+    <script src="scripts/mf/objectOps.js"></script>
+    <script src="scripts/cc/reports/tasksstatusreport.js"></script>
+    <script src="scripts/cc/reports/reportOps.js"></script>
+    
+    <script>
+        $(function () {
+            $("#startPicker").removeAttr("disabled");
+            $("#endPicker").removeAttr("disabled");
+        });
+    </script>
+
+    <script>
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+                var vault = dashboard.Vault;
+                var objVn = dashboard.CustomData.objVersion;
+                var props = dashboard.CustomData.properties;
+                var tasks = CC.taskStatusReport.searchAllTasks(vault);
+
+                var dropData = [];
+                var completed = 0, uncompleted = 0;
+                var dropDom = {}, chartDom = {};
+                var report = reportOps.getHistoryReportData(vault, md.taskStatusReport.classAlias, props);
+                if (report && report.reportInfo) {
+                    var reportInfo = JSON.parse(report.reportInfo);
+                    //初始化日期
+                    if (report.deadline) {
+                        $("#startPicker").val(report.startDate.replace(/\//g, "-"));
+                    }
+                    if (report.deadline) {
+                        $("#endPicker").val(report.deadline.replace(/\//g, "-"));
+                    }
+                    //初始化下拉选择框
+                    dropDom = initDropdownCheckBox(reportInfo.dropdata);
+                    //初始化饼图
+                    chartDom = initPieChart(reportInfo.completed, reportInfo.uncompleted);
+                    //更新表格
+                    updateTable(reportInfo.completed, reportInfo.uncompleted);
+                } else {
+                    for (var m = 1; m <= tasks.Count; m++) {
+                        var taskItem = tasks.Item(m);
+                        dropData.push({ 'id': taskItem.ObjVer.ID, 'label': taskItem.Title, 'isChecked': true });
+                        if (CC.taskStatusReport.isTaskCompleted(vault, taskItem.ObjVer)) {
+                            completed++;
+                        } else {
+                            uncompleted++;
+                        }
+                    }
+                    // 初始化下拉选择框
+                    dropDom = initDropdownCheckBox(dropData);
+                    //初始化饼图
+                    chartDom = initPieChart(completed, uncompleted);
+                    //更新表格
+                    updateTable(completed, uncompleted);
+                }
+
+                //日期
+                $("#startPicker").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    showMonthAfterYear: true,
+                    dateFormat: "yy-mm-dd",
+                    onSelect: function (dateText, inst) {
+                        $("#endPicker").datepicker("option", "minDate", dateText);
+                        //更新下拉选择框
+                        updateDropdownCheckBox(vault, tasks, dropDom);
+                    }
+                });
+
+                $("#endPicker").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    showMonthAfterYear: true,
+                    dateFormat: "yy-mm-dd",
+                    onSelect: function (dateText, inst) {
+                        $("#startPicker").datepicker("option", "maxDate", dateText);
+                        //更新下拉选择框
+                        updateDropdownCheckBox(vault, tasks, dropDom);
+                    }
+                });
+
+                //更新
+                $("#updateReport").on("click", function () {
+                    var strStartDate = $("#startPicker").val();
+                    var strEndDate = $("#endPicker").val();
+                    if (!reportOps.isValidDate(strStartDate, '-')
+                        || !reportOps.isValidDate(strEndDate, '-')) {
+                        alert("日期格式不正确！");
+                        return;
+                    }
+
+                    completed = 0, uncompleted = 0;
+                    dropData = dropDom.dropdownCheckbox("checked");
+                    for (var i = 0; i < dropData.length; i++) {
+                        for (var j = 1; j <= tasks.Count; j++) {
+                            if (dropData[i].id === tasks.item(j).ObjVer.ID) {
+                                if (CC.taskStatusReport.isTaskCompleted(vault, tasks.item(j).ObjVer)) {
+                                    completed++;
+                                } else {
+                                    uncompleted++;
+                                }
+                            }
+                        }
+                    }
+                    //更新饼图
+                    updatePieChart(chartDom, completed, uncompleted);
+                    //更新表格
+                    updateTable(completed, uncompleted);
+                    //保存更新信息
+                    report = {
+                        dropData: dropData,
+                        completed: completed,
+                        uncompleted: uncompleted
+                    };
+                    saveReportInfo(vault, objVn.ObjVer, report);
+                });
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        //初始化下拉选择框数据
+        function initDropdownCheckBox(dropData) {
+            var dropDown = $('.dropdown-checkbox-task').dropdownCheckbox({
+                data: dropData,
+                autosearch: true,
+                title: "任务名称",
+                hideHeader: false,
+                showNbSelected: true,
+                templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">选择任务 <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
+            });
+
+            return dropDown;
+        }
+
+        //更新下拉选择框数据
+        function updateDropdownCheckBox(vault, tasks, dropDom) {
+            var tempData = [];
+            var startDate = $("#startPicker").val();
+            var endDate = $("#endPicker").val();
+            var result = CC.taskStatusReport.filterTaskFromDate(vault, tasks, startDate, endDate);
+
+            for (var m = 0; m < result.length; m++) {
+                tempData.push({ 'id': result[m].ObjVer.ID, 'label': result[m].Title, 'isChecked': true });
+            }
+            dropDom.dropdownCheckbox("reset", tempData);
+        }
+
+        //初始化饼图
+        function initPieChart(completed, uncompleted) {
+            if (completed === 0 && uncompleted === 0) {
+                return null;
+            }
+
+            var pieData = [
+            {
+                value: uncompleted,
+                color: "#FFBC01",
+                //highlight: "#FF5A5E",
+                label: "未完成",
+                labelColor: 'white',
+                labelFontSize: '16'
+            },
+            {
+                value: completed,
+                color: "#2477BB",
+                //highlight: "#5AD3D1",
+                label: "已完成",
+                labelColor: 'white',
+                labelFontSize: '16'
+        }
+            ];
+            var ctx = $("#pieChart").get(0).getContext("2d");
+            var chart = new Chart(ctx);
+            var pieChart = chart.Pie(pieData, {
+                segmentShowStroke: true,
+                segmentStrokeColor: "#fff",
+                segmentStrokeWidth: 2,
+                animation: true,
+                animationSteps: 100,
+                animationEasing: "easeOutBounce",
+                animateRotate: true,
+                animateScale: false,
+                responsive: true
+                //onAnimationComplete: null
+            });
+
+            legend($("#pieLegend").get(0), pieData, pieChart);
+
+            return pieChart;
+        }
+
+        //更新饼图
+        function updatePieChart(chartDom, completed, uncompleted) {
+            if (!chartDom) {
+                return;
+            }
+
+            if (completed === 0 && uncompleted === 0) {
+                return;
+            }
+
+            chartDom.segments[0].value = uncompleted;
+            chartDom.segments[1].value = completed;
+            chartDom.update();
+        }
+
+        //更新表格
+        function updateTable(completed, uncompleted) {
+            var trs = $("#tasktable tbody").children();
+            for (var i = 1; i < trs.length; i++) {
+                trs.eq(i).remove();
+            }
+
+            var tabData = [
+                   {
+                       label: "未完成任务",
+                       count: uncompleted
+                   },
+                   {
+                       label: "已完成任务",
+                       count: completed
+                   },
+                   {
+                       label: "总计",
+                       count: uncompleted + completed
+                   }
+            ];
+            for (var j = 0; j < tabData.length; j++) {
+                //在尾行插入新行
+                var newRow = "<tr>"
+                    + "<td style='padding: 0 0 0 10px; text-align: left'>" + tabData[j].label + "</td>"
+                    + "<td style='text-align: center'>" + tabData[j].count + "</td></tr>";
+                $("#tasktable tbody tr:last").after(newRow);
+            }
+            $("#tasktable tbody tr:last").addClass("last");
+        }
+
+        //保存统计信息
+        function saveReportInfo(vault, objVer, report) {
+            //日期
+            var strStartDate = $("#startPicker").val();
+            var startDate = strStartDate ? new Date(strStartDate.replace(/\-/g, "/")) : null;
+            var strEndDate = $("#endPicker").val();
+            var endDate = strEndDate ? new Date(strEndDate.replace(/\-/g, "/")) : null;
+
+            //图表
+            var reportData = {
+                dropdata:report.dropData,
+                uncompleted: report.uncompleted,
+                completed: report.completed
+            };
+            var reportJson = JSON.stringify(reportData);
+            var uiData = {
+                "startDate": startDate,
+                "deadline": endDate,
+                "checkedItems": undefined,
+                "reportInfo": reportJson
+            };
+            reportOps.updateReport(vault, md.taskStatusReport.classAlias, objVer.ID, uiData);
+        }
+    </script>
+
+</head>
+    <body>
+        <div id="container">
+            <div id="header"> 
+                <div id="divMember" class="row show-grid">
+                    <div id="divPanl" class="divPanl">
+                        <div id="divTitle" class="date-start">项目任务</div>
+                        <div id="divContent" class="dropdown-checkbox-task"></div>
+                    </div>
+                </div>
+                
+                <div style="float: left">
+                    <div id="divPanlDate" class="divPanl">
+                        <div id="divTitleDate" class="date-start">起止日期</div>
+                        <input type="text" class="text-style" id="startPicker" disabled="disabled">
+                        <img id="imgStart" src="./images/date.png" />
+                    </div>
+
+                    <label id="lblSymbol">&nbsp;~&nbsp;</label>
+
+                    <div id="dateEnd" class="date-end">
+                        <input type="text" class="text-style" id="endPicker" disabled="disabled">
+                        <img id="imgEnd" src="./images/date.png" />
+                    </div>
+                </div>
+            </div>
+             
+            <div id="chatContent">
+                <div class="btn-update" id="updateReport" style="float: right">更 新 报 表</div>
+                <div id="pieLegend" style="float: left"></div>
+                <canvas id="pieChart" style="width: 100%; height: 100%"></canvas>
+            </div>
+
+            <div id="tableContent">
+                <table id="tasktable">
+                    <tr id="rowHead">
+                        <th id="table_font">任务完成状态</th>
+                        <th id="table_font">数目</th>
+                    </tr>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

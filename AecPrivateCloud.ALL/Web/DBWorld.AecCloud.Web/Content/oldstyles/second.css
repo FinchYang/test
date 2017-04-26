@@ -1,0 +1,1704 @@
+﻿/**
+    ** time : 2014 - 11 - 27
+    ** pro ： AECLOUD
+    ** author : 肖颖
+    ** main : AECLOUD 二级页面布局、版面样式
+**/
+
+/*AECLOUD*/
+
+
+.positionTop {
+    position: absolute;
+    top: 0;
+}
+/*头部位置*/
+.sectionTop {
+    background: #1066b7;
+    background: linear-gradient( top,#2497d9,#1066b7);
+    background: -moz-linear-gradient( top,#2497d9,#1066b7);
+    background: -webkit-linear-gradient( top,#2497d9,#1066b7);
+    background: -o-linear-gradient( top,#2497d9,#1066b7);
+    height: 90px;
+}
+
+.sectionTopContent {
+    position: relative;
+    height: 90px;
+}
+
+.sectionTopImg {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    height: 135px;
+    width: 700px;
+}
+/*当前位置*/
+#currentWrap {
+    color: #8b8b8b;
+    line-height: 22px;
+    /*margin: 20px auto;*/
+    margin-left: auto;
+    margin-right: auto;
+    width: 1170px;
+}
+
+    #currentWrap a {
+        color: #8b8b8b;
+        font-size: 12px;
+        margin: 0 5px;
+    }
+
+        /*#currentWrap a:hover {
+            text-decoration: underline;
+        }*/
+
+/*主要内容区块*/
+#content {
+    border:none;
+    background: #ececec;
+    /*margin: 0 auto;*/
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    position:relative;
+    width: 1200px;
+
+}
+    /*右边侧*/
+    #content > section {
+        width: 990px;
+        overflow: hidden;
+    }
+/*内容区块*/
+.secondContent {
+    margin-top: 60px;
+    padding-left: 5%;
+}
+
+.secondTitle {
+    margin-bottom: 15px;
+}
+
+    .secondTitle a {
+        color: #1a83cb;
+    }
+
+    .secondTitle span {
+        font-size: 0.65em;
+        font-weight: normal;
+        margin-left: 10px;
+    }
+
+    .secondTitle .asideMore {
+        font-size: 14px;
+    }
+
+.borBottom {
+    border-bottom: 1px solid #1a83cb;
+    padding-bottom: 10px;
+}
+
+.AEtable {
+    background: #4aaad4;
+    color: #fff;
+    margin-bottom: 15px;
+    padding: 20px 40px 15px 30px;
+}
+
+    .AEtable tr td:first-child {
+        font-size: 1.625em;
+        font-weight: bold;
+        padding-right: 30px;
+        white-space: nowrap;
+    }
+/*左边侧*/
+.fixed {
+    position: fixed;
+    top: 0;
+}
+
+#content > aside {
+    width: 15%;
+}
+.asideWrap {
+     background: #008ad2;
+}
+    .asideWrap > a.AEclient {
+        background: #fcc10f;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .asideWrap > a {
+        background: #1a83cb;
+        color: #fff;
+        display: block;
+        /*font-size: 16px;*/
+        font-family: "微软雅黑";
+        font-weight: bold;
+        height: 45px;
+        line-height: 45px;
+        /*margin-top: 5px;*/
+        overflow: hidden;
+        position: relative;
+        text-indent: 20px;
+        text-overflow: ellipsis;
+        width: 100%;
+        white-space: nowrap;
+        z-index: 10;
+    }
+
+        .asideWrap > a:hover {
+            text-decoration: none;
+        }
+
+    .asideWrap .disabledLink {
+        color: #ccc;
+    }
+
+    .asideWrap a:hover {
+        text-decoration:none;
+    }
+
+    .asideWrap a.disabledLink:hover {
+        color: #ccc;
+        text-decoration: none;
+    }
+
+
+
+    .asideWrap .on {
+        background: url(/Content/Images/Navigations/select.png) no-repeat center;
+        /*-ms-background-size:100%;
+        background-size:100%;*/
+        /*background: #017ec0;
+        border-left: 2px solid #fcc10f;*/
+    }
+
+.UpDown {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 45px;
+    width: 30px;
+    z-index: 11;
+    background: inherit;
+    text-align: center;
+}
+
+    .UpDown img {
+        margin-left: -20px;
+    }
+
+.ul_list {
+    background: #eeeeee;
+    display: none;
+    font-size: 14px;
+    padding: 10px 10px 10px 20px;
+    margin-bottom: 10px;
+}
+
+    /*.ul_list li {
+        background: url('/Content/Images/liImg.png') no-repeat 0 2px;
+        padding-left: 20px;
+    }*/
+
+    .ul_list a {
+        /*color: #333;*/
+         color: white;
+        display: inline-block;
+        line-height: 18px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+    }
+
+        .ul_list a:hover {
+            /*color: #2A8EE4;*/
+             /*color: red;*/
+            text-decoration: none;
+        }
+
+/*个人主页*/
+.userTopImg {
+    margin-bottom: 30px;
+}
+
+    .userTopImg img {
+        height: 100%;
+        width: 100%;
+    }
+
+.userTitle {
+    margin-bottom: 20px;
+}
+
+    .userTitle a {
+        color: #fff;
+        font-size: 0.7em;
+        font-weight: normal;
+    }
+
+.userContent {
+    background: #f1f1f1;
+}
+
+.userChangeContent, .userContent {
+    color: #333;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+}
+
+.changePassword {
+    background: #fcc10f;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    width: 120px;
+    text-align: center;
+}
+
+.userInfo {
+    padding-left: 100px;
+    word-break: break-all;
+}
+
+.myProject {
+    min-height: 50px;
+}
+
+.myProjectNo {
+    border: 1px dashed #ccc;
+    font-size: 16px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+
+    .myProjectNo a {
+        color: #1a83cb;
+    }
+
+/*二级页面内容*/
+.secondContent p {
+    text-indent: 28px;
+    color: #333;
+}
+
+.blackTitle {
+    color: #42484d;
+    font-size: 1.15em;
+    font-family: "微软雅黑";
+    font-weight: bold;
+    padding-left:30px;
+}
+
+.wordAndImg {
+    border-top: 1px dashed #ccc;
+    margin-top: 20px;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    min-height: 10px;
+}
+
+.wordAccount {
+    width: 69%;
+}
+
+    .wordAccount table tr td {
+        vertical-align: top;
+    }
+
+.wordAccountLeft {
+    width: 100px;
+    padding-right: 50px;
+    text-align: center;
+}
+
+    .wordAccountLeft div:first-of-type {
+        font-size: 16px;
+        margin: 10px 0;
+    }
+
+    .wordAccountLeft img:first-child {
+        width: 80px;
+        height: 80px;
+    }
+
+.clientDownload .submitBtn {
+    width: 150px;
+}
+
+    .clientDownload .submitBtn .submitA {
+        width: 150px;
+        font-size: 14px;
+        letter-spacing: 0px;
+    }
+
+.imgAccount {
+    width: 29%;
+}
+
+    .imgAccount img {
+        height: 100%;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+
+
+
+
+
+/*精彩推荐*/
+.recommend {
+    width: 100%;
+}
+
+    .recommend .top {
+        height: 20px;
+        border-bottom: 3px solid #e7e7e7;
+        padding-bottom: 10px;
+    }
+
+    .recommend .title h2 {
+        font-size: 20px;
+        font-family: "microsoft yahei";
+    }
+
+    .recommend .title-list {
+        position: relative;
+        left: 0;
+        top: 6px;
+    }
+
+        .recommend .title-list li {
+            width: 20%;
+            line-height: 20px;
+            text-align: center;
+            float: left;
+            font-size: 1.1em;
+            display: inline;
+            cursor: pointer;
+        }
+
+            .recommend .title-list li.on {
+                color: #1a83cb;
+                font-weight: bold;
+            }
+
+        .recommend .title-list p {
+            position: absolute;
+            top: 24px;
+            left: 0px;
+            width: 20%;
+            height: 7px;
+            border-top: 3px solid #1a83cb;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .recommend .title-list b {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-top: -3px;
+            border-style: solid dashed dashed dashed;
+            border-width: 9px;
+            border-color: #1a83cb #fff #fff #fff;
+            overflow: hidden;
+            zoom: 1;
+            font-size: 0;
+        }
+
+.product {
+    height: 450px;
+    position: relative;
+    overflow: hidden;
+    display: none;
+}
+
+.product-wrap .show {
+    display: block;
+}
+
+
+.knowledgeIndex {
+    width: 45%;
+}
+
+.knowledgeIndexDl {
+    padding: 10px;
+}
+
+    .knowledgeIndexDl a {
+        color: #333;
+    }
+
+        .knowledgeIndexDl a:hover {
+            color: #1a83cb;
+            text-decoration: underline;
+        }
+
+.knowledgeIndexDt {
+    position: relative;
+}
+
+.knowledgeIndexDtImg {
+    position: absolute;
+    border-radius: 2px;
+    height: 60px;
+    top: 30px;
+    left: 10px;
+    width: 60px;
+}
+
+.knowledgeIndexDtDiv {
+    padding: 30px 10px 10px 80px;
+}
+
+    .knowledgeIndexDtDiv > div {
+        position: relative;
+        padding-left: 40px;
+        line-height: 22px;
+    }
+
+.knowledgeIndexTitle {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.knowledgeIndexName {
+    display: block;
+    height: 22px;
+    line-height: 22px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+}
+
+/*专辑文件列表*/
+.knowledgeIndexFileList {
+    position: relative;
+    padding: 3px 40px 3px 25px;
+}
+
+    .knowledgeIndexFileList .icon_pdf {
+        position: absolute;
+        left: 2px;
+        top: 2px;
+    }
+
+    .knowledgeIndexFileList .score {
+        position: absolute;
+        right: 2px;
+        top: 7px;
+    }
+
+    .knowledgeIndexFileList a {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+span.score {
+    line-height: 16px;
+}
+
+    span.score b {
+        color: #9b5b32;
+        background: url('/Content/Images/love.png') no-repeat 0 0;
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+    }
+
+
+/*知识库*/
+.searchWrap {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.searchIn {
+    margin: 0 auto;
+    width: 710px;
+}
+
+.searchingInput {
+    background: url('Images/searchImg.gif') no-repeat 2px 10px;
+    border: 1px solid #b6b6b6;
+    height: 18px;
+    line-height: 18px;
+    padding: 10px 10px 10px 30px;
+    width: 450px;
+}
+
+.selType {
+    border: 1px solid #b6b6b6;
+    cursor: pointer;
+    height: 18px;
+    line-height: 18px;
+    padding: 10px;
+    width: 110px;
+}
+
+.selTypeList {
+    background: #fff;
+    border: 1px solid #b6b6b6;
+    border-top: none;
+    display: none;
+    position: absolute;
+    padding: 10px;
+    min-width: 110px;
+    z-index: 100;
+}
+
+    .selTypeList ul li {
+        cursor: pointer;
+        height: 22px;
+        line-height: 22px;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+        .selTypeList ul li:hover {
+            text-decoration: underline;
+        }
+
+.searchBtn {
+    width: 80px;
+}
+/*蓝色按钮通用样式*/
+.blueBtn {
+    border: none;
+    background: #1a83cb;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.25em;
+    height: 40px;
+    line-height: 40px;
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+.inputHover:hover {
+    text-decoration: underline;
+}
+
+.inputHover:active {
+    padding: 1px 0 0 1px;
+}
+
+
+.searchHot {
+    color: #7a7a7a;
+}
+
+    .searchHot a {
+        color: #7a7a7a;
+        margin-right: 10px;
+    }
+
+        .searchHot a:hover {
+            color: #197ec8;
+            text-decoration: underline;
+        }
+
+
+/*分类*/
+.AEClassify {
+    margin-bottom: 40px;
+}
+
+.classifyContent {
+    border-top: 1px solid #bfbfbf;
+    border-bottom: 1px solid #bfbfbf;
+    margin-top: 20px;
+    padding-top: 10px;
+}
+
+.classifyList {
+    position: relative;
+    padding-left: 80px;
+    padding-right: 50px;
+    min-height: 35px;
+}
+
+.classifyMore {
+    position: absolute;
+    right: 5px;
+    top: 0;
+}
+
+    .classifyMore a {
+        color: #333;
+        padding: 1px 8px;
+        border: 1px solid #ccc;
+    }
+
+        .classifyMore a:hover {
+            color: #1a83bc;
+            text-decoration: underline;
+        }
+
+        .classifyMore a:active {
+            border: 1px dashed #ccc;
+        }
+
+.classifyTitle {
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80px;
+    text-align: right;
+}
+
+.classifyUl {
+    padding-right: 2%;
+    height: 36px;
+    overflow: hidden;
+}
+
+.classifyItem {
+    cursor: pointer;
+    display: inline-block;
+    height: 27px;
+    line-height: 27px;
+    padding: 0 12px;
+    margin-bottom: 5px;
+}
+
+    .classifyList .classifyUl .classifyItem.current, .classifyItem:hover {
+        background: #1a83cb;
+        color: #fff;
+    }
+
+.classifyList .classifyUl .point {
+    color: #1a83cb;
+}
+
+.classifyUl .classifyCancel {
+    color: #ff0f0f;
+    margin-left: 5px;
+}
+
+.ulListTwo.secondList ul {
+    padding-top: 0px;
+}
+
+.secondList {
+    display: none;
+}
+
+    .secondList ul {
+        padding-top: 5px;
+        border-bottom: 1px dashed #ccc;
+    }
+
+.ulListTwo {
+    padding-left: 30px;
+}
+
+.ulListThree {
+    padding-left: 60px;
+    margin-bottom: 15px;
+}
+/*左侧分类列表*/
+.knowledgeTitle {
+    background: #1a83cb;
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: bold;
+    height: 37px;
+    line-height: 37px;
+    letter-spacing: 2px;
+    overflow: hidden;
+    padding-left: 10%;
+}
+
+.asideContent {
+    background: #eee;
+    display: none;
+    padding: 15px 0;
+}
+
+    .asideContent ul {
+        padding-left: 10%;
+        padding-right: 5px;
+    }
+
+    .asideContent > ul > li ul {
+        display: none;
+    }
+
+    .asideContent li {
+        padding-left: 10px;
+    }
+
+        .asideContent li.close {
+            background: url('/Content/Images/asideContentClose.png') no-repeat 0 10px;
+        }
+
+        .asideContent li.open {
+            background: url('/Content/Images/asideContentOpen.png') no-repeat 0 10px;
+        }
+
+        .asideContent li a {
+            color: #333;
+            display: block;
+            height: 24px;
+            line-height: 24px;
+            white-space: nowrap;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+            .asideContent li a:hover {
+                color: #1a83cb;
+                /*text-decoration: underline;*/
+            }
+/*图片列表*/
+.knowledgeImgContent {
+    min-height: 380px;
+}
+
+.ablumContent .ImgWrap {
+    height: 360px;
+}
+
+.ImgWrap {
+    width: 160px;
+    height: 340px;
+    margin-right: 13px;
+    margin-bottom: 40px;
+    overflow: hidden;
+}
+
+    .ImgWrap img {
+        margin-bottom: 15px;
+    }
+
+.ImgWord {
+    height: 24px;
+    line-height: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ImgPaddingTwo {
+    padding-left: 40px;
+}
+
+.ImgPaddingfour {
+    padding-left: 68px;
+}
+
+.ImgProsition {
+    position: relative;
+}
+
+.detail {
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.paddingTitle {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+/*分页*/
+.ablumPaging.paging {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.paging .pageA, .paging input {
+    border: 1px solid #c3c9cd;
+    border-radius: 2px;
+    color: #333;
+    padding: 6px 10px;
+}
+
+    .paging .pageA.pageOn {
+        background: #4b5a64;
+        color: #fff;
+    }
+
+.paging a:hover {
+    text-decoration: underline;
+}
+
+.pageInput {
+    width: 20px;
+}
+
+.paging .pageBtn {
+    cursor: pointer;
+    height: 30px;
+    width: 40px;
+    padding: 0;
+}
+
+/*.pageBtn:active {
+    padding: 1px 0 0 1px;
+}*/
+
+
+/*知识库右侧标题*/
+.knowledgeRightTitle {
+    background: #f1f1f1;
+    height: 37px;
+    line-height: 37px;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+/*知识库软件列表*/
+.softwareIcon {
+    background-image: url('/Content/Images/softwareBg.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 250px;
+    height: 105px;
+    padding-top: 65px;
+    position: relative;
+}
+
+.softwareIconTitle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    text-align: center;
+    width: 100%;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    line-height: 60px;
+}
+
+.softwareIconContent {
+    padding: 10px;
+}
+
+    .softwareIconContent a {
+        margin: 0 5px;
+    }
+
+        .softwareIconContent a img {
+            height: 28px;
+            width: 28px;
+        }
+
+.softwareIconList {
+    text-align: center;
+}
+
+    .softwareIconList ul li {
+        float: left;
+        margin: 5px 15px;
+    }
+
+.FreeBtn.softwareIconListBtn {
+    height: 35px;
+    width: 120px;
+}
+
+.freeSubmit.softwareIconListSubmit {
+    font-size: 1em;
+    height: 35px;
+    line-height: 35px;
+    letter-spacing: normal;
+    width: 120px;
+}
+
+/*软件详细介绍*/
+.softwareImg {
+    height: 100%;
+    width: 100%;
+}
+
+.softInfo span {
+    padding-right: 20px;
+}
+
+
+/*评论*/
+.softComment {
+    height: 150px;
+    resize: none;
+    padding: 10px 0;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.blueBtn.commentBtn {
+    font-size: 1em;
+    height: 30px;
+    line-height: 28px;
+    letter-spacing: 0px;
+    width: 100px;
+}
+
+    .blueBtn.commentBtn:active {
+        padding: 1px 0 0 1px;
+    }
+
+.commentList ul li {
+    border-bottom: 1px dashed #eee;
+    padding: 8px 100px 8px 10px;
+    position: relative;
+}
+
+    .commentList ul li time {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        line-height: 24px;
+    }
+
+
+/*文件预览*/
+.fileInfo {
+    padding: 10px 10%;
+}
+
+.fileInfoColumn {
+    width: 40%;
+}
+
+.fileIntroWrap {
+    width: 50%;
+}
+
+.fileIntro .fileIntroWrap:first-child .fileIntroColumn {
+    margin-right: 5%;
+}
+
+.fileIntro .fileIntroWrap:last-child .fileIntroColumn {
+    margin-left: 5%;
+}
+
+.fileIntroColumn {
+    border: 1px solid #eee;
+    min-height: 200px;
+    padding: 5px 10px;
+}
+
+    .fileIntroColumn a {
+        color: #1a83cb;
+    }
+
+        .fileIntroColumn a:hover {
+            text-decoration: underline;
+        }
+/*文件列表*/
+.fileFileListWrap li {
+    border-bottom: 1px dashed #ccc;
+}
+
+.fileListWrap li {
+    position: relative;
+    padding: 10px 270px 10px 100px;
+    min-height: 120px;
+}
+
+.fileImg {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+    height: 90px;
+    width: 70px;
+}
+
+.fileDetail {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 230px;
+}
+/*专辑推荐*/
+.specialWrap ul li {
+    position: relative;
+    padding: 10px 10px 10px 90px;
+    min-height: 100px;
+}
+
+.specialImg {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    height: 90px;
+    width: 70px;
+}
+
+.specialWrap ul li p {
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
+}
+
+    .specialWrap ul li p a {
+        color: #333;
+    }
+
+        .specialWrap ul li p a:hover {
+            color: #1a83cb;
+            text-decoration: underline;
+        }
+
+
+/*收藏*/
+.collectDailogBg {
+    background: rgba(103,103,103,0.5);
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.collectDailog {
+    position: fixed;
+    border: 1px solid #ccc;
+    display: none;
+    background: #fff;
+    width: 400px;
+    height: 330px;
+    overflow: hidden;
+}
+
+.dailogTitle a {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-right: 15px;
+    line-height: 35px;
+}
+
+.dailogTitle {
+    background: #159eff;
+    height: 35px;
+}
+
+.dailogFile {
+    margin-top: 20px;
+}
+
+.dailogPlaceContent {
+    border: 1px solid #ccc;
+    width: 230px;
+    height: 125px;
+    overflow: scroll;
+}
+
+.dailogContent > p {
+    padding-left: 30px;
+}
+
+.dailogPlace {
+    padding-left: 45px;
+}
+
+.dailogPlaceContent {
+    display: inline-block;
+}
+
+.dailogPlace a.newFile {
+    margin-top: 99px;
+    margin-left: 5px;
+}
+
+.newFile {
+    background: #159eff;
+    color: #fff;
+    display: inline-block;
+    padding: 2px 10px;
+}
+
+.dailogBtn {
+    text-align: right;
+    margin-top: 20px;
+    padding-right: 27px;
+}
+
+.dailogFile {
+    margin-top: 15px;
+    width: 350px;
+    margin: 0 auto;
+}
+
+.fileName {
+    line-height: 19px;
+    height: 19px;
+    width: 250px;
+}
+
+.fileChoose {
+}
+
+#fileChoose {
+    display: none;
+}
+/*知识库*/
+.konwledgeContent {
+    padding-right: 30px;
+}
+/*知识库文件预览*/
+.fileTag a {
+    color: #1a83cb;
+    display: inline-block;
+    line-height: 36px;
+    margin-right: 20px;
+}
+
+    .fileTag a:hover {
+        text-decoration: underline;
+    }
+/*知识云左侧栏*/
+.asideWrap.asideWrapSoftware .softwareNavList > a {
+    position: relative;
+}
+
+.softwareNavList {
+    position: relative;
+}
+/*知识云左侧二级菜单*/
+.softwareNavSecond {
+    border: 1px solid #2c3a3d;
+    background: rgba(44,44,44,0.9);
+    display: none;
+    padding: 10px;
+    position: absolute;
+    top: 0px;
+    left: 200px;
+    width: 500px;
+    min-height: 200px;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.softwareSecondContent {
+    margin-bottom: 10px;
+}
+
+    .softwareSecondContent .softwareSecondNavTitle a {
+        color: #fff;
+        font-size: 14px;
+    }
+
+.softwareNavSecond .softwareSecondContent a {
+    width: auto;
+}
+
+.softwareSecondContent a {
+    color: #fff;
+    display: inline-block;
+    margin: 0 10px;
+    padding: 0;
+    line-height: 18px;
+}
+
+    .softwareSecondContent a:hover {
+        color: #1a83cb;
+        text-decoration: underline;
+    }
+
+.softwareSecondContent > .blackTitle {
+    margin-bottom: 10px;
+}
+/*知识云文件预览右侧推荐列表*/
+
+.correlation_main ul li {
+    border-bottom: 1px dashed #ccc;
+    margin-bottom: 5px;
+    padding: 5px 0;
+}
+
+.article_item {
+    line-height: 22px;
+}
+
+.pdf_title {
+    position: relative;
+    padding-left: 35px;
+    padding-right: 10px;
+}
+
+    .pdf_title a {
+        white-space: nowrap;
+        color: #333;
+        font-size: 14px;
+        float: left;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+        .pdf_title a:hover {
+            color: #1a83cb;
+            text-decoration: underline;
+        }
+
+.icon_pdf {
+    position: absolute;
+    left: 5px;
+    top: 0px;
+    width: 16px;
+    height: 16px;
+}
+
+.article_comment, .article_name {
+    color: #666;
+    display: inline-block;
+    *zoom: 1;
+    *display: inline;
+    letter-spacing: normal;
+    word-spacing: normal;
+    width: 49%;
+    vertical-align: top;
+}
+
+/*搜索*/
+.SearchContent {
+    padding: 20px;
+}
+
+
+
+
+/*新闻列表*/
+.newsListContent {
+    padding: 20px;
+}
+
+    .newsListContent ul li {
+        border-bottom: 1px dashed #ccc;
+        position: relative;
+        padding: 0 100px 0 10px;
+        height: 36px;
+        line-height: 36px;
+    }
+
+        .newsListContent ul li a {
+            color: #333;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+            .newsListContent ul li a:hover {
+                color: #1a83cb;
+                text-decoration: underline;
+            }
+
+.time {
+    color: #999;
+    font-size: 12px;
+    position: absolute;
+    right: 10px;
+    top: 0;
+}
+
+.NewsTitle {
+    text-align: center;
+}
+
+.newTime {
+    text-align: center;
+}
+
+.newBtn a {
+    color: #999;
+}
+
+    .newBtn a:hover {
+        color: #1a83cb;
+        text-decoration: underline;
+    }
+
+
+/*忘记密码*/
+.progressBar {
+    position: relative;
+    height: 20px;
+    margin-bottom: 80px;
+}
+
+.progressFinish {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 5px;
+    background: #1a83cb;
+    z-index: 2;
+}
+
+.progressBarContent {
+    background: #ccc;
+    height: 5px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.progressStep {
+    position: absolute;
+    top: -8px;
+    color: #fff;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 2px;
+    background: #ccc;
+    overflow: hidden;
+    z-index: 3;
+}
+
+    .progressStep.finishStep {
+        background: #1a83cb;
+    }
+
+.progressFirst {
+    left: 0;
+}
+
+.progressTwo {
+    left: 33%;
+}
+
+.progressThree {
+    left: 66%;
+}
+
+.progressFour {
+    left: 100%;
+}
+
+
+.verifyType {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+    .verifyType select {
+        height: 20px;
+        line-height: 20px;
+    }
+
+.forgotStep > div {
+    display: none;
+}
+
+
+
+/*设计云*/
+.sotfwareUl {
+    margin-left: 28px;
+}
+
+    .sotfwareUl li {
+        list-style: disc;
+    }
+
+
+
+/*用户条款*/
+.Clause ul li {
+    text-indent: 28px;
+}
+
+
+
+/*帮助*/
+.DappImg img {
+    margin: 15px 0;
+}
+
+
+
+/*软件云导航*/
+.softNavConment {
+    position: relative;
+}
+
+.softwareSearch {
+    right: 0;
+    top: 0;
+    position: absolute;
+}
+
+
+/*软件列表*/
+.softwareList {
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+    .softwareList ul li {
+        border-radius: 5px;
+        float: left;
+        margin-right: 20px;
+        margin-bottom: 30px;
+        padding: 5px;
+        width: 240px;
+    }
+
+        .softwareList ul li:hover {
+            box-shadow: -3px 0 10px #ccc, /*左边阴影*/
+            3px 0 10px #ccc, /*右边阴影*/
+            0 -3px 10px #ccc, /*顶部阴影*/
+            0 3px 10px #ccc; /*底边阴影*/
+            cursor: pointer;
+        }
+
+        .softwareList ul li img {
+            border-radius: 5px;
+        }
+
+.softwareListUl dl {
+    float: left;
+    margin-left: 10px;
+    width: 140px;
+}
+
+    .softwareListUl dl dt {
+        height: 30px;
+        overflow: hidden;
+    }
+
+        .softwareListUl dl dt:last-child {
+            color: #999;
+        }
+
+.softwareName {
+    color: #1a83cb;
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 140px;
+}
+
+
+
+/*tab 默认状态*/
+.tab {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+/*.tab_ul {
+    height: 24px;
+}*/
+
+    /*.tab_ul li {
+        float: left;
+        width: auto;
+        text-align: center;
+        height: 24px;
+        line-height: 24px;
+        list-style: none;
+        cursor: pointer;
+    }*/
+
+        /*.tab_ul li a {
+            color: #000;
+            text-decoration: underline;
+        }*/
+
+    /*.tab_ul .li_on a {
+        color: #1b96d1;
+    }
+
+    .tab_ul .hover a {
+        color: #1b96d1;
+    }*/
+
+/*.tab_con {
+    height: auto;
+    width: 100%;
+    overflow: hidden;
+    display: none;
+}*/
+
+.tab_content .Tabshow {
+    display: block;
+}
+
+/*我的应用tab*/
+.myselfTab .tab_ul {
+    height: 30px;
+}
+
+    .myselfTab .tab_ul li {
+        width: 100px;
+        height: 29px;
+        line-height: 29px;
+    }
+
+        .myselfTab .tab_ul li a {
+            color: #2da5da;
+        }
+
+    .myselfTab .tab_ul .li_on a {
+        color: #ffbb41;
+    }
+
+    .myselfTab .tab_ul .hover a {
+        color: #ffbb41;
+    }
+
+.myselfTab .tab_con {
+    background: #ccc;
+}
+
+
+
+
+/*建设版块提示*/
+.building {
+    border: 1px dashed #ccc;
+    color: #ccc;
+    font-size: 1.625em;
+    font-weight: bold;
+    height: 50px;
+    line-height: 50px;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    text-align: center;
+}
+
+
+/*关于我们*/
+.aboutTable {
+    width: 100%;
+    margin-top: 20px;
+}
+
+    .aboutTable img {
+        width: 100%;
+        height: auto;
+    }
+
+    .aboutTable tr td {
+        padding: 0 5px 20px;
+    }
+
+
+    .aboutKnowledgeTable tr td {
+        width: 25%;
+    }
+
+.aboutGloryTable tr td {
+    width: 25%;
+    padding-bottom: 20px;
+}
+
+.aboutDistrictTable tr td {
+    width: 100%;
+}
+
+
+
+
+.indexTable {
+    margin-top:15px;
+}
+.indexTable table {
+    width: 100%;
+}
+
+    .indexTable table tr td {
+        vertical-align: top;
+    }
+
+        .indexTable table tr td:last-child {
+            width: 120px;
+        }
+
+        .indexTable table tr td a {
+            color:#000;
+            display: block;
+            width: 80px;
+            text-align: center;
+            margin: 10px auto;
+        }
+            .indexTable table tr td a :hover {
+                color:#1a83cb;
+            }
+
+.indexE {
+    position: relative;
+    padding-left: 100px;
+    font-size:16px;
+    line-height:30px;
+    margin-top:15px;
+}
+
+.indexETitle {
+    position: absolute;
+    left: 10px;
+    top: 0px;
+    color:#1a83cb;
+}
+.indexTable1 {
+    width:100%;
+}
+.indexTable1 tr td {
+    padding:0 7px;
+}
+.indexTable2 tr td img {
+    width:100%;
+    height:auto;
+}
+.indexTable2 tr td:first-child {
+    width:60%;
+}
+.indexTable2 tr td:last-child {
+    width:40%;
+}
+.indexModel a{
+    color:#000;
+    display:block;
+    float:left;
+    height:60px;
+    width:70px;
+    text-align:center;
+}
+    .indexModel a:hover {
+        color:#1a83cb;
+        text-decoration:underline;
+    }
+    .indexModel a span {
+        display:inline-block;
+    }
+
+
+    /*导航固定*/
+.posFix {
+    position:fixed;
+    top:0px;
+    left:0px;
+}

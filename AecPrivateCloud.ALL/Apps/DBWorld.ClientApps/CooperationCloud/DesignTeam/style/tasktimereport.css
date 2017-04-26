@@ -1,0 +1,94 @@
+﻿body {
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.dataTime {
+    border: 1px solid #ccc;
+    background: url(../images/calendar.png) no-repeat right 3px #fff;
+    height: 28px;
+    vertical-align: central;
+    width: 150px;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-right: auto;
+    margin-left: 0px;
+}
+
+th, td {
+    border: 1px solid #b5d6e6;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    height: 20px;
+}
+
+th {
+    background-color: #007DC6;
+    color: white;
+}
+
+.last {
+    background-color: #e0e0f9;
+}
+
+.chart-title {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.left {
+    float: left;
+    width: 40%;
+}
+
+.right {
+    float: right;
+    width: 40%;
+}
+
+.color-tip {
+    text-align: center;
+    margin-top: 7px;
+}
+
+    .color-tip input {
+        border: 0px;
+        width: 14px;
+        height: 14px;
+        /*background: white;*/
+    }
+
+    .color-tip span {
+        font-size: 12px;
+        color: rgb(88, 111, 177);
+        margin-left: 5px;
+    }
+
+.btn {
+    padding: 0 0 32px 120px;
+}
+.btn input {
+    border: 1px solid #dfdfdf;
+    /*border-radius: 15px;*/
+    background: #2276bd;
+    color: #ffffff;
+    font-size: 14px;
+    text-align: center;
+    height: 28px;
+    padding: 0 8px 1px 8px;
+    line-height: 0;
+}
+
+    .btn input:hover {
+        background: #23C5FF;
+    }
+
+    .btn input:active {
+        background: #23C5FF;
+        padding: 1px 7px 0px 9px;
+    }

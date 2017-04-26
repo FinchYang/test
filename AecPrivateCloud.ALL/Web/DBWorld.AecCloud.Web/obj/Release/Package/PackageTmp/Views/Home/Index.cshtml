@@ -1,0 +1,485 @@
+﻿@model LoginViewModel
+
+@{
+    ViewBag.Title = "DBWorld 工程云";
+}
+<script type="text/javascript">
+    var newsCount;
+    var announceCount;
+    $(function () {
+
+        LoadNewsTitles();
+        LoadAnnounceTitles();
+
+        $("#newsList").on("click", "ul li a[id^=newId_]", function () {
+            var newsId = $(this).attr("id");
+            newsId = newsId.substr(6);
+            location.href = "@Url.Content("~/NewsAnnounce/NewsDetails")?newsId=" + newsId + "&count=" + newsCount;
+        });
+
+        $("#announceList").on("click", "ul li a[id^=announceId_]", function () {
+            var id = $(this).attr("id");
+            id = id.substr(11);
+            location.href = "@Url.Content("~/NewsAnnounce/AnnounceDetails")?announceId=" + id + "&count=" + announceCount;
+        });
+
+        //图片轮转
+        $(window).load(function () {
+            $('.flexslider').flexslider();
+        });
+
+    })
+
+    //加载新闻标题
+    function LoadNewsTitles() {
+        $.post("/NewsAnnounce/Titles", { pageIndex: -1, pageSize: -1, type: "news" }, function (data) {
+            var res = strToJson(data);
+            newsCount = res.count;
+            var tempStr = "";
+            $.each(res.titles, function (i, item) {
+                tempStr += "<li><a href='javascript:void(0);' title='" + item.title + "' id='newId_" + item.Id + "'>" + item.title + "</a></li>";
+            });
+            $("#newsList ul").html(tempStr);
+        });
+    }
+
+    //加载新闻标题
+    function LoadAnnounceTitles() {
+        $.post("/NewsAnnounce/Titles", { pageIndex: -1, pageSize: -1, type: "announce" }, function (data) {
+            var res = strToJson(data);
+            announceCount = res.count;
+            var tempStr = "";
+            $.each(res.titles, function (i, item) {
+                tempStr += "<li><a href='javascript:void(0);' title='" + item.title + "' id='announceId_" + item.Id + "'>" + item.title + "</a></li>";
+            });
+            $("#announceList ul").html(tempStr);
+        });
+    }
+</script>
+
+@*<div class="indexRoll">*@
+<!-- 图片滚动 -->
+<div class="indexRollContent ContentWrap">
+
+    <!--roll-->
+
+    <div class="AERollWrap">
+
+        <div class="roll">
+            <div id="container">
+                <div class="flexslider">
+                    <ul class="slides">
+                        <li>
+                            <a href="@Url.Action("Index", "AECCloudClient")">
+                                <img src="~/Content/Images/tops/hero5.jpg" alt="凯德云十大特色技术图片" title="凯德云M-Files特色功能介绍图标" />
+                            </a>
+                            <div class="flex-caption">
+                                <div class="captionTitle yellowTitle">
+                                    DBWorld云平台
+                                </div>
+                                <p>
+                                    面向建筑工程行业
+                                </p>
+                                <p>
+                                    提供包含云协同、云应用、云共享智慧工程整体解决方案
+                                </p>
+                                <div class="FreeBtn">
+                                    @Html.ActionLink("免费下载", "Index", "AECCloudClient", "", "", "clientDown", null, new { @id = "clientDown", title = "免费下载", @class = "freeSubmit" })"
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "DesignCloud")"><img src="~/Content/Images/tops/hero1.png" alt="利用凯德云轻松高效工作图片_文档管理" title="凯德云M-Files高效工作图片_知识管理" /></a>
+                            <div class="flex-caption">
+                                <div class="captionTitle">
+                                    协同云
+                                </div>
+                                <p>
+                                    协同设计全过程电子化管理
+                                </p>
+                                <p>
+                                    在线校审与电子签名
+                                </p>
+                                <p>
+                                    支持移动终端
+                                </p>
+
+                            </div>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "SoftwareCloud")">
+                                <img src="~/Content/Images/tops/hero3.jpg" alt="凯德云荣耀榜图片_企业内容管理" title="凯德云历史_文档管理" />
+                            </a>
+                            <div class="flex-caption">
+                                <div class="captionTitle">
+                                    软件云
+                                </div>
+                                <p>
+                                    工程建设行业软件库
+                                </p>
+                                <p>
+                                    实现云设计、云仿真
+                                </p>
+                                <p>
+                                    免安装，软件即服务
+                                </p>
+
+                            </div>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "KnowledgeCloud")">
+                                <img src="~/Content/Images/tops/hero4.png" alt="凯德云十大特色技术图片" title="凯德云M-Files特色功能介绍图标" />
+                            </a>
+                            <div class="flex-caption" style=" width: 190px; padding-left:40px;">
+                                <div class="captionTitle">
+                                    知识云
+                                </div>
+                                <p>
+                                    工程建设行业优质知识库
+                                </p>
+                                <p>
+                                    精确、高效检索
+                                </p>
+                                <p>
+                                    想你所想
+                                </p>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="loginDiv">
+            <!--登录框-->
+            <div class="loginDivContent">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <ul class="nav navbar-nav navbar-right loginIn indexLogin">
+                            <li>
+                                @Html.ActionLink(User.Identity.GetUserName() + "!", "Personal", "Manage")
+                            </li>
+
+                            <li>
+                                您好！欢迎您的到来
+                            </li>
+                        </ul>
+                    }
+                }
+                else
+                {
+                    <div class="title indexLoginTitle">
+                        登录
+                    </div>
+                    using (Html.BeginForm("LogOn", "Account", FormMethod.Post))
+                    {
+                        <ul class="loginUl">
+                            <li class="loginName">
+                                @Html.LabelFor(m => m.UsernameOrEmail, new { @class = "formLabel" })
+                                @Html.TextBoxFor(m => m.UsernameOrEmail, new { @class = "formInput" })
+                                @Html.ValidationMessageFor(m => m.UsernameOrEmail, "", new { @class = "text-danger" })
+                            </li>
+                            <li class="loginPassword">
+                                @Html.LabelFor(m => m.Password, new { @class = "formLabel" })
+                                @Html.PasswordFor(m => m.Password, new { @class = "formInput" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })<br />
+                                <label class="Autologon">
+                                    @Html.CheckBoxFor(m => m.RememberMe)
+                                    自动登录
+                                </label>
+                                @*<input value="" type="checkbox" />自动登录*@
+                                @Html.ActionLink("忘记密码？", "ForgotPassword", "Account", "", new { @class = "Mfile_a_link" })
+
+                            </li>
+                        </ul>
+                        <div class="loginBtn">
+
+                            <div class="submitBtn">
+                                <input type="submit" value="登录" class="submitA" />
+                            </div>
+                            <div class="submitBtn">
+                                <input type="button" value="注册" class="submitA" onclick="@string.Format("location.href ='{0}'", Url.Action("Register", "Account"))" />
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <!--登录之后显示-->
+            <div class="loginDivPersonal">
+                登录之后显示
+            </div>
+        </div>
+
+        
+
+
+    </div>
+
+    <!--roll-->
+</div>
+
+
+<!-- section -->
+<section class="indexContent ContentWrap clearfix">
+    <div class="clearfix">
+        <!--左边-->
+        <div class="indexLeft left">
+            <div class="leftWrap clearfix">
+                
+                <div class="download indexHeight">
+
+                    <dl>
+
+                        <dt>
+                            快速通道
+                        </dt>
+                        <dt class="indexDownload">
+
+                            @Html.ActionLink("免费试用下载", "Index", "AECCloudClient", "", "", "clientDown", null, new { @id = "clientDown", title = "免费试用下载" })
+                        </dt>
+                        <dt class="indexDBWorld" style="border-bottom:none;">
+                            <a href="@Url.Action("Index", "AECCloudClient")" title="DBWorld客户端">DBWorld客户端</a>
+                            <ul>
+                                <li>
+                                    <a href="@Url.Action("Index", "DesignCloud")" title="协同云">
+                                        协同云
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "KnowledgeCloud")" title="知识云">
+                                        知识云
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "SoftwareCloud")" title="软件云">
+                                        软件云
+                                    </a>
+                                </li>
+                            </ul>
+                        </dt>
+                        <dt class="indexDBWorld">
+                            <p>模板使用</p>
+
+                            <a href="@Url.Action("Index", "DesignCloud")">
+                                <img src="/Content/Images/templates/indexcomment.png" />
+                                <span>通用模板</span>
+                            </a>
+                            <a href="@Url.Action("Index", "DesignCloud")">
+                                <img src="/Content/Images/templates/indexbim.png" />
+                                <span>BIM模板</span>
+                            </a>
+                        </dt>
+
+
+                        <dt class="indexHelp">
+                            <a href="javascript:void(0);" title="技术支持">技术支持</a>
+                        </dt>
+                    </dl>
+                </div>
+                <div class="xietongyun left">
+                    
+                    <div class="title" style="text-align:center;margin:15px 0 30px 0;">DBWorld云平台</div>
+                   
+                    <div class="content">
+
+
+                        <p>
+                            DBWorld是以云端软件、系统、知识等资源打造的面向工程技术和管理人员的社会化协同工作平台，并基于云架构进行工程项目资源的社会化分享、协作与电子交易。
+                        </p>
+                        <table cellpadding="0" cellspacing="0" border="0" class="marginTop indexTable1 indexTable2 marginBottom">
+                            <tr>
+                                <td>
+                                    <img src="/Content/Images/templates/indexImage.png" />
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p>
+                            DBWorld帮助工程项目团队实现协同工作的“虚拟化”、“无纸化”、“移动化”和“模型化”，是工程技术与管理人员的智能化IT助手，提供工程行业互联网生态圈环境，提高工程从业人员的协同工作能力、效率和质量，促进整个建设行业的变革和生产效能的提升。
+                        </p>
+
+                    </div>
+                    
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <!--右边-->
+        <div class="indexRight right indexHeight">
+            <div class="rightWrap">
+                <div class="rightAside">
+                    
+
+                    <!--新闻动态-->
+                    <div class="title" style="margin-top:15px;">
+                        新闻动态
+                        <a href="@Url.Action("NewsIndex", "NewsAnnounce")" name="news" title="more" class="asideMore right">MORE</a>
+                    </div>
+                    <div class="rightAsideContent" id="newsList">
+                        <ul>
+                            
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hezuo clearfix">
+
+        <p class="anli title">合作伙伴</p>
+        <script type="text/javascript">
+            //定义图片自动轮转
+            function action() {
+                var _scroll = $(".pictureRollList ul");
+                //ul往左边移动200px
+                _scroll.animate({ marginLeft: "-200px" }, 100, function () {
+                    //把第一个li丢最后面去
+                    _scroll.css({ marginLeft: 0 }).find("li:first").appendTo(_scroll);
+                });
+            }
+            //浏览器改变大小时执行
+            $(window).resize(function () {
+                //左侧快速通道的高度
+                $(".indexHeight").height($(".xietongyun").height());
+                //轮转图片区域的宽度
+                $(".pictureRollList").width($(".pictureRoll").width());
+            });
+            $(function () {
+                //点击按钮向右移动
+                $(".prevpicture").click(function () {
+                    $(this).parent().prev().find("ul").animate({ marginLeft: 0 }, 100, function () {
+                        $(this).find("li:last").prependTo($(this));
+                    });
+                });
+                //点击按钮向左移动
+                $(".nextpicture").click(function () {
+                    $(this).parent().prev().find("ul").animate({ marginLeft: "-200px" }, 100, function () {
+                        $(this).css({ marginLeft: 0 }).find("li:first").appendTo($(this));
+                    });
+                });
+                $(".indexHeight").height($(".xietongyun").height());
+                //合作伙伴图片轮播
+                var autoRoll = null;
+                //先赋值再取值
+                $(".pictureRollList").width($(".pictureRoll").width());
+                $(".pictureRollList ul").width($(".pictureRollList ul li").length * 200);
+                var pictureRollList = $(".pictureRollList").width();
+                var pictureRollListUl = $(".pictureRollList ul").width();
+                var autoRoll = setInterval("action()", 7000);
+                $(".pictureRoll").hover(function () {
+                    //清楚自动轮播
+                    clearInterval(autoRoll);
+                }, function () {
+                    //鼠标移开自动轮播开启
+                    autoRoll = setInterval("action()", 7000);
+                });
+            });
+        </script>
+        <div class="pictureRoll">
+            <div class="pictureRollList">
+                <ul class="pictureRollListUl">
+                    <li>
+                        <img src="/Content/Images/Partners/partner1.jpg" alt="上海三益建筑设计有限公司图片" />
+                        <a href="javascript:void(0);" title="上海三益建筑设计有限公司">
+                            上海三益建筑设计有限公司
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner2.png" alt="上海富欣智能交通设备有限公司图片" />
+                        <a href="javascript:void(0);" title="上海富欣智能交通设备有限公司">
+                            上海富欣智能交通设备有限公司
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner3.png" alt="上海西门子奥钢联冶金有限公司图片" />
+                        <a href="javascript:void(0);" title="上海西门子奥钢联冶金有限公司">
+                            上海西门子奥钢联冶金有限公司
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner4.png" alt="BIM服务图片" />
+                        <a href="javascript:void(0);" title="BIM服务">
+                            BIM服务
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner5.png" alt="德国汉莎测试技术有限公司图片" />
+                        <a href="javascript:void(0);" title="德国汉莎测试技术有限公司">
+                            德国汉莎测试技术有限公司
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner6.png" alt="上海宝治集团有限公司图片" />
+                        <a href="javascript:void(0);" title="上海宝治集团有限公司">
+                            上海宝治集团有限公司
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner7.png" alt="上海斐讯数据通信技术有限公司图片" />
+                        <a href="javascript:void(0);" title="上海斐讯数据通信技术有限公司">
+                            上海斐讯数据通信技术有限公司
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner8.png" alt="中国建筑科学研究院图片" />
+                        <a href="javascript:void(0);" title="中国建筑科学研究院">
+                            中国建筑科学研究院
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner9.png" alt="安世亚太图片" />
+                        <a href="javascript:void(0);" title="安世亚太">
+                            安世亚太
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner10.png" alt="Autodesk图片" />
+                        <a href="javascript:void(0);" title="Autodesk">
+                            Autodesk
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner11.jpg" alt="上海现代建筑设计（集团）有限公司图片" />
+                        <a href="javascript:void(0);" title="上海现代建筑设计（集团）有限公司">
+                            上海现代建筑设计（集团）有限公司
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner12.jpg" alt="上海建筑设计研究院有限公司图片" />
+                        <a href="javascript:void(0);" title="上海建筑设计研究院有限公司">
+                            上海建筑设计研究院有限公司
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner13.jpg" alt="华东建筑设计研究总院图片" />
+                        <a href="javascript:void(0);" title="华东建筑设计研究总院">
+                            华东建筑设计研究总院
+                        </a>
+                    </li>
+                    <li>
+                        <img src="/Content/Images/Partners/partner14.jpg" alt="集团现代都市建筑设计院图片" />
+                        <a href="javascript:void(0);" title="集团现代都市建筑设计院">
+                            集团现代都市建筑设计院
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="pictureRollBtn">
+                <a href="javascript:void(0);" title="向左" class="prevpicture"><img src="/Content/Images/Navigations/prev.png" /></a>
+                <a href="javascript:void(0);" title="向右" class="nextpicture"><img src="/Content/Images/Navigations/next.png" /></a>
+            </div>
+        </div>
+
+    </div>
+
+
+</section>

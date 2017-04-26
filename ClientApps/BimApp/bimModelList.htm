@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>BIM模型列表</title>
+
+    <!--BIM模型列表-->
+    <link type="text/css" rel="stylesheet" href="style/treeview/jquery.treeview.css" />
+    <link type="text/css" rel="stylesheet" href="style/layout-default.css">
+
+    <link type="text/css" rel="stylesheet" href="style/main.css" />
+
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script type="text/javascript" src="scripts/layout/jquery.layout.js"></script>
+
+    <script type="text/javascript" src="scripts/jquery.treeview/jquery.treeview.js"></script>
+    <script type="text/javascript" src="scripts/jquery.treeview/jquery.treeview.edit.js"></script>
+
+    <!--M-Files-->  
+    
+    <script type="text/javascript" src="scripts\md\base.js"></script>
+    <script type="text/javascript" src="scripts\md\bim.js"></script>
+
+    <script type="text/javascript" src="scripts/UIControlLibrary/utilities.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/localization.js"></script>
+    <script type="text/javascript" src="scripts/home_common.js"></script>
+    <script type="text/javascript" src="scripts/listing_common.js"></script>   
+
+    <script type="text/javascript" src="scripts/mf/client.js"></script>
+    <script type="text/javascript" src="scripts/mf/ui.js"></script>
+    <script type="text/javascript" src="scripts/mf/objectOps.js"></script>
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/cc/public.js"></script>
+    <script type="text/javascript" src="scripts/cc/mfTreeDomOps.js"></script>
+    <script type="text/javascript" src="scripts/cc/bimModelList.js"></script>
+
+    <style type="text/css">
+        body {
+            font-family: Verdana, helvetica, arial, sans-serif;
+            font-size: 68.75%;
+            background: #fff;
+            color: #333;
+        }
+
+        .projtree {
+            position: relative;
+            padding-left: 223px;
+        }
+
+        .dashboard {
+            height: 100%;
+        }
+
+        #treeWrap {
+            padding-left: 1px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #ffffff;
+        
+            width: 220px;
+            overflow: hidden;
+        }
+
+        .selectedSpan {
+            background-color: darkgray;
+        }
+         .treeTitle {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 1px 1px 1px 20px;
+            margin-bottom: 5px;
+            background-color: #007DC6; 
+            height: 33px;
+            line-height: 33px;
+            color: white;
+        }
+        /*右侧文件列表
+         begin*/
+        li {
+            list-style-type: none;
+        }
+
+        #list_files ul li {
+            height: 30px;
+            line-height: 30px;
+            overflow: hidden;
+        }
+
+        #list_files ul li:hover {
+            background-color: #CBE1FD;
+        }
+            
+        #list_files ul li:active, #list_files ul li.on {
+            background-color: #CBE1FD;
+        }
+
+        #list_files ul li img {
+            width: 20px;
+            height: 20px;
+            float: left;
+            margin: 5px 8px;
+        }
+
+        #list_files ul li label {
+            float: left;
+            font-size: 14px;
+            display: block;
+        }
+        /*end*/
+    </style>
+
+    <script type="text/javascript">
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+            //var cd = dashboard.CustomData;
+            //alert(cd.objsAndProps.Count);
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function() {
+
+                //var views = dashboard.CustomData.views;
+
+                // Shortcuts.
+                var shellFrame = dashboard.Parent;
+
+                var loc = new localization();
+
+                //获取vault对象
+                var vault = shellFrame.ShellUI.Vault;
+
+                $(function() {
+                      
+                    $(".projtree").height($(window).height());
+
+                    var proj = getProject();
+                    var units = getUnits();
+                    var propjId = proj.Type + "-" + proj.ID;
+                    var projDom = createLiDom(propjId, proj.Title, getModelPlans, "#directoryTree");
+
+                    for (var i = 0; i < units.length; i++) {
+                        var unitId = units[i].Type + "-" + units[i].ID;
+                        var unitDom = createLiDom(unitId, units[i].Title, getModelPlans, $("#" + propjId + ">ul"));
+
+                        var floors = getFloors(units[i].ID);
+                        for (var j = 0; j < floors.length; j++) {
+                            var floorId = floors[j].Type + "-" + floors[j].ID;
+                            var floorDom = createLiDom(floorId, floors[j].Title, getModelPlans, unitDom.children("ul").filter(":first"));
+
+                            var discs = getDisciplines(floors[j].ID);
+                            for (var k = 0; k < discs.length; k++) {
+                                var discId = discs[k].Type + "-" + discs[k].ID;
+                                var discDom = createLiDom(discId, discs[k].Title, getModelPlans, floorDom.find("ul:first"));
+                            }
+                        }
+                    }
+
+                    modellst.init(vault, shellFrame,loc);//首次进入页面初始化搜索所有文件
+
+                    $("#directoryTree").treeview({
+                        unique: true
+                    });
+                });
+
+                function createLiDom(id, title, callback, parent) {
+                    var newDom = $("<li id='" + id + "'><span class='folder'><a href='#' style='color:black; font-size: 13px;'>" + title + "</a></span><ul>" +
+                        "</ul></li>").appendTo(parent);
+                    $("#" + id + ">span>a").click(function (event) { 
+                        var selectedDom = $(event.target);
+                        $('#directoryTree .selectedSpan').removeClass("selectedSpan");
+                        selectedDom.addClass("selectedSpan");
+                        var domLi = selectedDom.parents("li").filter(":first");
+                        callback(domLi);
+                    }); 
+                    return newDom;
+                }
+
+                function getModelPlans(domLi) {
+                    var title = domLi.find("span>a").filter(":first").text();
+                    var domId = domLi.attr("id");
+                    var arr = domId.split('-');
+                    //var plans = modellst.searchModelPlans(shellFrame, { 'ObjType': arr[0], 'ID': arr[1], 'DisplayName': title }); 
+                    //displayPlansInList(plans); 
+
+                    var sConditons = modellst.search_criteria(vault,arr);//搜索条件
+
+                    try {
+                        var view = MF.ObjectOps.getTempSearchView(vault, undefined, 0, arr[1], sConditons);//获取临时视图 
+                        var tempView = modellst.getTempViewPath(vault, view);//得到临时视图路径
+                        var viewId = view.ID;
+    
+                        $("#list_ul").html(""); 
+                        modellst.create_dashboard(shellFrame, loc, tempView, vault, viewId);//创建临时视图listing
+                     
+                    } catch (e) {} 
+                }
+              
+                function displayPlansInList(plans) {
+                    if (plans === undefined) return;
+                    for (var i = 0; i < plans.length; i++) {
+                        modellst.insert_files(plans[i], "images/revit2014.png", "list_ul", shellFrame);
+                    } 
+                }
+
+                function substrString(str) {
+                    var lastIndex = str.indexOf('\\');
+                    var lastStr = str.substring(lastIndex + 1); 
+                    return lastStr;
+                }
+
+                function setCurrentPath(propDom) {
+                    var path = "";
+                    if (propDom) {
+                        var parents = propDom.parents("li"); 
+                        for (var i = parents.length ; i > 0; i--) {
+                            path += parents.eq(i - 1).find("span>a").filter(":first").text() + "\\";
+                        }
+                        path += propDom.find("span>a").filter(":first").text();
+                    } 
+                    return path;
+                }
+
+                //项目
+                function getProject() {
+                    return CC.treeDomOps.getProject(vault);
+                }
+
+                //获取单体
+                function getUnits() {
+                    return CC.treeDomOps.getUnits(vault);
+                }
+
+                //层
+                function getFloors(parentId) {
+                    return CC.treeDomOps.getFloors(vault, parentId);
+                }
+
+                //专业
+                function getDisciplines(parentId) {
+                    return CC.treeDomOps.getDisciplines(vault, parentId);
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="projtree"> 
+        <div id="treeWrap">
+            <div class="treeTitle">项目树</div>
+            <ul id="directoryTree" class="filetree"></ul>
+        </div>
+         
+        <div style="min-width: 705px;">
+            <div id="fullarea"></div> 
+        </div>
+    </div>
+</body>
+</html>

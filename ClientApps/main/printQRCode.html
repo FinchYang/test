@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+	#main_content{
+		margin:auto;
+		width:600px;
+	}
+	#main_table{
+		width:600px;
+		border-collapse:collapse;
+		display:none;
+	}
+	td{
+		border:1px solid #B5B5B5;
+		text-align:center;
+	}
+	caption{
+		font-size:22px;
+		margin-bottom:6px;
+	}
+	#btn_print{
+		margin-top:10px;
+		margin-left:270px;
+		width:60px;	
+		display:none;		
+	}
+	</style>
+<script type="text/javascript" src="scripts\jquery\jquery.js"></script>
+<script type="text/javascript" src="qrcode.js"></script>
+<script type="text/javascript">
+	"use strict";
+	var qrcodes;
+	function OnNewDashboard( dashboard ) {
+		dashboard.Events.Register( Event_Started, getDashboardStartedHandler( dashboard ) );
+	}
+	function getDashboardStartedHandler( dashboard ) {
+		return function () {
+			dashboard.Window.SetDefaultSize( 900, 800, true );
+			dashboard.Window.Title = "二维码打印";
+			qrcodes = dashboard.CustomData.qrcodes;	
+		}				
+	}
+	//输出word
+	$(function(){
+		//输入二维码边长后
+		$('#qrsize').change(function(){
+			var dpiX = window.screen.deviceXDPI
+			var dpiY = window.screen.deviceYDPI
+			var size = $(this).val();
+			var sizeX = size/25.4*dpiX;
+			var sizeY = size/25.4*dpiY;
+			if(!isNaN(size)){
+				$('#sizeDefine').hide();
+				$('#main_table').show();
+				$('#btn_print').show();
+				//循环对象			
+				for(var i =0;i<qrcodes.length;i++){
+					var tr = "<tr><td>" + (i+1) + "<input type='checkbox' checked='true'></input></td><td>" + qrcodes[i].Title + "</td><td class='qrcode'></td></tr>";				
+					$('#main_table').append(tr);
+					var qrcode = qrcodes[i].qrcode;				
+					if(qrcode){
+						//添加二维码
+						new QRCode($('#main_table tr').eq(i+1).children('.qrcode').get(0), {
+						text: qrcode,
+						width: sizeX,
+						height: sizeY,
+						colorDark : "#000000",
+						colorLight : "#ffffff",
+						correctLevel : QRCode.CorrectLevel.H,
+						align: "center"
+						});
+					}else{
+						$('#main_table tr').eq(i+1).children().eq(0).children('input').attr('checked',false);
+					}
+				}
+			}else{
+				alert("请输入数字！");
+			}			
+		});		
+		//导出二维码
+		$('#btn_print').click(function(){	
+			var fso = new ActiveXObject("Scripting.FileSystemObject");
+			//二维码下载到临时文件夹			
+			var tempPath = fso.GetSpecialFolder(2);
+			var imgPaths = [];
+			var i =0;
+			//下载二维码图片
+			$('#main_table tr:gt(0)').each(function(){
+				var checked = $(this).children().eq(0).children('input').prop('checked');
+				if(checked){
+					var src = $(this).find('img').attr('src');
+					if(src){
+						var imgPath = tempPath + "\\" + guid() + ".png";	
+						base64ToImg(src,imgPath);
+						imgPaths.push(imgPath);
+					}					
+				}				
+			});
+			//save doc
+			var path = browseFolder();
+			if(!path) return;
+			if(!fso.FolderExists(path)){
+				alert("指定的目录不存在：" + path);
+				return;
+			}
+			//复制二维码图片到word
+			var mydate = new Date();
+			var wordPath =path + "\\" + mydate.getFullYear().toString() + (mydate.getMonth()+1).toString() +mydate.getDate().toString()+ mydate.getHours().toString()+mydate.getMinutes().toString()+mydate.getSeconds().toString() + ".doc";
+			var wordApp=new ActiveXObject("Word.Application");
+			wordApp.Visible=false;
+			var myDoc = wordApp.Documents.Add();
+			for(var i =0;i<imgPaths.length;i++){
+				var range = myDoc.Range();
+				var imgPath = imgPaths[i];
+				if(fso.FileExists(imgPath)){
+					wordApp.Selection.InlineShapes.AddPicture(imgPath);	
+				}else{
+					alert("文件不存在：" + imgPath);
+				}							
+			}
+			//保存退出
+			myDoc.saveAs2(wordPath);
+			//myDoc.Close(true);
+			//wordApp.Quit();					
+			alert("二维码已保存到：" + wordPath);			
+			//for(var i =0;i<imgPaths.length;i++){deleteFile(imgPaths[i]);}
+			wordApp.Visible=true;
+		});	
+	});
+	
+	//删除文件
+	function  deleteFile(name)   
+	{   
+       var fso=new  ActiveXObject("Scripting.FileSystemObject");   
+       if(fso.FileExists(name)) {
+		  fso.DeleteFile(name);
+	   }  else{
+	   }
+	}   
+
+	
+	//选择文件夹
+	function browseFolder() {
+		var Message = "请选择保存路径:"; //选择框提示信息
+		var Shell = new ActiveXObject("Shell.Application");
+		var Folder = Shell.BrowseForFolder(0, Message, 64, 17); //起始目录为：我的电脑
+		//var Folder = Shell.BrowseForFolder(0, Message, 0); //起始目录为：桌面
+		if (Folder != null) {
+			Folder = Folder.items(); // 返回 FolderItems 对象
+			Folder = Folder.item(); // 返回 Folderitem 对象
+			//Folder = Folder.Path; // 返回路径
+			//if (Folder.charAt(Folder.length - 1) != "\\") {
+			//    Folder = Folder + "\\";
+			//}
+			//document.getElementById(path).value = Folder;
+			return Folder.Path;
+		}else{
+			return "";
+		}
+	}
+	
+	function testDD(a,imgPath){
+		var s = String.fromCharCode.apply(null, a);  
+		var stream = new ActiveXObject('Adodb.Stream');  
+		stream.Mode = 3;  
+		stream.Open();  
+		stream.Type = 2;  
+		stream.Charset = 'iso8859-1';  
+		stream.WriteText(s);  
+		stream.SaveToFile(imgPath,2);  
+		stream.Close()
+	}
+	function dataURL2Blob(dataurl) {
+		var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+			bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+		while(n--){
+			u8arr[n] = bstr.charCodeAt(n);
+		}
+		return new Blob([u8arr], {type: "application/octet-binary"});
+	}
+	function base64ToImg(src,imgPath){
+		var dblob = dataURL2Blob(src);
+		var reader = new FileReader();
+		reader.addEventListener("loadend", function() {
+			// reader.result contains the contents of blob as a typed array
+			var res = new Uint8Array(reader.result);
+			testDD(res,imgPath); 
+		});
+	    reader.readAsArrayBuffer(dblob);
+	}
+	
+	function S4() {
+		return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+	}
+	function guid() {
+		return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+	}
+
+</script>
+</head>
+<body>
+	<div id="main_content">
+		<div id="sizeDefine">
+			<strong>二维码边长:</strong><input id="qrsize" type="text"></input><strong>mm</strong>
+		</div>
+		<table id="main_table">
+			<caption align="top"><strong>构件二维码</strong></caption>
+			<tr><td width="100px">编号</td><td width="400px">构建名称</td><td width="10px">模型链接</td></tr>
+		</table>
+		<button id="btn_print">输出</button>
+	<div>
+</body>
+</html>

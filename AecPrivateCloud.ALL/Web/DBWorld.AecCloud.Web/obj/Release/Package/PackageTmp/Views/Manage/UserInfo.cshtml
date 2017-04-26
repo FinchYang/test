@@ -1,0 +1,174 @@
+﻿@model UserInfoViewModel
+
+@{
+    ViewBag.Title = "UserInfo";
+}
+<!-- 当前位置 -->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="登录">用户信息</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavPrivatePartiale")
+    <!-- 右边内容 -->
+    <section class="right">
+        <div class="secondContent" style="overflow-y: scroll;max-height: 500px;">
+            @*<div class="userTopImg">
+                <img src="~/Content/Images/userPageTop.gif" alt="个人用户主页页头图片" title="欢迎标语" />
+            </div>*@
+            @using (Html.BeginForm())
+            {
+                <div class="title userTitle">
+                    个人信息
+                    @*@Html.ActionLink("修改密码", "ChangePassword", "Manage", new { @class = "changePassword right" })*@
+                </div>
+                <div class="userChangeContent clearfix">
+                    <ul class="formUl">
+                        <li>
+                            <label class="formLabel left">头像：</label>
+                            <div class="userInfo">
+                                <img src="/BIM/GetUserImage?userId=@Model.Id" width="185" height="150" alt="用户头像" />
+                            </div>
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Name, new { @class = "formLabel left" })
+                            @*@Html.TextBoxFor(m => m.Name, new { @class = "formInput", @disabled = true, @Value = (Model.Name == null) ? "无" : Model.Name.ToString() })*@
+                            @if (Model.Name == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.Name</div>
+                            }
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Description, new { @class = "formLabel left" })
+                            @if (Model.Description == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.Description</div>
+                            }
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="title userTitle">
+                    联系信息
+                </div>
+                <div class="userChangeContent">
+                    <ul class="formUl">
+                        <li>
+                            @Html.LabelFor(m => m.Phone, new { @class = "formLabel left" })
+                            @if (Model.Phone == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.Phone</div>
+                            }
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Email, new { @class = "formLabel left" })
+                            @if (Model.Email == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.Email</div>
+                            }
+                        </li>
+                        @*<li>
+                            @Html.LabelFor(m => m.Email, new { @class = "formLabel left" })
+                            @if (Model.Email == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.Email</div>
+                            }
+                        </li>*@
+                        <li>
+                            @Html.LabelFor(m => m.QQ, new { @class = "formLabel left" })
+                            @if (Model.QQ == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.QQ</div>
+                            }
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="title userTitle">
+                    职业信息
+                </div>
+                <div class="userChangeContent">
+
+                    <ul class="formUl">
+                        <li>
+                            @Html.LabelFor(m => m.Industry, new { @class = "formLabel left" })
+                            @if (Model.Industry == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.Industry</div>
+                            }
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Company, new { @class = "formLabel left" })
+                            @if (Model.Company == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.Company</div>
+                            }
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Department, new { @class = "formLabel left" })
+                            @if (Model.Department == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.Department</div>
+                            }
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Post, new { @class = "formLabel left" })
+                            @if (Model.Post == null)
+                            {
+                                <span>无</span>
+                            }
+                            else
+                            {
+                                <div class="userInfo">@Model.Post</div>
+                            }
+                        </li>
+                    </ul>
+                </div>
+                <p class="right">
+                    <input type="submit" value="修改" class="subBtn formLoginIn" />
+                </p>
+
+            }
+        </div>
+
+    </section>
+</div>

@@ -1,0 +1,208 @@
+﻿@model UserInfoViewModel
+
+@{
+    ViewBag.Title = "UserInfoEdit";
+}
+<style>
+    
+    .body-container {
+        background-color: white;
+    }
+
+     #content {
+         background-color: #ececec;
+         max-height: inherit !important;
+     }
+
+    .secondContent {
+        margin-top:10px;
+        padding-left:0;
+        height:1000px;
+    }
+
+    .user-image {
+        padding-left:50px;
+        text-align: center;
+    }
+
+    .formUl li, .user-image li {
+        list-style:none;
+    }
+
+    .formLabel {
+        text-align: right;
+        width:180px;
+    }
+
+    .formInput {
+        width: 387px;
+        height:37px;
+        border-color:#dcdcdc;
+        background-color:#ececec;
+    }
+    .formTextarea {
+        width: 387px;
+        height:123px;
+        border-color:#dcdcdc;
+        background-color:#ececec;
+    }
+
+    #preview img {
+        width: inherit !important;
+        height: inherit !important;
+    }
+
+    .userTitle {
+        border-bottom:2px solid #ececec;
+        padding-left:10px;
+        padding-bottom:2px;
+    }
+
+    
+
+    #imghead {
+        width: 91px;
+        height:27px; 
+        text-align: center;
+        background-color:#4f9ef1;
+        display: inline-block;
+        border:1px solid #0066a0;
+        -ms-border-radius:3px;
+        border-radius:3px;
+        color:white;
+        margin-top:10px;
+    }
+
+    .subBtn {
+        margin-left:450px;
+        background-color:#0066a0;
+        width:115px;
+        height:37px;
+    }
+    
+    .bottom-info {
+        margin-bottom:0;
+        padding-bottom:5px;
+    }
+
+    .edit-form {
+        background-color: white;
+        margin-right:50px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        //$("#preview img").attr("src", $("#imgSrc").attr("value"));
+
+        $("#imghead").click(function () {
+            $("#imgSrc").val("");
+            $("#imgUp").click();
+        });
+    });
+
+
+</script>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section class="right">
+        <div class="section-header">我的账户 > 个人信息</div>
+        <div class="secondContent">
+            @*<div class="userTopImg">
+                <img src="/Content/Images/userPageTop.gif" alt="个人用户主页页头图片" title="欢迎标语" />
+            </div>*@
+            @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+            @using (Html.BeginForm("UserInfoEdit", "Manage", FormMethod.Post, new {enctype = "multipart/form-data", id = "creatProject", @class="edit-form"}))
+            {
+                @Html.HiddenFor(m => m.Id)
+                <div class="userChangeContent clearfix">
+                    <ul class="formUl left">
+                        <li>
+                            @Html.LabelFor(m => m.WorkerIdentity, new {@class = "formLabel"})
+                            @Html.TextBoxFor(m => m.WorkerIdentity, new {@class = "formInput", @disabled = "disabled"})
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Name, new {@class = "formLabel"})
+                            @Html.TextBoxFor(m => m.Name, new {@class = "formInput"})
+                        </li>
+                        @*<li>
+                            @Html.LabelFor(m => m.Description, new {@class = "formLabel left"})
+                            @Html.TextAreaFor(m => m.Description, new {@class = "formTextarea left"})
+                        </li>*@
+                    </ul>
+
+                    <div class="user-image-container">
+                        @*如果没有使用本地上传图片的话 此处input记录下默认图片的路径传进后台 *@
+                        <ul class="user-image left">
+                            <li><span id="preview"><img src="/BIM/GetUserImage?userId=@Model.Id" width="146" height="146" alt="用户头像" /></span></li>
+                            <li>
+                                <a href="#" id="imghead" title="修改头像">
+                                    修改头像
+                                </a>
+                            </li>
+                        </ul>
+                        <input type="file" onchange="previewImage(this)" style="display: none;" id="imgUp" name="projectImg" accept=".jpg,.bmp,.gif,.jpeg" />
+                    </div>
+
+                </div>
+                <div class="title userTitle">
+                    联系信息
+                </div>
+                <div class="userChangeContent">
+                    <ul class="formUl">
+                        <li>
+                            @Html.LabelFor(m => m.Phone, new {@class = "formLabel"})
+                            @Html.TextBoxFor(m => m.Phone, new {@class = "formInput"})
+                            @Html.ValidationMessageFor(m => m.Phone)
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Email, new {@class = "formLabel"})
+                            @Html.TextBoxFor(m => m.Email, new {@class = "formInput"})
+                            @Html.ValidationMessageFor(m => m.Email)
+                        </li>
+                        @*<li>
+                                @Html.LabelFor(m => m.Email, new { @class = "formLabel" })
+                                @Html.TextBoxFor(m => m.Email, new { @class = "formInput", @readonly = true })
+                            </li>*@
+                        <li>
+                            @Html.LabelFor(m => m.QQ, new {@class = "formLabel"})
+                            @Html.TextBoxFor(m => m.QQ, new {@class = "formInput"})
+                            @Html.ValidationMessageFor(m => m.QQ, "", new {@class = "text-danger"})
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="title userTitle">
+                    职业信息
+                </div>
+                <div class="userChangeContent bottom-info">
+
+                    <ul class="formUl">
+                        <li>
+                            @Html.LabelFor(m => m.Industry, new {@class = "formLabel"})
+                            @Html.TextBoxFor(m => m.Industry, new {@class = "formInput"})
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Company, new {@class = "formLabel"})
+                            @Html.TextBoxFor(m => m.Company, new {@class = "formInput"})
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Department, new {@class = "formLabel"})
+                            @Html.TextBoxFor(m => m.Department, new {@class = "formInput"})
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Post, new {@class = "formLabel"})
+                            @Html.TextBoxFor(m => m.Post, new {@class = "formInput", @disabled = "disabled"})
+                        </li>
+                    </ul>
+                </div>
+                <p>
+                    <input type="submit" value="确认修改" class="subBtn formLoginIn"/>
+                </p>
+            }
+        </div>
+
+    </section>
+</div>

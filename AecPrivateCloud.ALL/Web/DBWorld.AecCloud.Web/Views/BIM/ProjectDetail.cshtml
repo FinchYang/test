@@ -1,0 +1,291 @@
+﻿@using DBWorld.AecCloud.Web.ApiRequests
+@model ProjectEditModel
+           
+@{
+    ViewBag.Title = "项目概况";
+    //Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var domain = DomainClient.Domain;
+}
+
+<link href="~/Content/oldstyles/loading.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/oldstyles/second.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/oldstyles/footer.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/oldscripts/Mfile.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/jquery.flexslider-min.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/commonMethod.js" type="text/javascript"></script>
+<script src="~/Scripts/oldscripts/kefu.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+
+<script src="~/Scripts/oldscripts/BIM.js"></script>
+<link href="~/Content/oldstyles/BIMClient.css" rel="stylesheet" />
+<link href="~/Content/oldstyles/BIMMaster.css" rel="stylesheet" />
+<link href="~/Content/oldstyles/BIMPopup.css" rel="stylesheet" />
+<link href="~/Scripts/multiselect/bootstrap.css" rel="stylesheet" />
+<link href="~/Scripts/multiselect/multiple-select.css" rel="stylesheet"/>
+<script src="~/Scripts/multiselect/multiple-select.js"></script>
+<script src="~/Scripts/oldscripts/BIMProjectDetails.js"></script>
+
+<style>
+    .popupClose {
+    background: url('/Content/images/new/popupClose.png') no-repeat 0 0;
+    cursor: pointer;
+    position: inherit;
+    right: -15px;
+    top: -15px;
+    width: 31px;
+    height: 31px;
+    z-index: 10001;
+}
+    .party-wrap {
+        margin-bottom:-15px;
+        padding-top: 10px;
+    }
+     .party-wrap-span {
+         float: left;
+         color: black;
+     }
+     .party-wrap-div {
+         float: right; 
+         width: 200px;
+         margin-right: 60px;
+         font-size: 12px;
+     }
+    .user-invited {
+        float: left;
+        margin-top: 12px;
+    }
+     .user-invited>input[type=text] {
+         width: 190px;
+     }
+      .user-invited>label {
+        background-color: gainsboro;
+        font-weight: normal;
+     }
+
+    .select{
+        width: 200px;
+        border: 1px solid #1b96d1;
+        background-color: white;
+        font-size: 12px;
+    }
+    .select input[type="checkbox"] {
+        padding: 0;
+        margin: 0 3px 0 0; 
+    }
+    .select span {
+        color: #065190;
+    }
+    .btn-wrap {
+        margin: 20px 0 15px 0;
+        padding-top: 25px;
+    }
+
+    .btn-wrap input:disabled {
+        color: rgb(186, 183, 183);
+        cursor: wait;
+    }
+    .ms-choice {
+        border: 2px solid silver;
+    }
+
+    .proj-detail-info {
+        height:37px;
+        width:650px;
+        border:2px solid #dcdcdc;
+        padding-top:5px;
+        padding-left:10px;
+    }
+
+    .proj-detail-info-date {
+        height:37px;
+        width:200px;
+        border:2px solid #dcdcdc;
+        padding-top:5px;
+        padding-left:10px;
+    }
+
+    .proj-detail-info-status {
+        height:37px;
+        width:100px;
+        border:2px solid #dcdcdc;
+        padding-top:5px;
+        padding-left:10px;
+    }
+    .textarea-info {
+        border:2px solid #dcdcdc;
+        height:112px;
+        width:650px;
+        margin-bottom:10px;
+    }
+
+    div.name-display {
+        text-align: center;
+        color:black;
+    }
+
+    div.showProject {
+        background-color: white;
+        padding-top: 30px;
+        margin-right:50px;
+    }
+
+    .body-container {
+        background-color: white;
+    }
+
+    .right div {
+        background-color: white;
+    }
+
+    .member-content {
+        margin-top: 0 !important;
+        margin-bottom: 10px;
+    }
+    .projectDetailContent {
+        margin-right: 20px !important;
+    }
+    .projectTitle {
+        margin-right: 20px !important;
+    }
+
+    .corbar {
+        float: left;
+        margin-left: 3px;
+        margin-right: 10px;
+        width: 5px;
+        height: 22px;
+        background-color: #017EC1 !important;
+    }
+</style>
+
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section class="right">
+        <div class="section-header" style="padding-top: 5px;">
+            <div class="corbar"></div> 项目中心 <img src="/Content/Images/mdd/副级导航.png" /> 项目信息
+        </div>
+        <input type="hidden" class="currentProject" />
+        <div class="projectDetailContent" id="projectDetail">
+            <div class="showProject">
+            </div>
+        </div>
+        <div class="projectTitle">项目成员</div>
+        <div class="projectDetailContent member-content">
+
+            <div class="columnWrap clearfix">
+                <div class=" columnRight borderNone qualifyImg left" id="membersList2">
+                    <a href="javascript:void(0);" style="display: inline-block; float:left; margin-right:5px;">
+                        <img src="~/Content/Images/projects/addmember.png" width="81" height="81" alt="添加成员" class="moreMember" />
+                        <div class="name-display">添加成员</div>
+                    </a>
+                    <span class="closeUser">
+                    </span>
+                    
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+  <!--弹窗部分-->
+
+<div class="popupInvitate popupWrap">
+    <div class="newProjectTitle">
+        邀请成员
+        <a href="javascript:void(0);" title="关闭" class="popupClose popupCloseStyle right" style="width:31px;height:31px;margin:0;">
+            @*<img src="~/Content/Images/newProjectClose.png" width="12" height="12" alt="关闭图片" />*@
+        </a>
+    </div>
+    <div class="popupInvitateWrap">
+        <div class="popupInvitateTitle fontShallowBlue">
+            <p style="color:red;"></p>
+            邀请伙伴一起加入吧！
+        </div>
+        <div class="participant fontWhite party-wrap" id="partiesDiv">
+            <div class="columnWrap clearfix">
+                <span class="columnLeft party-wrap-span">
+                    参与方：
+                </span>
+                <div class="borderNone party-wrap-div">
+                    <div class="nice-select" name="nice-select" id="partiesDiv02">
+                        <input type="text" id="chooseParty" style="padding-left: 8px;">
+                        <ul id="partiesUl"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="invitePopContent">
+            <div class="user-invited">
+                <span>请选择账户：</span>
+                <select id="userAccounts" class="select" multiple="multiple">
+                </select>
+            </div>
+            @*<div class="user-invited" style="margin: 15px 60px 20px 68px; font-size: 11px;color: #065190;">
+                备注：邀请成功后，系统将通过MFiles登录账户设置的邮箱来通知用户
+            </div>*@
+            @*<div class="user-invited" style="margin-left: 90px;">
+                <input id="domainCk" type="checkbox" checked="checked" />
+                <label id="domainLb" for="domainCk">@domain</label>
+            </div>*@
+            <div class="btn-wrap">
+                <div class="InvitateBtn">
+                    @*<a href="javascript:void(0);" title="确定" class="InvitateSave" id="inviteMember">确定</a>
+                    <a href="javascript:void(0);" title="取消" class="popupClose" id="inviteCancelOp">取消</a>*@
+                    <input type="button" value="确定" class="InvitateSave" id="inviteMember">
+                    <input type="button" value="取消" class="popupClose" id="inviteCancelOp">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--小组成员-->
+<div class="groupMemberWrap popupWrap">
+    <div class="groupMoreContent">
+        <div class="groupMoreTitle">
+            <input value="" type="text" class="groupMoreInput" placeholder="模糊查询" />
+            <a href="javascript:void(0);" title="关闭" class="popupClose">关闭</a>
+        </div>
+        <ul class="groupMoreList checkboxList">
+            @*<li>
+                    <a href="javascript:void(0)" title="项目助理">项目助理</a>
+                </li>*@
+        </ul>
+    </div>
+</div>
+
+<div class="userData popupWrap" style="width: 400px;padding-bottom: 50px;height: 600px;}">
+    <div class="popupTitle" style="padding-left:  150px;">
+        成员个人信息
+        <a href="javascript:void(0);" title="关闭" class="popupClose right">
+            @*<img src="~/Content/Images/newProjectClose.png" width="12" height="12" alt="关闭图片" />*@
+        </a>
+    </div>
+    <div class="popupContent userDataContent" style="padding-left: 20px;line-height: 1.1em;">
+        <!--个人信息内容-->
+    </div>
+    <div id="selectrolesdiv" style="padding-left: 20px;">
+        <span style="margin-right: 10px;">项目岗位：</span>
+        @*<div style="border: 2px solid silver;display: inline;margin-left: 20px;padding: 0px;">*@
+            <select id='roles' name='ss' multiple='multiple' style="width: 150px;margin-left: 10px;">
+                @*<option value='1'>工长</option>
+            <option value='2'>安全员</option>
+            <option value='3'>安全总监</option>
+            <option value='4'>材料员</option>
+            <option value='5'>材料员</option>*@
+            </select>
+        @*</div>*@
+       
+        <input type='button' name='Submit' id='roleselected' value='提交' style="background-color: #008ad2;color: white;padding-left: 10px;padding-right: 10px;margin-left: 20px;" />
+    </div>
+</div>
+
+
+<!--弹出窗阴影-->
+<div class="popupWrapBg"></div>

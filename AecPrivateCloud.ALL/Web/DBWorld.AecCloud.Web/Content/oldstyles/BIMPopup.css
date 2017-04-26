@@ -1,0 +1,612 @@
+﻿/**
+    ** time : 2015 - 1 - 20
+    ** pro ： DBWorld
+    ** author : 肖颖
+    ** main : BIM客户端主要样式
+**/
+
+
+/*弹出窗口*/
+.popupWrap {
+    display: none;
+    background: #fff;
+    position: absolute;
+    z-index: 100;
+    top: 30px;
+    word-break: break-all;
+}
+
+.popupWrapBg {
+    background: rgba(0,0,0,0.5);
+    display: none;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 99;
+}
+
+.popupClose {
+    color: #fff;
+}
+
+.popupTitle {
+    background: #096e9a;
+    color: #fff;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+.popupCloseStyle {
+    display: block;
+    height: 12px;
+    line-height: 12px;
+    margin-right: 10px;
+    margin-top: 8px;
+    width: 12px;
+}
+
+.popupContent {
+    padding: 10px;
+    font-family: "微软雅黑";
+    font-size: 14px;
+}
+
+
+
+
+/*新建项目*/
+.newProject {
+    border: 1px solid #1b96d1;
+    background: #fff;
+    min-height: 595px;
+    width: 475px;
+    z-index: 1000;
+}
+
+.newProjectTitle {
+    background: #096e9a;
+    color: #fff;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+}
+
+.newProjectClose {
+    display: block;
+    height: 12px;
+    margin-right: 10px;
+    margin-top: 8px;
+    width: 12px;
+    line-height: 12px;
+}
+
+.newProjectContent {
+    padding: 10px;
+}
+
+/*左右分布排版的基本样式*/
+.columnWrap {
+    color: #025a85;
+    margin-top: 10px;
+}
+
+.columnLeft {
+    width: 80px;
+}
+
+.columnRight {
+    width: 900px;
+}
+
+
+
+.newProjectContent .columnRight {
+    width: 650px;
+}
+
+.projectTemplete {
+    width: 100%;
+}
+
+    .projectTemplete tr td {
+        width: 33.3%;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+/*#preview img {
+    height: 176px;
+    width: 227px;
+}*/
+
+#imghead a {
+    color: #1b96d1;
+}
+
+    #imghead a:hover {
+        text-decoration: underline;
+    }
+
+.projectTempleteContent {
+    border: 1px solid #1b96d1;
+    height: 80px;
+    position: relative;
+}
+
+.projectTempleteTitle {
+    background: #1b96d1;
+    font-size: 12px;
+    color: #fff;
+    line-height: 20px;
+    height: 20px;
+    width: 110px; /*85px;*/
+    text-align: center;
+}
+
+.projectTempleteIntroduce {
+    color: #096e9a;
+    font-size: 12px;
+    padding: 10px;
+}
+
+.projectTempleteImg {
+    position: absolute;
+    right: 2px;
+    top: 0;
+}
+
+    .projectTempleteImg img {
+        height: 20px;
+        width: 21px;
+    }
+
+
+/*高级设置*/
+.popupWrap.seniorEdit {
+    border: 1px solid #1b96d1;
+    min-height: 335px;
+    max-height: 335px;
+    width: 485px;
+}
+
+.projectCoverChoose {
+    height: 150px;
+    width: 100%;
+}
+
+    .projectCoverChoose tr td {
+        color: #096e9a;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 3px;
+        text-align: center;
+    }
+
+/*个人信息*/
+.userData {
+    border: 1px solid #1b96d1;
+    position: absolute;
+    width: 375px;
+}
+
+.userDataContent {
+    position: relative;
+}
+
+    .userDataContent .columnRight {
+        width: 270px;
+    }
+        .userDataContent .columnRight.columnEmail {
+            width:160px;
+        }
+
+.userDataHead {
+    height: 145px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 110px;
+}
+
+.userDataImg img {
+    height: 120px;
+    width: 110px;
+}
+
+.userDataHead a {
+    background-image: url('Images/UserHeaderChange.gif');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: #fff;
+    display: block;
+    width: 75px;
+    height: 24px;
+    line-height: 24px;
+    margin-top: 3px;
+    padding-left: 35px;
+}
+
+
+
+/*添加小组*/
+.groupWrap {
+    position: relative;
+}
+
+.groupList {
+    background: #1b96d1;
+    color: #fff;
+    cursor: pointer;
+    height: 23px;
+    line-height: 23px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    padding: 0 10px;
+    position: relative;
+    text-align: center;
+}
+
+    .groupList span {
+        position: absolute;
+        top: -5px;
+        right: 0;
+    }
+
+        .groupList span img {
+            height: 15px;
+            width: 15px;
+        }
+
+    .groupList input {
+        background: none;
+        border: none;
+        color: #fff;
+        font-family: "微软雅黑";
+        height: 23px;
+        line-height: 23px;
+        width: 50px;
+    }
+
+    .groupList a {
+        color: #fff;
+    }
+
+.groupMoreWrap {
+    background: url(images/groupMoreBg.png) no-repeat 0 0;
+    min-height: 110px;
+    padding-left: 24px;
+    width: 128px;
+    position: absolute;
+}
+
+    .groupMoreWrap.popupWrap {
+        z-index: 101;
+    }
+
+.groupMoreContent {
+    background: #009fe4;
+    overflow: hidden;
+    padding: 8px;
+    width: 112px;
+    min-height: 100px;
+    max-height: 300px;
+}
+
+.groupMoreTitle {
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 5px;
+    height: 22px;
+}
+
+    .groupMoreTitle input {
+        background: none;
+        border: 1px solid rgba(255,255,255,0.3);
+        color: #fff;
+        height: 22px;
+        line-height: 22px;
+        padding: 0 5px;
+        width: 60px;
+    }
+
+    .groupMoreTitle a {
+        color: #fff;
+        margin-left: 5px;
+    }
+
+.groupMoreList li {
+    color: #fff;
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+}
+
+    .groupMoreList li a {
+        color: #fff;
+        display: inline-block;
+        width: 90px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .groupMoreList li span {
+        margin-top: 10px;
+        margin-right: 5px;
+    }
+
+/*小组成员*/
+.groupMemberWrap {
+    background: #009fe4;
+    min-height: 110px;
+    width: 128px;
+    position: absolute;
+}
+
+    .groupMemberWrap.popupWrap {
+        z-index: 101;
+    }
+
+.checkboxList input {
+    margin-top: 10px;
+    margin-right: 2px;
+}
+
+
+/*添加成员弹窗*/
+/*.popupWrap.popupInvitate {
+    background: #096e9a;
+    min-height: 270px;
+    max-height: 270px;
+    padding: 10px;
+    width: 340px;
+}
+
+.popupInvitateTitle {
+    border-bottom: 1px solid rgba(27,150,209,0.85);
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+    .popupInvitateTitle p {
+        color: #ffbb41;
+    }
+
+.tpyeInvitateWrap {
+    margin-top: 5px;
+    width: 340px;
+}
+
+.emailInvitate {
+    margin-right: 5px;
+}
+
+.linkInvitate {
+    margin-left: 5px;
+}
+
+.tpyeInvitate {
+    width: 165px;
+}
+
+.typeInvitateInput {
+    height: 25px;
+    line-height: 25px;
+    margin-top: 5px;
+    padding: 0 5px;
+    width: 165px;
+}*/
+.popupWrap.popupInvitate {
+    border: 1px solid #096e9a;
+    background: #fff;
+    height: auto;
+    width: 400px;
+}
+
+.popupInvitateWrap {
+    padding: 10px 25px;
+}
+
+
+.popupInvitateTitle {
+    border-bottom: 1px solid rgba(27,150,209,0.85);
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+    .popupInvitateTitle p {
+        color: #096e9a;
+    }
+
+.popupInvitate .columnRight {
+    width: 270px;
+}
+
+.tpyeInvitateWrap {
+    margin-top: 5px;
+    width: 340px;
+}
+
+.emailInvitate {
+    margin-right: 5px;
+}
+
+.linkInvitate {
+    margin-left: 5px;
+}
+
+.tpyeInvitate {
+    width: 165px;
+}
+
+    .tpyeInvitate p {
+        color: #096e9a;
+    }
+
+.typeInvitateInput {
+    border: 1px solid #1b96d1;
+    height: 25px;
+    line-height: 25px;
+    margin-top: 5px;
+    padding: 0 5px;
+    width: 160px;
+}
+/*添加成员弹窗成员列表tab*/
+.tabInvitate {
+    width: 340px;
+}
+
+    .tabInvitate .tab_ul li a {
+        color: #096e9a;
+        margin-right: 20px;
+        text-decoration: none;
+    }
+
+    .tabInvitate .tab_ul .li_on a {
+        color: #ffbb41;
+    }
+
+    .tabInvitate .tab_ul .hover a {
+        color: #ffbb41;
+    }
+
+    .tabInvitate .tab_con {
+        height: 45px;
+        width: 340px;
+        position: relative;
+        margin: 10px 0;
+    }
+
+.InvitateMemberList {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    width: 300px;
+    height: 45px;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.memberListUl li {
+    float: left;
+    height: 45px;
+    margin-right: 10px;
+    width: 90px;
+}
+
+    .memberListUl li a {
+        color: #fff;
+        font-size: 12px;
+    }
+
+        .memberListUl li a img {
+            height: 45px;
+            width: 45px;
+            float: left;
+        }
+
+        .memberListUl li a span {
+            display: block;
+            float: left;
+            width: 42px;
+            white-space: nowrap;
+            overflow: hidden;
+            height: 45px;
+            line-height: 45px;
+            text-overflow: ellipsis;
+            padding-left: 3px;
+        }
+
+.InvitateMemberListBtn a {
+    position: absolute;
+    display: block;
+    height: 15px;
+    width: 15px;
+    top: 15px;
+}
+
+    .InvitateMemberListBtn a img {
+        height: 15px;
+        width: 15px;
+    }
+
+.prevInvitate {
+    left: 0;
+}
+
+.nextInvitate {
+    right: 0;
+}
+/*参与方*/
+.participant {
+}
+
+/*项目经理添加*/
+.popuoManager {
+    background: #096e9a;
+    height: 240px;
+    padding: 10px 5px;
+    width: 140px;
+    position: absolute;
+}
+
+.popuoManagerSearch input {
+    border-radius: 2px;
+    margin-bottom: 10px;
+    width: 100px;
+}
+
+.popupManagerContent {
+    height: 210px;
+    overflow: auto;
+}
+
+    .popupManagerContent .memberListUl li {
+        width: 120px;
+        margin-bottom: 7px;
+        position: relative;
+    }
+
+        .popupManagerContent .memberListUl li a span {
+            width: 70px;
+        }
+
+.chooseManager {
+    position: absolute;
+    right: 2px;
+    top: 16px;
+}
+
+
+/*新建消息、查看消息*/
+.messageNewsPopup {
+    border: 1px solid #096e9a;
+    width: 375px;
+    min-height: 100px;
+    overflow: hidden;
+}
+
+.messageInput {
+    border: 1px solid #1b96d1;
+    width: 100%;
+}
+
+
+
+/*确认弹窗*/
+.promptWrap {
+    border: 1px solid #1b96d1;
+    border-radius: 5px;
+    min-height: 120px;
+    padding: 10px 15px;
+    min-width: 250px;
+    max-width: 350px;
+}
+
+.promptContain {
+    min-height: 90px;
+    text-align: center;
+}

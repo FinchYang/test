@@ -1,0 +1,315 @@
+﻿@model PagedList.IPagedList<AecCloud.Service.Vaults.PerformanceRateModel>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "工期履约率统计报表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var homeUrl = AecCloud.BaseCore.Utility.GetHost(Request.Url);
+}
+
+<style>
+     #divTitle {
+        margin-top: 5px;
+        margin-right: 20px;
+        background-color: #FFFFFF;
+        width: 1000px;
+        height: 30px;
+    }
+
+    #corbar {
+        float: left;
+        margin-left: 8px;
+        margin-top: 3px;
+        width: 6px;
+        height: 24px;
+        background-color: #017EC1;
+    }
+
+    #title {
+        margin-top: 2px;
+        margin-left: 8px;
+        float: left;
+        font-weight: 500;
+        vertical-align: middle;
+        font-size: 16px;
+    }
+    td{
+        display:table-cell;
+        text-align:center;
+        vertical-align:middle;        
+    }
+    #year{
+        margin-left: 10px;
+        background: url("/Content/Images/mdd/年份.png") no-repeat scroll right center;
+        width: 140px;
+        height: 26px;
+        background-color: #008AD4;
+        color: #FFFFFF;
+    }
+    #year::-ms-expand { display: none; }
+    #month{
+        margin-left: 5px;
+        background: url("/Content/Images/mdd/月份.png") no-repeat scroll right center;
+        width: 140px;
+        height: 26px;
+        background-color: #008AD4;
+        color: #FFFFFF;
+    }
+    #month::-ms-expand { display: none; }
+    input{
+        margin-left: 5px;
+        width: 70px;
+        height: 26px;
+        background-color: #008AD2;
+        color: #FFFFFF;
+        border-radius: 3px;
+        border: none;
+    }
+    #mainContent {
+        margin-top: 5px;
+        width: 1000px;
+        height: 720px;
+        background-color: #FFFFFF;
+    }
+
+    #placeHolder1 {
+        margin-left: 15px;
+        width: 969px;
+        height: 5px;
+    }
+    th {
+        background-color: #008AD2;
+        text-align: center;
+        border-color: #FFFFFF;
+        color: #FFFFFF;
+        height: 30px;
+        line-height: 18px;
+    }
+   td {
+        border-color: #F0F0F0;
+        height: 28px;
+        text-align: center;
+        word-break: break-all;
+        line-height: 18px;
+    }
+    table{
+        margin:auto;
+    }
+    .body-container{
+        min-height:1000px;
+    }
+   select{
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none; 
+  padding-right: 24px;
+   }
+   
+
+</style>
+<script type="text/javascript">
+    $(function () {
+        //if ($('table').children().size() < 2) {
+        //   // setTimeout(function () { alert();},3000);
+        //    $("form input").submit();
+        //}
+        @*var year0 =  @ViewBag.year0;
+        var month0 = @ViewBag.month0;
+        if(year0 ==0 && month0==0){
+            setTimeout($("form input").submit(),"500");
+            
+        }*@  
+    })
+</script>
+
+@functions{
+    //获取年份列表
+    public static List<SelectListItem> GetYears()
+    {
+        var list = new List<SelectListItem>();
+        var yearNow = int.Parse(DateTime.Now.ToString("yyyy"));
+        for (int i = -9; i <= 10;i++ )
+        {
+            var selected = false;
+            //if (i == 0) selected = true;
+            var yearItem = (yearNow + i).ToString();
+            if (i == 0) selected = true;
+
+            list.Add(new SelectListItem() { Text = yearItem, Value = yearItem, Selected = selected });
+        }
+     //   list.Add(new SelectListItem() { Text = "年份", Value = "", Selected = true });     
+        return list;
+    }
+    //获取月份列表
+    public static List<SelectListItem> GetMonths()
+    {
+        var list = new List<SelectListItem>();
+        var monthNow = int.Parse(DateTime.Now.Month.ToString());
+        for (int i = 1; i <= 12;i++ )
+        {
+            var selected = false;
+            if (i == monthNow) selected = true;
+            list.Add(new SelectListItem() { Text = i.ToString() + "月", Value = i.ToString(), Selected = selected });
+        }
+       // list.Add(new SelectListItem() { Text =  "月份", Value = "", Selected = true });
+        return list;
+    }
+    //获取总履约率
+    public string GetTotalPerformRate()
+    {
+
+        var num = 0;
+        double rate = 0.0d;
+        foreach (var item in Model)
+        {
+            if (item.UnitRateNum != 0)
+            {
+                num++;
+                rate += item.UintRate;
+            }
+        }
+        if (num != 0)
+        {
+            return Math.Round(rate / num, 2).ToString() + "%";
+        }
+        else
+        {
+            return "-";
+        }
+    }
+    public string StandardPerformRate(string rateStr)
+    {
+        var rateDouble = double.Parse(rateStr);
+        return Math.Round(rateDouble, 2).ToString() + "%";
+    }
+}
+    <!-- 主要内容部分 -->
+<div id="content">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section class="right">
+     @*   <div><h4 class="noticetable">项目报表</h4></div>*@
+        @*<div class="section-header" style="margin-left: 20px;">项目报表 <img src="~/Content/Images/mdd/副级导航.png" alt="" /> 工期履约率统计表</div>*@
+        <div id="divTitle">
+            <div id="corbar"></div>
+            <div id="title">项目报表 <img src="/Content/Images/mdd/副级导航.png" /> 工期履约率统计</div>
+        </div>
+        <div class="noticetable" style="margin-left: 1em">
+        @*    <h5><span style="background-color: #1a83cb; color: white; padding: 5px;">工期履约率统计表</span></h5>*@
+            @using (Html.BeginForm("PerformanceRate", "IntegratedManagement"))
+            {
+                <p>
+                    @Html.DropDownListFor(m => m.FirstOrDefault().year, GetYears())
+                    @Html.DropDownListFor(m => m.FirstOrDefault().month, GetMonths())
+                    @*@Html.DropDownList("year", GetYears())
+                    @Html.DropDownList("month", GetMonths())*@
+                    <input type="submit" value="查看" />
+                </p>
+            }
+        </div>
+        <div id="mainContent">
+            <div id="placeHolder1"></div>
+            <div style="overflow-y:auto; width:986px;height:700px">
+                <table width="950" style="margin-left:12px;">
+                    <thead style="background-color: #1a83cb;color: white;">
+                        <tr>
+                            <th width="210">所属单位</th>
+                            <th width="210">履约率项目类别</th>
+                            <th width="230">按项目类别统计的工期履约率</th>
+                            <th width="150">公司工期履约率</th>
+                            <th width="150">总履约率</th>
+                        </tr>
+                    </thead>
+                   @* <tr><td width="210"></td><td width="210"></td><td width="230"></td><td width="150"></td><td width="150"></td></tr>*@
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td width="210" rowspan="5" valign="middle">
+                                @Html.ActionLink(item.UnitName, "PerformanceRateUnit", new
+                                                       {
+                                                           unitName = item.UnitName,
+                                                           //year = Model.FirstOrDefault().year,
+                                                           //month = Model.FirstOrDefault().month
+                                                           //year = Request["year"],
+                                                           //month = Request["month"]
+                                                           year = ViewBag.year0,
+                                                           month = ViewBag.month0
+                                                       })
+                        </td>
+
+                            <td width="210">公建项目 </td>   
+                            <td width="230" valign="middle">
+                                @if (Html.DisplayFor(modeItem => item.ComFacilityNum).ToString() != "0")
+                                {
+                                    @(StandardPerformRate(Html.DisplayFor(modeItem => item.ComFacilityRate).ToString()))
+                                }
+                                else
+                                { @("-") }
+                            </td>
+                            <td width="150" rowspan="5">
+                                @if (Html.DisplayFor(modeItem => item.UnitRateNum).ToString() != "0")
+                                {
+                                    @(StandardPerformRate(Html.DisplayFor(modeItem => item.UintRate).ToString()))
+                                }
+                                else
+                                { @("-") }
+                            </td>
+                            @if (Model[0].Equals(item))
+                            {
+                                <td width="150"  rowspan=@(Model.Count *5)>@GetTotalPerformRate()</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td width="210">房地产项目 </td>
+                            <td width="230">
+                                @if (Html.DisplayFor(modeItem => item.RealEstateNum).ToString() != "0")
+                                {
+                                    @(StandardPerformRate(Html.DisplayFor(modeItem => item.RealEstateRate).ToString()))
+                                }
+                                else
+                                { @("-") }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="210">基础设施项目 </td>
+                            <td width="230">
+                                @if (Html.DisplayFor(modeItem => item.InfrastructureNum).ToString() != "0")
+                                {
+                                    @(StandardPerformRate(Html.DisplayFor(modeItem => item.InfrastructureRate).ToString()))
+                                }
+                                else
+                                { @("-") }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="210">融资类项目 </td>
+                            <td width="230">
+                                @if (Html.DisplayFor(modeItem => item.FinancingNum).ToString() != "0")
+                                {
+                                    @(StandardPerformRate(Html.DisplayFor(modeItem => item.FinancingRate).ToString()))
+                                }
+                                else
+                                { @("-") }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="210">工期变更大的项目 </td>
+                            <td width="230">
+                                @if (Html.DisplayFor(modeItem => item.ChangedProjNum).ToString() != "0")
+                                {
+                                    @(StandardPerformRate(Html.DisplayFor(modeItem => item.ChangedProjRate).ToString()))
+                                }
+                                else
+                                { @("-") }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>            
+</section>
+ </div>
+
+
+
+

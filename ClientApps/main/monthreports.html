@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>信息聚合</title>
+    <link rel="stylesheet" href="styles/home.css"  />
+    <link rel="stylesheet" href="styles/main.css"  />
+
+    <script src="scripts/jquery/jquery.js"></script>
+    <script src="scripts/cc/home.js"></script>
+    <script src="scripts/cc/core.js"></script>
+    <script src="scripts/md/base.js"></script>
+    <script src="scripts/home_common.js"></script>
+    <script src="scripts/listing_common.js"></script>
+    <script src="scripts/UIControlLibrary/localization.js"></script>
+    <script src="scripts/mf/client.js"></script>
+    <script src="scripts/mf/vault.js"></script>
+    <script src="scripts/mf/ui.js"></script>
+    <script src="scripts/mf/alias.js"></script>
+
+    <script>
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+                var loc = new localization();
+                var shellFrame = dashboard.Parent;
+                var vault = shellFrame.ShellUI.Vault;
+
+                var titleArray = ["施工月报", "监理月报"];
+                var imgArray = ["images/邮件.png", "images/邮件.png"];
+                var pathArray = ["文档管理\\进度控制\\施工月报", "文档管理\\监理总结\\监理月报"];
+
+                $(function () {
+                    initializeLayout(dashboard, shellFrame);
+
+                    CC.aggregation.setModule(shellFrame, loc, "fullareadiv", pathArray, imgArray, titleArray);
+
+                    shellFrame.Events.Register(MFiles.Event.ActiveListingChanged, getActiveListingChangedHandler(shellFrame));
+
+                    $(window).resize(resized);
+                    resized();
+                });
+            }
+        }
+
+        window.onload = function () {
+            var $winH = $(window).height(),
+               $winW = $(window).width();
+            $(".module").css({ "width": $winW  - 2, "height": $winH / 2 });
+            $(".mf-content").css({ "height": $winH / 2 - 40 });
+            $("#fullareadiv").find(".module:even").css("borderRight", "4px solid #dedddd");
+        }
+
+        window.onresize = function () {
+            var $winH = $(window).height(),
+               $winW = $(window).width();
+            $(".module").css({ "width": $winW - 2, "height": $winH / 2 });//四个模块自适应
+            $(".mf-content").css({ "height": $winH / 2 - 40 }); //上下间隔
+            $("#fullareadiv").find(".module:even").css("borderRight", "4px solid #dedddd"); //添加分割线
+        }
+    </script>
+</head>
+<body>
+    <div id="fullareadiv">
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+
+.div-center-head{
+	width: 100%;
+    min-width: 850px;
+	margin-bottom: 10px;
+	background-color: #F7F7F7;
+}
+
+.div-center-content{
+	width: 100%;
+    min-width: 850px;
+	background-color: #F7F7F7;
+}
+
+.selected-node {
+	background-color: gainsboro;
+}
+
+.select-option {
+	margin-left: 20px;
+}
+
+.btn-div{
+    margin-top: 10px;
+}
+
+.btn-div button{
+    overflow: hidden;
+    vertical-align: middle;
+    height: 26px;
+    width: 90px;
+    line-height: 0;
+    display: inline-block;
+    margin: 0 2px 0 0;
+    padding: 6px 9px;
+    font-size: 12px;
+    text-align: center;
+    font-family: Helvetica,Arial,FreeSans,sans-serif;
+    white-space: nowrap;
+    -moz-user-select: none;
+    border: medium none;
+    color: white;
+    cursor: pointer;
+    background: #1693c9;    
+}
+
+.btn-div button:hover{
+	background:#006dbd;
+}
+
+.btn-div button:active{
+	padding:1px 0 0 1px;
+}
+
+.div-horizontal-left {
+    float: left;
+    margin: 20px 0 10px 0;
+}

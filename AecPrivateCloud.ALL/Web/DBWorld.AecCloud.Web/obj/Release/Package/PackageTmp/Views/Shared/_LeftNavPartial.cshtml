@@ -1,0 +1,32 @@
+﻿<script type="text/javascript">
+    $(function () {
+        $(".UpDown").html('<img src="/Content/Images/asideup.png" />');
+        //左侧导航点击效果
+        $(".asideWrap>a").hover(function () {
+            $(this).addClass("on");
+        }, function () {
+            if ($(this).next(".ul_list").is(":visible")) {
+                return false;
+            } else {
+                $(this).removeClass("on");
+            }
+        });
+        $(".UpDown").click(function () {
+            $(this).parents("a").siblings(".ul_list").hide().end().next(".ul_list").show("100").end().addClass("on").siblings().removeClass("on");
+            $(this).parents(".asideWrap").find(".UpDown").html('<img src="/Content/Images/asideup.png" />');
+            $(this).html('<img src="/Content/Images/asidedown.png" />');
+            return false;
+        });
+        //进入页面默认第一个展开
+        //$(".asideWrap .UpDown:first").click();
+    })
+</script>
+<aside class="left">
+    <div class="asideWrap">
+        <img src="/Content/Images/leftTop.png" alt="" />
+            @*最新公告*@
+        <a href="@Url.Action("NewsIndex", "NewsAnnounce")" title="新闻动态" name="news">
+            新闻动态
+        </a>
+    </div>
+</aside>

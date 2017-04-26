@@ -1,0 +1,337 @@
+﻿/**
+    ** time : 2015 - 4 - 21
+    ** pro ： 6月新版本
+    ** author : 肖颖、刘甦
+    ** main : 头部样式
+**/
+.headerWrap {
+    background: #fff;
+    min-width: 1170px;
+}
+
+.commodityTop {
+    background: #fafafa;
+    border-bottom: 1px solid #ededed;
+    height: 30px;
+    line-height: 30px;
+    min-width: 1170px;
+    overflow: hidden;
+}
+
+.loginBar {
+    display: inline;
+}
+
+.loginIn a {
+    padding: 0 10px 0 2px;
+}
+
+.loginFor a {
+    margin-right: 10px;
+}
+
+.loginBar div {
+    display: inline;
+}
+
+.commodityTopUserIcon {
+    height: 20px;
+    line-height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+    .commodityTopUserIcon img {
+        vertical-align: middle;
+        height: 20px;
+        width: 20px;
+    }
+
+.commodityTopItem {
+    border-left: 1px solid #ddd;
+    padding: 0 10px;
+}
+
+.VIPManageIcon {
+    background: url('Images/VIPManageIcon.png') no-repeat 0 3px;
+    display: inline-block;
+    height: 20px;
+    overflow: hidden;
+    vertical-align: middle;
+    width: 20px;
+}
+
+
+.loginIn span {
+    display: inline-block;
+    height: 20px;
+    overflow: hidden;
+    vertical-align: middle;
+    width: 20px;
+}
+
+.homePageLink span {
+    background: url('Images/new/commodityTopHome.png') no-repeat 0 0;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#header {
+    height: 100px;
+    /*overflow: hidden;*/
+    position: relative;
+}
+
+.storeLogo {
+    position: absolute;
+    left: 0;
+    top: 20px;
+}
+
+.trolley {
+    position: absolute;
+    right: 120px;
+    top: 33px;
+}
+
+.trolleyContent {
+    position: relative;
+}
+
+    .trolleyContent span {
+        border: 1px solid #fff;
+        background: #f39800;
+        border-radius: 8px;
+        color: #fff;
+        display: block;
+        height: 16px;
+        line-height: 16px;
+        position: absolute;
+        right: -7px;
+        top: -7px;
+        text-align: center;
+        min-width: 16px;
+    }
+
+    .trolleyContent a {
+        background-repeat: no-repeat;
+        display: inline-block;
+        height: 32px;
+        line-height: 32px;
+        vertical-align: middle;
+        width: 32px;
+    }
+
+    .trolleyContent .headerCollect {
+        background-position: 0 0;
+    }
+
+    .trolleyContent .headerTrolley {
+        background-position: -32px 0;
+    }
+/*顶部搜索*/
+.searchTop {
+    right: 0;
+    top: 35px;
+    position: absolute;
+    width: 570px;
+}
+
+.searchInputWrap input {
+    border: 2px solid #3589c4;
+    border-left: none;
+    height: 22px;
+    line-height: 22px;
+    padding: 4px 10px;
+    width: 390px;
+}
+
+.searchInputWrap .btnDiv {
+    height: 34px;
+    line-height: 34px;
+}
+
+.searchType {
+    background: url('Images/searchTypeIcon.png') no-repeat 42px 15px;
+    border: 2px solid #3589c4;
+    border-right: none;
+    color: #3589c4;
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+    width: 50px;
+    position: relative;
+}
+
+    .searchType b {
+        color: #3589c4;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+.searchTypeList {
+    border: 2px solid #3589c4;
+    border-top: none;
+    background: #fff;
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: -2px;
+    width: 57px;
+    z-index: 10;
+    text-align: center;
+}
+
+    .searchTypeList ul li a {
+        display: block;
+        color: #3589c4;
+    }
+
+        .searchTypeList ul li a:hover {
+            background: #3589c4;
+            color: #fff;
+        }
+
+.hotSeach {
+    color: #c5c5c5;
+}
+
+    .hotSeach a {
+        color: #c5c5c5;
+        margin-left: 5px;
+    }
+
+        .hotSeach a:hover {
+            color: #333;
+        }
+
+
+/*底部*/
+#footer {
+    background: #1c5e8d;
+    color: #f4f4f4;
+    padding: 20px 0;
+    min-width: 1170px;
+}
+
+.footer {
+    background: #1c5e8d \9;
+    color: #f4f4f4 \9;
+    padding: 20px 0 \9;
+    min-width: 1170px \9;
+}
+
+.guideList {
+    padding-bottom: 30px;
+}
+
+.guideItem {
+    overflow: hidden;
+}
+
+.guideItem1 {
+    width: 20%;
+}
+
+    .guideItem1 p {
+        text-align: center;
+    }
+
+.guideItem2 {
+    width: 39%;
+}
+
+    .guideItem2 time {
+        font-weight: normal;
+        font-size: 12px;
+        margin-left: 10px;
+    }
+
+.guideItem dl {
+    padding-right: 20px;
+}
+
+    .guideItem dl dt a {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .guideItem dl .guideItemTel a {
+        font-size: 24px;
+    }
+
+    .guideItem dl a {
+        color: #fff;
+        display: block;
+        width: 100%;
+    }
+
+    .guideItem dl dt {
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        color: #fff;
+        font-size: 14px;
+        height: 35px;
+        line-height: 35px;
+        padding-left: 40px;
+    }
+
+    .guideItem dl dd a {
+        color: #a0cceb;
+    }
+
+    dt,
+dd {
+  line-height: 22px;
+}
+
+
+.guidePay {
+    background-image: url('Images/new/guideItemPay.png');
+}
+
+
+.guideItemGreenHand {
+    background-image: url('Images/new/guideItemGreenHand.png');
+}
+
+.guideItemTel {
+    background-image: url('Images/new/guideItemTel.png');
+}
+
+.guideItem dl dd {
+    padding-left: 40px;
+    color: #a0cceb;
+}
+
+.weChatIcon {
+    display: block;
+    margin: 0 auto 10px;
+}
+
+.copyright {
+    border-top: 1px solid #618faf;
+    padding-top: 10px;
+    text-align: center;
+}
+
+    .copyright a {
+        color: #f4f4f4;
+        padding: 0 10px;
+    }
+
+.copyrightA {
+    border-left: 1px solid #f4f4f4;
+}
+
+.copyright span {
+    float: right;
+}
+.footerIndex {
+    text-indent:36px;
+}

@@ -1,0 +1,141 @@
+﻿@model FileGetModel
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var downloadHost = DBWorld.AecCloud.Web.AuthUtility.GetHomeHost().TrimEnd('/') + "/Intro/DownloadClient";
+}
+<link href="/Content/product-download.css" rel="stylesheet" type="text/css">
+
+<style>
+    
+    body {
+        background-color: #eee; /*#fafafa;*/
+    }
+
+     .loadFile {
+         text-align: left;
+         height: 45px;
+     }
+
+    .download-form {
+        margin-top: 50px;
+        margin-left: 160px;
+        font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #btnDownload {
+        display: inline-block;
+        width: 70px;
+        height: 25px;
+        border: 0;
+        background: url(/Content//Images//new/下载-默认.png) no-repeat;
+        background-size: contain;
+    }
+
+    #btnDownload:active {
+        background: url(/Content//Images//new/下载-按下.png) no-repeat;
+        background-size: contain;
+    }
+
+
+    .module-list {
+        width: 1170px;
+        min-width: 1170px;
+        margin-left: auto;
+        margin-right: auto;
+        align-content: center;
+    }
+
+    .center-block {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .image-text {
+        display: block;
+        text-align: center;
+        font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .text-larger {
+        font-size: 1.5em;
+    }
+
+    .text-medium {
+        font-size: 1.0em;
+    }
+
+    .download-area {
+        background-color: #eee;
+    }
+
+    .header-text-download {
+        display: block;
+        color: #39A9F0;
+        font-size: 1.5em;
+        font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .download-tips {
+        display: block;
+        font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+</style>
+
+<!-- 客户端下载部分 -->
+<div class="productImg">
+    <div class="webWidth">
+        <div class="productImgBtn">
+            <a href="@(downloadHost)?type=x86" title="32位下载" class="productFreeBtn2">32位下载</a>
+            <a href="@(downloadHost)?type=x64" title="64位下载" class="productFreeBtn">64位下载</a>
+        </div>
+    </div>
+</div>
+
+<!-- 协同云主要模块介绍部分 -->
+<div style="background-color:white; padding-top:10px;padding-bottom:10px;">
+    <div class="module-list table row">
+        <div class="col-md-4">
+            <img class="center-block" src="~/Content/Images/new/我的云盘.png" />
+            <b class="image-text text-larger">我的云盘</b>
+        </div>
+        <div class="col-md-4">
+            <img class="center-block" src="~/Content/Images/new/协同云.png" />
+            <b class="image-text text-larger">协同云</b>
+        </div>
+        <div class="col-md-4">
+            <img class="center-block" src="~/Content/Images/new/企业云.png" />
+            <b class="image-text text-larger">企业云</b>
+        </div>
+    </div>
+</div>
+
+<!-- 下载文件部分 -->
+
+<div class="module-list table row download-area">
+
+    <div class="col-md-6">
+        <img class="center-block" src="~/Content/Images/new/锁.png" />
+        @*<b class="image-text text-medium">XXX 给你加密分享了文件</b>*@
+    </div>
+    <div class="col-md-6" style="height:230px;">
+        @using (Html.BeginForm("DownLoad", "Files", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal download-form" }))
+        {
+            <div>
+                <label class="header-text-download">云文件下载</label>
+                @*<label class="download-tips">文件名：XXXX-XXXX</label>*@
+            </div>
+            <div>
+                <label class="download-tips">请输入提取密码：</label>
+            </div>
+    <div class="loadFile">
+        @Html.HiddenFor(c => c.Item)
+        @Html.TextBoxFor(x => x.Key)
+        <input id="btnDownload" type="submit" value="" />
+    </div>
+        }
+    </div>
+
+</div>

@@ -1,0 +1,448 @@
+﻿
+    @{
+        ViewBag.Title = "分包商管理";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    <link href="~/Content/oldstyles/cscec82.css" rel="stylesheet" type="text/css" />
+<style>
+    #container {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    #header {
+        height: 100px;
+        background: #9c6;
+        margin-bottom: 5px;
+    }
+
+    #mainContent {
+        height: 500px;
+        margin-bottom: 5px;
+    }
+
+    #content {
+        min-height: 628px !important;
+        border: 1px solid silver;
+        overflow: hidden;
+    }
+
+    td, th {
+        border: 1px solid #000;
+        padding: .5em .75em;
+    }
+
+    .noticetable {
+        margin: .5em;
+        border-bottom: 1px solid #000;
+        padding: 5px;
+    }
+
+   
+    #selectContractorProfession {
+        /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+        border: solid 1px #000;
+        width: 140px;
+        /*很关键：将默认的select选择框样式清除*/
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        /*在选择框的最右侧中间显示小箭头图片*/
+        background: url('/Content/Images/mdd/承包专业.png') no-repeat scroll right center #008ad2;
+        /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+        padding-right: 24px;
+    }
+
+
+    /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+    #selectContractorProfession::-ms-expand {
+        display: none;
+    }
+
+    #selectIsQualified {
+        /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+        border: solid 1px #000;
+        width: 140px;
+        /*很关键：将默认的select选择框样式清除*/
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        /*在选择框的最右侧中间显示小箭头图片*/
+        background: url('/Content/Images/mdd/合格.png') no-repeat scroll right center #008ad2;
+        /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+        padding-right: 24px;
+    }
+
+
+    /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+    #selectIsQualified::-ms-expand {
+        display: none;
+    }
+
+    #selectCity {
+        /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+        border: solid 1px #000;
+        width: 140px;
+        /*很关键：将默认的select选择框样式清除*/
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        /*在选择框的最右侧中间显示小箭头图片*/
+        background: url('/Content/Images/mdd/城市.png') no-repeat scroll right center #008ad2;
+        /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+        padding-right: 24px;
+    }
+
+
+    /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+    #selectCity::-ms-expand {
+        display: none;
+    }
+
+    #selectProvince {
+        /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+        border: solid 1px #000;
+        width: 140px;
+        /*很关键：将默认的select选择框样式清除*/
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        /*在选择框的最右侧中间显示小箭头图片*/
+        background: url('/Content/Images/mdd/省份.png') no-repeat scroll right center #008ad2;
+        /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+        padding-right: 24px;
+    }
+
+
+    /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+    #selectProvince::-ms-expand {
+        display: none;
+    }
+
+
+    .cscectable {
+        border: 1px solid #000;
+        table-layout: fixed;
+        width: 969px;
+    }
+
+    #apply {
+        margin-left: 5px;
+        width: 70px;
+        height: 26px;
+        background-color: #008AD2;
+        color: #FFFFFF;
+        border-radius: 3px;
+        border: none;
+    }
+
+    #mainTable {
+        height: 396px;
+        border: 2px solid #DADADA;
+        background-color: white;
+    }
+
+    #flipArea {
+        margin-top: 6px;
+        /*margin-left: 10px;*/
+        width: 969px;
+        height: 40px;
+        border: 2px solid #F5F5F5;
+    }
+
+    th {
+        background-color: #008AD2;
+        text-align: center;
+        border-color: #FFFFFF;
+        color: #FFFFFF;
+        height: 50px;
+        line-height: 18px;
+    }
+
+    td {
+        border-color: #F0F0F0;
+        height: 28px;
+        text-align: center;
+        word-break: break-all;
+        line-height: 18px;
+    }
+
+    #flipSelect {
+        float: left;
+        border: 2px solid #DADADA;
+        margin-left: 50px;
+        margin-top: 5px;
+        width: 60px;
+        height: 26px;
+    }
+
+        #flipSelect option {
+            text-align: center;
+        }
+
+    #summary {
+        float: left;
+        margin-top: 5px;
+        margin-left: 300px;
+    }
+
+    #pageNum {
+        border: 2px solid #DADADA;
+        width: 80px;
+        text-align: center;
+        float: left;
+        margin-left: 20px;
+    }
+
+    #firstPage, #prevPage, #nextPage, #lastPage {
+        margin-top: 7px;
+        float: left;
+        margin-left: 20px;
+    }
+
+    #totalPages {
+        margin-top: 0px;
+        float: left;
+        margin-left: 4px;
+    }
+ 
+</style>
+
+                               <script type="text/javascript">
+                                   var resData = null;
+                                   var page = 0;
+                                   var alllines = 0;
+                                   var maxlines = 10;
+                                   var allpage = 0;
+                                   function getcontractorsdata() {
+                                       console.log("getcontractorsdata begin");
+                                       var selectIsQualified = $("#selectIsQualified option:selected").text();
+                                       var selectProvince = $("#selectProvince option:selected").text();
+                                       var selectContractorProfession = $("#selectContractorProfession option:selected").text();
+                                       var selectCity = $("#selectCity option:selected").text();
+
+                                       var searchStr = $("#SearchString").val();
+                                       $.ajax({
+                                           url: "/newreport/GetContractorListData",
+                                           data: {
+                                               selectContractorProfession: selectContractorProfession, selectCity: selectCity, selectProvince: selectProvince,
+                                               selectIsQualified: selectIsQualified, SearchString: searchStr
+                                           },
+                                           success: function (res) {
+                                               console.log("success");
+                                             //  document.getElementById("contractorurl").href = "inherit";
+                                               resData = JSON.parse(res);
+                                               alllines = resData.length;
+                                               console.log(alllines);
+                                               allpage = Math.ceil(alllines / maxlines);
+                                               if (allpage > 0)
+                                                   page = page < 1 ? 1 : page;
+                                               loadPage(page);
+                                               synctabletaildata();
+                                           },
+                                           error: function (xmlHttpRequest, textStatus, errorThrown) {
+                                               console.log("error");
+                                               console.log("获取失败：(status:" + xmlHttpRequest.status + ", readyState:" + xmlHttpRequest.readyState +
+                                                       ", textStatus:" + textStatus + ", errorThrown: " + errorThrown + ")");
+                                           }
+                                       });
+                                   }
+                                   $(document).ready(function () {
+                                       getcontractorsdata();
+                                       loadflipSelect();
+                                       $("#apply").click(function () {
+                                           getcontractorsdata();
+                                       });
+                                       $("#pageNum").change(function () {
+                                           console.log("in page change");
+                                           page = $("#pageNum").val();
+                                           loadPage(page);
+                                       });
+                                       //下拉框翻页
+                                       $("#flipSelect").change(function () {
+                                           maxlines = $("#flipSelect option:selected").text();
+                                           synctabletaildata();
+                                           allpage = Math.ceil(alllines / maxlines);
+                                           page = page > allpage ? allpage : page;
+
+                                           loadPage(page);
+                                           synctabletaildata();
+                                           $("#pageNum").val(page);
+                                       });
+                                       //转跳第一页
+                                       $("#firstPage").click(function () {
+                                           if (allpage > 0) {
+                                               page = 1;
+                                               loadPage(1);
+                                           }
+                                       });
+                                       //转跳最后一页
+                                       $("#lastPage").click(function () {
+                                           if (allpage > 0) {
+                                               page = allpage;
+                                               loadPage(allpage);
+                                           }
+                                       });
+                                       //前一页
+                                       $("#prevPage").click(function () {
+                                           console.log("in previous page=" + page);
+                                           if (page > 1) {
+                                               page--;
+                                               $("#pageNum").val(page);
+                                               loadPage(page);
+                                           }
+                                       });
+                                       //后一页
+                                       $("#nextPage").click(function () {
+                                           console.log("in next page=" + page);
+                                           if (page < allpage) {
+                                               page++;
+                                               $("#pageNum").val(page);
+                                               loadPage(page);
+                                           }
+                                       });
+                                   });
+                                   function synctabletaildata() {
+                                       $("#summary").text("每页" + maxlines + "条，共" + alllines + "条数据信息");
+                                       $("#totalPages").text("/" + allpage);
+                                   }
+
+                                   //载入下拉框翻页数据
+                                   function loadflipSelect() {
+                                       $("#flipSelect option").remove();
+                                       var option = "<option>" + 10 + "</option>";
+                                       option += "<option>" + 20 + "</option>";
+                                       option += "<option>" + 30 + "</option>";
+                                       option += "<option>" + 40 + "</option>";
+                                       option += "<option>" + 50 + "</option>";
+                                       option += "<option>" + 60 + "</option>";
+                                       $("#flipSelect").append(option);
+                                   }
+                                   //翻页
+                                   function loadPage(page) {
+                                       console.log("in loadpage,page=" + page);
+                                       if (page < 1) page = 1;
+                                       if (page > allpage) page = allpage;
+                                       $("#mainTable tr").remove();
+                                       if (allpage < 1) return;
+                                       for (var i = 0; i < maxlines; i++) {
+                                           var item = (page - 1) * maxlines + i;
+                                           if (item < resData.length) {
+                                               var tr = "<tr>";
+                                               tr += "<td>" + resData[item].Name + "</td>";
+                                               tr += "<td>" + resData[item].PropContractedProfession + "</td>";
+                                               tr += "<td>" + resData[item].PropBusinessLicenseNumber + "</td>";
+
+                                               tr += "<td>" + resData[item].PropTaxRegistrationNumber + "</td>";
+                                               tr += "<td>" + resData[item].PropQualificationCertificateNumber + "</td>";
+                                               tr += "<td>" + resData[item].PropLevelOfQualification + "</td>";
+
+                                               tr += "<td>" + resData[item].PropSafetyProductionLicenseNumber + "</td>";
+                                               tr += "<td>" + resData[item].PropRegisteredCapital + "</td>";
+                                               tr += "<td>" + resData[item].PropTelephoneAndFaxOfLegalRepresentative + "</td>";
+
+                                               tr += "<td>" + resData[item].PropDetailedAddress + "</td>";
+                                               tr += "<td>" + resData[item].PropDeputiesAndTelephones + "</td>";
+                                               tr += "<td>" + resData[item].PropLevel + "</td>";
+                                               tr += "<td>" + resData[item].PropIsQualified + "</td>";
+                                               tr += "<td>" + resData[item].PropComment + "</td>";
+
+
+                                               tr += "</tr>";
+                                               $("#mainTable").append(tr);
+                                           } else {
+                                               $("#mainTable").append("<tr><td></td> <td></td> <td></td> <td></td><td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td></tr>");
+                                           }
+                                       }
+                                       $("#pageNum").val(page);
+                                   }
+                                   function prevent(e) {
+                                       e.preventDefault ? e.preventDefault() : e.returnValue = false;
+                                   }
+                                   function digitInput(e) {
+                                       var c = e.charCode || e.keyCode; //FF、Chrome IE下获取键盘码
+                                       if ((c != 8 && c != 46 && // 8 - Backspace, 46 - Delete
+                                               (c < 37 || c > 40) && // 37 (38) (39) (40) - Left (Up) (Right) (Down) Arrow
+                                               (c < 48 || c > 57) && // 48~57 - 主键盘上的0~9
+                                               (c < 96 || c > 105)) // 96~105 - 小键盘的0~9
+                                               || e.shiftKey) { // Shift键，对应的code为16
+                                           prevent(e); // 阻止事件传播到keypress
+                                       }
+                                   }
+                                   $(function () {
+                                       $("#pageNum").keydown(function (e) {
+                                           digitInput(e);
+                                       });
+                                   });
+                               </script>
+    <!-- 当前位置 -->
+    @*<div id="currentWrap">
+            @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+            <span>>></span>
+            <a title="项目中心">项目中心</a>
+        </div>*@
+    <!-- 主要内容部分 -->
+    @*<div id="content" class="clearfix" style=" overflow-y: scroll; overflow-x: scroll">*@
+
+    <!-- 左边导航 -->
+    @*@Html.Partial("_LeftNavBIM")*@
+    <!-- 右边内容 -->
+<section>
+    <div class="section-header"> <div class="corbar"></div> 分包商 <img src="/Content/Images/mdd/副级导航.png" /> 分包商管理</div>
+         @*   <div class="section-header" style="margin-left: 20px;">分包商 <img src="~/Content/Images/mdd/副级导航.png" alt="" /> 分包商</div>*@
+    @using (Html.BeginForm("ContractorList", "NewReport", System.Web.Mvc.FormMethod.Get))
+    {
+        <p style="margin-left: 2em;">
+            @Html.DropDownList("selectContractorProfession", "承包专业")
+            @Html.DropDownList("selectIsQualified", "合格？")
+            @Html.DropDownList("selectProvince", "省份")
+            @Html.DropDownList("selectCity", "城市")
+
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { maxlength = 192, placeholder = "请输入分包商名称关键字" })
+
+            <input type="button" id="apply" value="筛选" />
+            <span>
+                <a id="contractorurl"style="background-color: #1a83cb; color: white; padding: 5px;" href="@ViewBag.Url" title="分包商管理">分包商编辑</a>
+            </span>
+        </p>
+    }
+    <div style=" overflow-y: scroll; overflow-x: scroll">
+        <table class="">
+            <thead style="background-color: #1a83cb;color: white;">
+                <tr>
+                    <th>分包商名称</th>
+                    <th>承包专业</th>
+                    <th>营业执照编号</th>
+                    <th>税务登记证编号</th>
+                    <th>资质证书编号</th>
+                    <th>资质等级</th>
+                    <th>安全生产许可证编号</th>
+                    <th>注册资金（万元）</th>
+                    <th>法人代表及电话、传真</th>
+                    <th>详细地址</th>
+                    <th>现场负责人及电话</th>
+                    <th>级别</th>
+                    <th>合格？</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody id="mainTable"></tbody>
+
+        </table>
+        <div id="flipArea">
+            <select id="flipSelect"></select>
+            <div id="flipButtons">
+                <img id="firstPage" title="第一页" src="/Content/Images/mdd/左1.png" />
+                <img id="prevPage" title="前一页" src="/Content/Images/mdd/左2.png" />
+                <input type="text" id="pageNum" value="0" />
+                <div id="totalPages">/0</div>
+                <img id="nextPage" title="后一页" src="/Content/Images/mdd/右2.png" />
+                <img id="lastPage" title="最后一页" src="/Content/Images/mdd/右1.png" />
+            </div>
+            <div id="summary">每页 10 条， 共 0 条数据信息</div>
+        </div>
+    </div>
+</section>
+
+
+

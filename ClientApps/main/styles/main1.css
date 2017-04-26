@@ -1,0 +1,187 @@
+body {
+    overflow: auto; /* when page gets too small */
+	margin: 0;
+	padding: 0;
+    width: 100%;
+    height: 100%;
+	font-family: Verdana, helvetica, arial, sans-serif;
+    font-size: 12px;
+}
+
+#fullareadiv {
+    /*position: absolute;*/
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    z-index: 1;
+}
+
+.memberButton {
+    /*display: inline;*/
+    border-radius: 3px 7px 0px 0px;
+    background-color: #23C5FF;
+    height: 23px;
+    width: 85px;
+    margin-left: 10px;
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #cccccc;
+    cursor: pointer;
+}
+
+.mf-listing-content {
+    background-color: #007DC6;
+}
+
+.mf-listing-new-header.mf-listing-header {
+  /*display: inline;*/
+    border-radius: 0;
+    margin-left: 0;
+    background-color: #0087D1;
+    height: 28px;
+    color: white;
+}
+
+.mf-listing-header {
+    /*display: inline;*/
+    border-radius: 3px 7px 0px 0px;
+    background-color: #23C5FF;
+    height: 22px; /* 24px*/
+    margin-left: 10px;
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #cccccc;
+    cursor: pointer;
+}
+
+.mf-panel .active {
+    background-color: #007DC6;
+}
+
+
+
+html.mf-ltr .mf-listing-header {
+    padding: 6px 6px 0px 13px;
+}
+
+html.mf-rtl .mf-listing-header {
+    padding: 6px 13px 0px 6px;
+}
+
+.mf-listing-header.mf-compact-layout {
+    height: 20px; /* 22px*/
+    padding-top: 4px;
+    padding-bottom: 0px;
+}
+
+.mf-listing-header.mf-listing-active {
+}
+
+.mf-listing-header-text {
+    font-family: 'Segoe UI';
+    font-size: 14px;
+    padding: 0px;
+    border-width: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+html.mf-ltr .mf-listing-header-text {
+    margin: 0px 22px 0px 0px;
+}
+
+html.mf-rtl .mf-listing-header-text {
+    margin: 0px 0px 0px 22px;
+}
+
+.mf-listing-header-text.mf-compact-layout {
+    font-size: 13px;
+}
+
+.mf-listing-header-collapsed-state {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    overflow: hidden;
+}
+
+html.mf-ltr .mf-listing-header-collapsed-state {
+    float: right;
+}
+
+html.mf-rtl .mf-listing-header-collapsed-state {
+    float: left;
+}
+
+.mf-listing-header-collapsed-state .mf-listing-header-expanded {
+    width: 16px;
+    height: 16px;
+    background-image: url( '../images/collapse.png' );
+}
+
+.mf-listing-header-collapsed-state .mf-listing-header-collapsed {
+    width: 16px;
+    height: 16px;
+    background-image: url( '../images/expand.png' );
+}
+
+.sdHeaderDiv .sdHeader {
+    display: block;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-right: 5px;
+    /*float: right;*/
+    text-align: center;
+    text-decoration: none;
+}
+
+.sdHeader:hover {
+    text-decoration: underline;
+}
+
+.sdHeaderDiv {
+    width: auto;
+    background: #39A9F0;
+    border-radius: 3px 7px 0px 0px;
+    margin-left: 10px;
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    color: #fff;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.sdHeaderDiv a.sdHeaderDivA img {
+    vertical-align: middle;
+}
+        .sdHeaderDiv a.sdHeaderDivA {
+            color: #fff;
+            display: block;
+            background: #39A9F0;
+            padding: 0 8px;
+            text-decoration: none;
+        }
+
+        .sdHeaderDiv a.sdHeaderDivA:hover {
+            background: #23c5ff;
+        }
+
+        .sdHeaderDiv a.sdHeaderDivA:active {
+            background: #2276BC;
+        }
+
+        .sdHeaderDiv span {
+            padding-left: 13px;
+        }

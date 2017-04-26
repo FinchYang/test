@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--<link rel="stylesheet" type="text/css" href="" />-->
+    <link href="scripts/jquery-ui-1.11.4.custom/jquery-ui.css" rel="stylesheet" />
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script type="text/ecmascript" src="scripts/jquery-ui-1.11.4.custom/jquery.datepicker-zh-CN.js"></script>
+
+    <script type="text/javascript" src="scripts/core.js"></script>
+    <script type="text/javascript" src="scripts/web.js"></script>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "微软雅黑";
+            font-size: 14px;
+        }
+
+        input {
+            font-family: "微软雅黑";
+            font-size: 14px;
+        }
+
+        .clearfix:after {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        #wrap {
+            background: #ffffff;
+            border: 1px solid #666;
+            height: 460px;
+            width: 420px;
+            overflow: hidden;
+        }
+
+        .title_wrap {
+            background: url(image/title_bg.png) no-repeat 0 0;
+            font-size: 18px;
+            color: #fff;
+            height: 35px;
+            line-height: 35px;
+            /*padding-left: 15px;*/
+            text-align: center;
+        }
+
+            .title_wrap a {
+                color: #ffffff;
+                display: block;
+                float: right;
+                font-family: "微软雅黑";
+                margin-right: 10px;
+                width: 15px;
+                text-decoration: none;
+            }
+
+        .contain_wrap {
+            padding: 20px;
+        }
+
+        .files {
+            margin-bottom: 15px;
+        }
+
+            .files label {
+                color: #666;
+                display: block;
+                float: left;
+                height: 24px;
+                line-height: 24px;
+                overflow: hidden;
+                width: 90px;
+                margin-left: 15px;
+            }
+
+            .files input {
+                border: 1px solid #48a9e1;
+                border-radius: 4px;
+                font-size: 14px;
+                float: left;
+                padding: 2px 6px;
+                width: 240px;
+                height: 20px;
+            }
+
+        .btn {
+            padding: 0 0 32px 120px;
+        }
+
+        .btn_bottom {
+            border-bottom: 1px dashed #dfdfdf;
+            margin-bottom: 30px;
+        }
+
+        .btn input {
+            border: 1px solid #dfdfdf;
+            border-radius: 15px;
+            background: #2276bd;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: center;
+            height: 28px;
+            padding: 0 8px 1px 8px;
+            line-height: 0;
+        }
+
+            .btn input:hover {
+                background: #23C5FF;
+            }
+
+            .btn input:active {
+                background: #23C5FF;
+                padding: 1px 7px 0px 9px;
+            }
+
+        #desc {
+            color: #2476bb;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .dataTime {
+            border: 1px solid #ccc;
+            background: url(image/calendar.png) no-repeat right 3px #fff;
+            height: 28px;
+            vertical-align: central;
+            width: 100px;
+        }
+
+        .datepicker { }
+    </style>
+    <script type="text/javascript">
+        function OnNewDashboard(dashboard) {
+            dashboard.Window.SetDefaultSize(422.5, 462.5, true); //设置默认大小
+            dashboard.Window.Resizable = false;
+            dashboard.Window.Maximizable = false;
+            dashboard.Window.Minimizable = false;
+
+            var sf = dashboard.Parent;
+            var vault = sf.ShellUI.Vault;
+            var filesInfo = dashboard.CustomData.SharedFiles;
+            var fileId = filesInfo.FileVerID;
+            //var fileVersion = filesInfo.FileVerVersion;
+            var fileNameWithExt = filesInfo.Filename;
+            //var fileNameEncode = encodeURIComponent(fileNameWithExt);
+            //var userId = filesInfo.UserID;
+            var vGuid = filesInfo.VaultGuid;
+            var objType = filesInfo.ObjType;
+            var objId = filesInfo.ObjId;
+            $(function () {
+                $(".datepicker").datepicker({
+                    changeMonth: true,  //月份下拉列表
+                    changeYear: true,  //月份下拉列表
+                    minDate: "0d",   //可选最小日期
+                    //maxDate: "+10d",  //可选最大日期
+                    //showButtonPanel: true,
+                    showMonthAfterYear: true,
+                    dateFormat: "yy-mm-dd"
+                });
+                $('#sharedFile').val(fileNameWithExt);
+            });
+
+            $('#btnSure').click(function () {
+                //alert("调用webApi");
+                var dayDiff = -1;
+                //var sharingDeadLine = "";
+                var sharingTime = $('#sharedDate').datepicker("getDate");
+                if (sharingTime) {
+                    //sharingDeadLine = getFormatDateString(sharingTime);
+                    //sharingDeadLine.toJSON();
+                    dayDiff = GetDateDiff(getFormatDateString(new Date()), sharingTime.toString(), "day");
+                } 
+                
+                var dataModel= {
+                    "Guid": vGuid,
+                    "ObjType": objType,
+                    "ObjId": objId,
+                    "FileId": fileId,
+                    "ExpiredDays": dayDiff
+                }
+                //alert(JSON.stringify(dataModel));
+                var token = cd.getToken(vault);
+                //alert(token);
+                var res = webapi.shareFile2Web(vault, dataModel, token);
+                var resJson = JSON.parse(res);
+                if (resJson.status === 200) {
+                    //ok
+                    //alert(resJson.response);
+                    var fileShareLink = resJson.response;
+                    if (!fileShareLink) {
+                        alert(resJson.response);
+                    }
+                    $('#fileLink').val(fileShareLink.Url);
+                    $('#filePwd').val(fileShareLink.Password);
+                } else {
+                    //error: return resJson.response;
+                    var errMessage = resJson.response;
+                    if (errMessage.Message) {
+                        errMessage = errMessage.Message;
+                    }
+                    alert("获取失败：" + resJson.status + "," + resJson.response);
+                    $('#fileLink').val('');
+                    $('#filePwd').val('');
+                }
+                /*
+                var prefix = "http://192.168.2.35:8080/"; //http://localhost:30710/
+                var apiUrl = prefix + "api/WebShare/ShareFiles?vaultGuid=" + vGuid + "&userId=" + userId + "&fileVerID=" + fileId + "&fileVerVersion=" + fileVersion + "&fileName=" + fileNameEncode + "&deadLine=" + sharingDeadLine;
+                $.ajax({
+                    type: "GET",
+                    url: apiUrl,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "jsonp",
+                    //jsonp: "callback",
+                    //jsonpCallback: "onHandler",
+                    async: true,
+                    success: function (data) {
+                        var res = data.split("<-->");
+                        if (res.length > 1) {
+                            $('#fileLink').val(res[0]);
+                            $('#filePwd').val(res[1]);
+                        } else alert(data);
+                    },
+                    error: function (xmlHttpRequest, textStatus, errorThrown) {
+                        alert("获取失败：(status:" + xmlHttpRequest.status + ", readyState:" + xmlHttpRequest.readyState +
+                                ", textStatus:" + textStatus + ", errorThrown: " + errorThrown + ")");
+                        $('#fileLink').val('');
+                        $('#filePwd').val('');
+                    }
+                });
+                */
+            });
+            $('#btnCopy').click(function () {
+                var strtitle = "文件名: " + $('#sharedFile').val();
+                var strlink = "\r\n链接: " + $('#fileLink').val();
+                var strpwd = "\r\n密码: " + $('#filePwd').val();
+                window.clipboardData.setData('text', strtitle + strlink + strpwd);
+                var content = window.clipboardData.getData('text');
+                alert("已成功复制到粘贴板:\r\n" + content);
+                //dashboard.Window.close();
+            });
+        }
+        //日期格式：yyyy-MM-dd
+        function getFormatDateString(datetime) {
+            var year = datetime.getFullYear();       //年
+            var month = datetime.getMonth() + 1;     //月
+            var day = datetime.getDate();            //日
+
+            var clock = year + "-";
+            if (month < 10) clock += "0";
+            clock += month + "-";
+            if (day < 10) clock += "0";
+            clock += day;    
+            return clock;
+        }
+        /* 
+        * 获得时间差,时间格式为 年-月-日 小时:分钟:秒 或者 年/月/日 小时：分钟：秒 
+        * 其中，年月日为全格式，例如 ： 2010-10-12 01:00:00 
+        * 返回精度为：秒，分，小时，天
+        */
+        function GetDateDiff(startTime, endTime, diffType) {
+            //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式 
+            startTime = startTime.replace(/\-/g, "/");
+            endTime = endTime.replace(/\-/g, "/");
+
+            //将计算间隔类性字符转换为小写
+            diffType = diffType.toLowerCase();
+            var sTime = new Date(startTime);      //开始时间
+            var eTime = new Date(endTime);  //结束时间
+            //作为除数的数字
+            var divNum = 1;
+            switch (diffType) {
+                case "second":
+                    divNum = 1000;
+                    break;
+                case "minute":
+                    divNum = 1000 * 60;
+                    break;
+                case "hour":
+                    divNum = 1000 * 3600;
+                    break;
+                case "day":
+                    divNum = 1000 * 3600 * 24;
+                    break;
+                default:
+                    break;
+            }
+            return parseInt((eTime.getTime() - sTime.getTime()) / parseInt(divNum));
+        }
+    </script>
+
+</head>
+<body>
+    <div id="wrap">
+        <div class="title_wrap">
+            创建私密链接并分享
+            <!--<a href="javascript:void(0);" title="关闭">X</a>-->
+        </div>
+        <div class="contain_wrap">
+            <div id="desc">可以将链接发送给你的QQ、MSN等好友。</div>
+            <div class="files clearfix">
+                <label>分享的文件：</label>
+                <input id="sharedFile" type="text" value="" readonly="readonly" />
+            </div>
+            <div class="files clearfix">
+                <label>  有效期至：</label>
+                <input id="sharedDate" type="text" class="dataTime datepicker" />
+            </div>
+            <div class="btn btn_bottom">
+                <input id="btnSure" type="button" value="确定并创建私密链接" />
+            </div>
+            <div class="files clearfix">
+                <label>  私密链接：</label>
+                <input id="fileLink" type="text" value="" readonly="readonly" />
+            </div>
+            <div class="files clearfix">
+                <label>  提取密码：</label>
+                <input id="filePwd" type="text" value="" readonly="readonly" />
+            </div>
+            <div class="btn">
+                <input id="btnCopy" type="button" value="复制链接及密码" />
+            </div>
+        </div>
+    </div>
+</body>
+</html>

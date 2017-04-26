@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>BIMInfoApplication</Name>
+    <Assembly>E:\Dev\cadsimula\jifeng\SimulaDesign.BimInfo\SimulaDesign.RevitBimInfo\bin\Debug\SimulaDesign.RevitBimInfo.dll</Assembly>
+    <AddInId>7f23068c-b4c9-464a-9c4a-50c68a86ecd8</AddInId>
+    <FullClassName>SimulaDesign.RevitBimInfo.RevitApplication</FullClassName>
+    <VendorId>ADSK</VendorId>
+    <VendorDescription>Autodesk, www.autodesk.com</VendorDescription>
+  </AddIn>
+  <!--<AddIn Type="Command">
+    <Assembly>E:\Dev\cadsimula\jifeng\SimulaDesign.BimInfo\SimulaDesign.RevitBimInfo\bin\Debug\SimulaDesign.RevitBimInfo.dll</Assembly>
+    <AddInId>7f23068c-b4c9-464a-9c4a-50c68a86ecd8</AddInId>
+    <FullClassName>SimulaDesign.RevitBimInfo.ExportInfoCommand</FullClassName>
+    <Text>导出信息</Text>
+    <VendorId>ADSK</VendorId>
+    <VendorDescription>Autodesk, www.autodesk.com</VendorDescription>
+  </AddIn>-->
+</RevitAddIns>

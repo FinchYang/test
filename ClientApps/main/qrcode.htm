@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+
+<!-- Styles used on the dashboard -->
+<style>
+body { font-family: "tahoma"; }
+</style>
+
+<!-- Include the jQuery Core library -->
+<script type="text/javascript" src="scripts/jquery.js"></script>
+<script type="text/javascript" src="qrcode.js"></script>
+<script src="scripts/mf/alias.js"></script>
+
+<!-- Dashboard implementation -->
+<script type="text/javascript">
+
+"use strict";
+
+function OnNewDashboard( dashboard ) {
+	/// <summary>Dashboard code entry point.</summary>
+	/// <param name="dashboard" type="MFiles.Dashboard">The new dashboard object.</param> 
+	
+	// Register a handler to listen the started event.
+	dashboard.Events.Register( Event_Started, getDashboardStartedHandler( dashboard ) );
+}
+
+	function PrintDiv() {
+		/// <summary>Prints the metadata.</summary>
+		var documentContainer = document.getElementById('qrcode');
+		var windowObject = window.open('', '_blank', 'width=600,height=600,top=50,left=50,toolbars=no,scrollbars=yes,status=no,resizable=no,menubar=no,status=no,toolbar=no');
+		windowObject.document.writeln('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
+		windowObject.document.writeln('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+		windowObject.document.writeln('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">');
+		windowObject.document.writeln('<title>二维码打印</title>'); // English
+		windowObject.document.writeln("<center>");
+		windowObject.document.writeln(documentContainer.innerHTML);
+		windowObject.document.writeln("</center>");
+		windowObject.document.writeln('</html>');
+		windowObject.document.close();
+		windowObject.focus();
+		windowObject.print();
+		windowObject.close();
+	}
+
+	function addCodes(qrcodes, message) {
+		// Set the dashboard content.
+		$( "#message_placeholder" ).append(message );
+		
+		for (var i = 0; i < qrcodes.length; i++) {
+			new QRCode(document.getElementById("qrcode"), {
+				text: qrcodes[i],
+				width: 100,
+				height: 100,
+				colorDark : "#000000",
+				colorLight : "#ffffff",
+				correctLevel : QRCode.CorrectLevel.H,
+				align: "center"
+			});
+
+			jQuery("#qrcode").append("<div align=center>" + qrcodes[i] + "</div>");
+		}
+
+		
+		// Add an action for the button.
+		
+		jQuery( "#button_print" ).click( function() {
+		
+			// Close the dashboard window on button click.
+			PrintDiv();
+		} );
+	}
+
+// $(function() {
+// 	var qrcodes = ["123","456"];//dashboard.CustomData.qrcodes;
+// 		addCodes(qrcodes, "test");
+// });
+
+function getDashboardStartedHandler( dashboard ) {
+	/// <summary>Gets the event handler function for dashboard starting event.</summary>
+	/// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param> 
+	/// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+	// Return the handler function.
+	return function () {
+
+		// Set the dashboard window features.
+		dashboard.Window.SetDefaultSize( 600, 600, true );
+		dashboard.Window.Resizable = false;
+		dashboard.Window.Maximizable = false;
+		dashboard.Window.Minimizable = false;
+		
+		// Set the window title.
+		dashboard.Window.Title = dashboard.CustomData.caption;
+
+		var qrcodes = dashboard.CustomData.qrcodes;
+		addCodes(qrcodes, dashboard.CustomData.message);
+		
+	};
+}
+
+</script>
+</head>
+
+<!-- The dashboard content -->
+<body>
+<p id="message_placeholder" align="center"></p>
+<hr/>
+<div id="qrcode" align="center">  </div>
+<hr/>
+<center><button id="button_print">打印</button></center>
+</body>
+</html>

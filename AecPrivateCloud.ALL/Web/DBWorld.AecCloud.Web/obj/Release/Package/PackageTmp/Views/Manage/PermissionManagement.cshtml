@@ -1,0 +1,147 @@
+﻿@using DBWorld.AecCloud.Web.Models
+@model List<DBWorld.AecCloud.Web.Models.CompanyManager>
+    @{
+        ViewBag.Title = "人员权限管理";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+<script>
+    $(function () {
+        console.log("func begin");
+        var all;
+        var companyid;
+        var groupid;
+        $('#selCompany').change(function () {
+      //  $("#companylist").on("click", "td", function () {
+          //  companyid = $(this).attr("id");
+            companyid = $(this).val();
+            console.log("click  companyid:" + companyid);
+            //var classid = $(this).attr("class");
+            //console.log("click  classid:" + classid);
+
+            $.ajax({
+                url: "/Manage/GetDbUserGroup",
+                async: false,
+                data: { code: companyid },
+                success: function (data) {
+                    console.log(data);
+                    all = strToJson(data);
+                    $('#dbusergroup').empty();
+                    var op = "<option value='" + '0 ' + "'>"
+                        + '请选择' + "</option>";
+                    $('#dbusergroup').append(op);
+                    $.each(all, function (i, item) {
+                        op = "<option value='" + item.Id + "'>"
+                            + item.GroupName + "</option>";
+                        $('#dbusergroup').append(op);
+                    });
+                   
+                }
+            });
+        });
+        $('#dbusergroup').change(function () {
+            groupid = $(this).val();
+            console.log(groupid);
+            $('#selectuser').empty();
+            var op = "<option value='" + '0 ' + "'>"
+                + '请选择' + "</option>";
+            $('#selectuser').append(op);
+            $.each(all, function (i, item) {
+                if (item.Id == groupid) {
+                    $.each(item.Dbusers, function (j, litem) {
+                        op = "<option value='" + litem.Id + "'>"
+                            + litem.Name + "</option>";
+                        $('#selectuser').append(op);
+                    });
+                    return false;
+                }
+                return true;
+            });
+        });
+        $("#permissionset").on("click", "#saverpermission", function () {
+            var selid = $("#selectuser").val();
+            if (selid==0) {
+                alert("请选择适当用户！");
+                return;
+            }
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: "/manage/permissionset",
+                    data: {
+                        groupid: groupid,
+                        userid: selid
+                    },
+                    async: false,
+                    success: function (data) {
+                        if (data === "success") {
+                            alert("设置成功！");
+                        } else {
+                            alert(data);
+                        }
+                    },
+                    error: function (xmlHttpRequest, textStatus, errorThrown) {
+                        console.log("设置失败：(status:" + xmlHttpRequest.status + ", readyState:" + xmlHttpRequest.readyState +
+                            ", textStatus:" + textStatus + ", errorThrown: " + errorThrown + ")");
+                    }
+                });
+            } catch (e) {
+                alert(e.message);
+            } finally {
+              //  location.reload(false);
+            }
+            console.log("after ajax：");
+        });
+    });
+</script>
+@functions{
+    public  List<SelectListItem> GetCompanies()
+    {
+        var list = new List<SelectListItem>();
+        foreach (var item in Model)
+        {
+            list.Add(new SelectListItem() {Text = item.Name, Value = item.Code, Selected = false});
+        }
+        list.Add(new SelectListItem() {Text = "请选择", Value = "", Selected = true});
+        return list;
+    }
+
+}
+    <div id="currentWrap">
+        @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+        <span>>></span>
+        <a title="项目中心">项目中心</a>
+    </div>
+    <!-- 主要内容部分 -->
+    <div id="content" class="clearfix" >
+        <!-- 左边导航 -->
+        @Html.Partial("_LeftNavBIM")
+        <!-- 右边内容 -->
+        <section id="permissionset"class="right">
+            <div class="section-header"> <div class="corbar"></div> 人员权限 <img src="/Content/Images/mdd/副级导航.png" /> 人员权限管理</div>
+       @*  //   <div class="noticetable" style="margin-left: 1em"><h5><span style="background-color: #1a83cb; color: white; padding: 5px;">人员权限管理</span></h5></div>*@
+            <div style="margin-left: 50px;margin-top: 50px;width: 900px;">
+                <div id='companylist' style="position: absolute;top: 100px;left: 300px;width: 250px">
+                    <div style="margin-left: 60px;padding: 10px;">公司选择</div>
+                    <div>
+                        @Html.DropDownList("selCompany", GetCompanies())
+                    </div>
+                </div>
+                <div id='usergrouplist' style="position: absolute; top: 100px; left: 600px; width: 250px;">
+                    <div style="margin-left: 50px; padding: 10px;">用户组选择</div>
+                    <select id='dbusergroup' style="width: 200px">
+                        <option value='0'>请选择</option>
+                    </select>
+                </div>
+
+
+                <div style="position: absolute; top: 100px; left: 900px; width: 250px;">
+                    <div style="margin-left: 60px; padding: 10px;">用户选择</div>
+                    <select id='selectuser' style="width: 200px">
+                        <option value='0'>请选择</option>
+                    </select>
+                </div>
+                <input style="position: absolute; top: 190px; left: 900px; background-color: #008ad2; color: white;padding: 5px 20px;"type='button' name='Submit' id='saverpermission' value='提交' />
+            </div>
+        </section>
+    </div>
+

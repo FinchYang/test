@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "NewsIndex";
+}
+
+<script src="@Url.Content("~/Scripts/oldscripts/News.js")" type="text/javascript"></script>
+<!--二级页面头部-->
+<!--当前位置-->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "Home", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="新闻动态" name="current_news">新闻动态</a>
+</div>
+
+<div id="content" class="clearfix">
+    @Html.Partial("_LeftNavPartial")
+    <section class="right">
+        <!-- 内容版块 -->
+        <div class="secondContent">
+            <div class="title secondTitle">
+                新闻动态：
+            </div>
+            <div class="newsListContent" id="newsListContent">
+               <ul>
+
+               </ul>
+                <div class="paging marginTop">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

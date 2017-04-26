@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Model Browser</title>
+    
+    <!-- style -->
+    <link type="text/css" rel="stylesheet" href="style/main.css" />
+    <link type="text/css" rel="stylesheet" href="style/treeview/jquery.treeview.css" />
+    <link type="text/css" rel="stylesheet" href="style/layout-default.css">
+    <link type="text/css" rel="stylesheet" href="style/bimmodelbrowser.css"/>
+    
+    <!-- jquery -->
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script type="text/javascript" src="scripts/layout/jquery.layout.js"></script>
+    
+    <!-- tree plugin -->
+    <script type="text/javascript" src="scripts/jquery.treeview/jquery.treeview.js"></script>
+    <script type="text/javascript" src="scripts/jquery.treeview/jquery.cookie.js"></script>
+    
+    <!-- Helper scripts -->
+    <script type="text/javascript" src="scripts/UIControlLibrary/utilities.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/localization.js"></script>
+    <script type="text/javascript" src="scripts/home_common.js"></script>
+    <script type="text/javascript" src="scripts/listing_common.js"></script>
+    
+
+
+    <script type="text/javascript" src="scripts/md/base.js"></script>
+    <script type="text/javascript" src="scripts/md/bim.js"></script>
+    
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+    <script type="text/javascript" src="scripts/mf/client.js"></script>
+    <script type="text/javascript" src="scripts/mf/ui.js"></script>
+    <script type="text/javascript" src="scripts/mf/vault.js"></script>
+    <script type="text/javascript" src="scripts/mf/objectOps.js"></script>
+
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/cc/public.js"></script>
+    <script type="text/javascript" src="scripts/cc/mfTreeDomOps.js"></script>
+    <script type="text/javascript" src="scripts/cc/bimmodelbrowser.js"></script>
+   
+    <!-- Dashboard implementation -->
+    <script type="text/javascript">
+
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+             
+                var shellFrame = dashboard.Parent;
+                var vault = shellFrame.ShellUI.Vault;
+
+                var loc = new localization();
+                var additionalSectionShown = false;
+                initializeLayout(dashboard, shellFrame);
+
+                //初始化目录树
+                $('#container').layout({
+                    west__size: 220,//pane的大小
+                    spacing_open: 2, // ALL panes
+                    spacing_closed: 8,//关闭时边框的间隙
+                    togglerContent_open: "<div style='background:red; height: 50px;'></div>",
+                    togglerContent_closed: "<div style='background:red; height: 50px;'></div>", //也可以用<img/>
+                    togglerTip_open: "收起",
+                    togglerTip_closed: "展开",
+                    sliderTip: "显示/隐藏侧边栏",//在某个Pane隐藏后，当鼠标移到边框上显示的提示语。
+                    resizerTip: "调整大小" //鼠标移到边框时，提示语
+                });
+
+                var proj = CC.treeDomOps.getProject(vault);
+                var units = CC.treeDomOps.getUnits(vault);
+                var propjId = proj.Type + "-" + proj.ID;
+                var projDom = createLiDom(propjId, proj.Title, "","#directoryTree"); //项目
+
+                for (var i = 0; i < units.length; i++) {//单体
+                    var unitId = units[i].Type + "-" + units[i].ID;
+                    var unitDom = createLiDom(unitId, units[i].Title, "", $("#" + propjId + ">ul"));
+                    //alert('单体：'+units[i].Title);
+                    var floors = CC.treeDomOps.getFloors(vault, units[i].ID);
+                    for (var j = 0; j < floors.length; j++) {//楼层
+                        var floorId = floors[j].Type + "-" + floors[j].ID;
+                        var floorDom = createLiDom(floorId, floors[j].Title, units[i].Title, unitDom.children("ul").filter(":first"));
+                        //alert('楼层：'+floors[j].Title);
+                        var discs = CC.treeDomOps.getDisciplines(vault, floors[j].ID);
+                        for (var k = 0; k < discs.length; k++) {//专业
+                            var discId = discs[k].Type + "-" + discs[k].ID;
+                            //alert('专业：'+discs[k].Title);
+                            var discDom = createLiDom(discId, discs[k].Title, units[i].Title + "-" + floors[j].Title, floorDom.find("ul:first"));
+                        }
+                    }
+                }
+               
+                //显示树图节点
+                function createLiDom(id, title, parentTitle, parentDom) {
+                    var arr = id.split("-");
+                    var url = "";
+                    var typeId = parseInt(arr[0]);
+                    var objId = parseInt(arr[1]);
+                    if (objId > 0) {
+                        url = MF.ui.getIconFromUI(shellFrame, typeId);
+                    }
+
+                    var newDom = $("<li id='" + id + "'>"
+                        + "<div><img src='" + url + "' style='width:16px; height:14px; margin:0 1px 0 0'/>"
+                        + "<a class='node' href='#' style='color:black; font-size: 13px;'>" + title + "</a>"
+                        + "<span style='color:red; display:none;'> New!</span></div><ul>"
+                        + "</ul></li>").appendTo(parentDom);
+
+                    //attach data
+                    if (parentTitle === "") {
+                        newDom.data({ name: title, obj: null });
+                    } else {
+                        newDom.data({ name: parentTitle + "-" + title, obj: null });
+                    }
+                    return newDom;
+                }
+
+                //点击节点展开
+                $("#directoryTree").treeview({
+                    collapsed: true,
+                    persist: "location",
+                    toggle: function () {
+
+                        //判断是否再次加载数据
+                        var reLoad = true;
+                        $(this).find("ul li").each(function () {
+                            if ($(this).data().obj) {
+                                reLoad = false;
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        });
+                        
+                        if (!reLoad) return;
+
+                        //搜索并显示当前节点数据                        
+                        _showNodeAndAttachData(vault, $(this));
+
+                        //搜索并显示当前节点子节点数据
+                        $(this).find(">ul>li").each(function () {
+                            _showNodeAndAttachData(vault, $(this));
+                        });
+                    }
+                });
+               
+                //点击节点文本
+                $(".node").click(function (event) {
+                    var selectedDom = $(event.target);
+                    var domLi = selectedDom.parents("li").filter(":first");
+                    var arr = domLi.attr("id").split("-");
+
+                    if (CC.treeDomOps.isProjectDom(vault, arr[0])) {
+                        return;
+                    }
+
+                    //当前点击的节点数据
+                    var docData = [];
+                    docData.push(domLi.data());
+                    _showModelMetaData(shellFrame, domLi.data());
+
+                    //是否加载所有子节点数据
+                    var reLoad = true;
+                    domLi.find("ul li").each(function () {
+                        if ($(this).data().obj) {
+                            reLoad = false;
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    });
+
+                    if (!reLoad) {
+                        //不搜索只显示
+                        $(domLi).find("ul li").each(function () {
+                            docData.push($(this).data());
+                        });
+                    } else {
+                        //搜索数据并显示
+                        $(domLi).find("ul li").each(function () {
+                            _showNodeAndAttachData(vault, $(this));
+                            docData.push($(this).data());
+                        });
+                    }
+                    _updateDocmentTable(vault, docData);
+                });
+
+                // Listen to the ActiveListingChanged event.
+                shellFrame.Events.Register(MFiles.Event.ActiveListingChanged, getActiveListingChangedHandler(shellFrame));
+
+                // Resize panes.
+                //$(window).resize(resizedWithHeight($("#btnReview").height()));
+                //resizedWithHeight($("#btnReview").height())();
+            };
+        }
+
+    </script>
+    
+    <script>
+        //搜索并添加当前节点下的数据
+        function _showNodeAndAttachData(vault, dom) {
+            //title and id
+            var arr = dom.attr("id").split("-");
+            //model object
+            var objVers = CC.browser.searchModelDocument(vault, { ObjType: arr[0], ID: arr[1], DisplayName: dom.data().name });
+            if (objVers && objVers.Count > 0) {
+                //attach jquery data
+                dom.data().obj = objVers.item(1);
+                //show or hide "New!"
+                var spanDom = dom.find("span").filter(":first");
+                if (!objVers.item(1).IsAccessedByMeValid) {
+                    spanDom.show();
+                }
+            }
+        }
+
+        //更新元数据
+        function _showModelMetaData(shellFrame, item) {
+            //显示元数据
+            if (item.obj) {
+                CC.browser.showMetaData(shellFrame, item.obj.ObjVer.Type, item.obj.ObjVer.ID);
+            }
+        }
+
+        //更新表格
+        function _updateDocmentTable(vault, docData) {
+            var trs = $("#tableStatus tbody").children();
+            for (var r = 1; r < trs.length; r++) {
+                trs.eq(r).remove();
+            }
+
+            var title, version, time, publisher, unKnown = "--";
+            for (var i = 0; i < docData.length; i++) {
+                var item = docData[i];
+
+                if (item.obj) {
+                    title = item.name;
+                    version = item.obj.ObjVer.Version;
+                    var value = new Date(item.obj.CreatedUtc);
+                    time = value.toLocaleString();
+                    if (version === 1) {
+                        publisher = vault.ObjectPropertyOperations.GetProperty(item.obj.ObjVer, MFBuiltInPropertyDefCreatedBy).Value.DisplayValue;
+                    } else {
+                        publisher = vault.ObjectPropertyOperations.GetProperty(item.obj.ObjVer, MFBuiltInPropertyDefLastModifiedBy).Value.DisplayValue;
+                    }
+                    
+                } else {
+                    title = item.name;
+                    version = unKnown;
+                    time = unKnown;
+                    publisher = unKnown;
+                }
+
+                if ($.type(title) !== "undefined") {
+                    var newRow = "<tr id=>"
+                        + "<td style='padding: 0 0 0 10px; text-align: left'>" + title + "</td>"
+                        + "<td style='text-align: center'>" + version + "</td>"
+                        + "<td style='text-align: center'>" + time + "</td>"
+                        + "<td style='text-align: center'>" + publisher + "</td></tr>";
+                    $("#tableStatus tbody tr:last").after(newRow);
+
+                    if (item.obj) {
+                        $("#tableStatus tbody tr:last").dblclick(function (it) {
+                            return function () {
+                                vault.ObjectFileOperations.OpenFileInDefaultApplication(0, it.obj.ObjVer, it.obj.Files.item(1).FileVer, MFFileOpenMethodOpen);
+                            };
+                        }(item));
+                    }
+                }
+            }
+            
+            $(function () {
+                $("#tableStatus tbody tr").hover(
+                    function () {
+                        $(this).addClass("rowhover");
+                    },
+                    function () {
+                        $(this).removeClass("rowhover");
+                    });
+            });
+        }
+    </script>
+
+</head>
+<body>
+    <div id="container">
+        <div id="treeWrap" class="ui-layout-west">
+            <div class="treeTitle">项目树</div>
+            <ul id="directoryTree" class="filetree"></ul>
+        </div>
+
+        <div id="tableWrap" class="ui-layout-center">
+            <div id="listings" class="mf-panel-container" style="width: 100%; height: 100%; padding: 0px;margin: 0px; border: 0px;">
+                <!--<div style="background-color: #007DC6; width: 100%; height: 33px; line-height: 33px; ">
+                    <div style="font-size: 14px; color: white; text-align: center;">发布状态</div>
+                </div>-->
+                <table id="tableStatus">
+                    <tr style="height: 31px;line-height: 31px; color: white;font-size: 14px;text-align: center;">
+                        <th style="width: 160px;">模型名称</th>
+                        <th style="width: 160px;">版本</th>
+                        <th style="width: 160px;">最新发布时间</th>
+                        <th style="width: 160px;">发布人</th>
+                    </tr>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

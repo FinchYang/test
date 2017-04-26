@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>DBWorldClient Updater</title>
+
+		<link>http://co.dbworld.cn/Installer/versioninfo.xml</link>    
+		<description>DBWorld Client Updater</description>      
+		<language>en</language> 
+    <item>
+      <title>Version 1.0.0.77</title>
+			<sparkle:releaseNotesLink>http://co.dbworld.cn/Installer/releasenotes.html</sparkle:releaseNotesLink>
+      <pubDate>Mon, 30 Mar 2015 10:21:11 +0000</pubDate>
+      <enclosure url="http://co.dbworld.cn/Installer/DBWorld.1.0.0.77.Setup.exe" type="application/octet-stream" sparkle:version="1.0.0.77" />
+    </item>
+    <!--
+		<item>            
+			<title>Version 1.0.2.0</title>
+			<sparkle:releaseNotesLink>http://192.168.1.182/NetSparkle/1.0.2/rnotes.html</sparkle:releaseNotesLink>
+			<pubDate>Sun, 31 Dec 2010 10:31:11 +0000</pubDate>
+			<enclosure 
+				url="http://192.168.1.182/NetSparkle/1.0.2/NetSparklTestApp-1.0.2.exe"
+				length="5120" 
+				type="application/octet-stream"
+				sparkle:version="1.0.2.0"  mnmnb
+				sparkle:dsaSignature="R0Umm343UUfeJ15fV0nDQ2Gg0AsHbGUU76GpsWv2H+agMWXADXpg2g=="
+			/>
+		</item>
+    -->
+  </channel>
+</rss>

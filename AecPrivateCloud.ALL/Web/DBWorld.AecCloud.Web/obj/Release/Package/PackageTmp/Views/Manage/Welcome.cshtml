@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Welcome";
+}
+<!-- 当前位置 -->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "BIM", new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="用户信息" name="antiture">用户信息</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavPrivatePartiale")
+    <!-- 右边内容 -->
+    <section class="right">
+        <div class="secondContent">
+            <div class="userTopImg">
+                <img src="/Content/Images/userPageTop.gif" alt="个人用户主页页头图片" title="欢迎标语" />
+            </div>
+
+            <div class="WelcomeDBWorld">
+                @ViewBag.userName<span>&nbsp;！欢迎您的到来，请完善您的用户信息。</span>
+            </div>
+            <h2 class="loginTitle">
+                <span class="haveLogin right">
+                    @Html.ActionLink("完善信息", "UserInfoEdit", "Manage", new { @class = "subBtn formLoginIn" })
+                </span>
+            </h2>
+        </div>
+
+    </section>
+</div>

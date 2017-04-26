@@ -1,0 +1,983 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>设计策划</title>
+
+    <!-- Styles used on the dashboard -->
+    <link rel="stylesheet" href="style/dtdesignplan.css" />
+    <link rel="stylesheet" href="style/handsontable/handsontable.full.css"/>
+    <link rel="stylesheet" href="style/handsontable/handsontable.samples.css"/>
+    <!-- Include the jQuery Core library -->
+    <script src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+    <script src="scripts/jquery-ui-1.10.0.custom/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <!-- Helper scripts -->
+    <script src="scripts/UIControlLibrary/utilities.js"></script>
+    <script src="scripts/UIControlLibrary/localization.js"></script>
+    <script src="scripts/home_common.js"></script>
+    <script src="scripts/listing_common.js"></script>
+    <script src="scripts/mf/vault.js"></script>
+    <script src="scripts/md/base.js"></script>
+    <script src="scripts/mf/alias.js"></script>
+    <script src="scripts/md/dt_designTeam.js"></script>
+    <script src="scripts/cc/public.js"></script>
+    <script src="scripts/cc/core.js"></script>
+    <script src="scripts/mf/client.js"></script>
+    <script src="scripts/wsh.js"></script>
+    <script src="scripts/mf/objectOps.js"></script>
+    <script src="scripts/cc/dtdesignplan.js"></script>
+    <script src="scripts/mf/property.js"></script>
+    <script src="scripts/cc/dt_taskops.js"></script>
+    
+    <!--Ext script-->
+    <script src="scripts/handsontable/handsontable.full.js"></script>
+
+    <script type="text/javascript">
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            var shellFrame = dashboard.Parent;
+            var vault = shellFrame.ShellUI.Vault;  
+
+            //项目名称
+            $("#project").html(CC.designplan.getProjectName(vault));
+           
+            //阶段
+            var currPhase = CC.designplan.getCurrDesignPhase(vault);
+            var allPhase = CC.designplan.getAllDesignPhase(vault);
+            initSelectOptions($("#phaseOptions"), currPhase, allPhase);
+
+            //专业
+            var currMajor = CC.designplan.getCurrMajorGroup(vault);
+            var allMajor = CC.designplan.getAllMajorGroup(vault);
+            initSelectOptions($("#majorOptions"), currMajor, allMajor);
+
+            //自定义表头
+            var allAlias = [
+                md.drawingPlan.propDefs.DrawingTitle, //图名
+                md.drawingPlan.propDefs.DrawingNumber, //图号
+                md.drawingPlan.propDefs.FrameSize, //图幅
+                md.drawingPlan.propDefs.DrawingScale, //比例
+                md.drawingPlan.propDefs.DrawingPerson, //绘图人
+                md.drawingPlan.propDefs.Designer, //设计人
+                md.drawingPlan.propDefs.Verifier, //校对人
+                md.drawingPlan.propDefs.Checker, //审核人
+                md.drawingPlan.propDefs.Validator, //审定人
+                md.drawingPlan.propDefs.DisciplineLead, //专业负责人
+                md.drawingPlan.propDefs.ChiefDesigner, //设总
+                md.drawingPlan.propDefs.ProjManager, //项目经理
+                md.drawingPlan.propDefs.Deadline, //截止日期
+                md.drawingPlan.propDefs.JobTime, //预计工时
+                md.drawingPlan.propDefs.PlanProgress, //进度
+                md.drawingPlan.propDefs.PlanVersion //版本
+            ];
+
+            //创建并更新表格
+            var dom = {};
+            var roleId = CC.designplan.getRoleId(vault);
+            var filter = getPhaseIdAndMajorId(allPhase, allMajor);
+            var result = updateTable(dom, vault, allAlias, filter, roleId);
+
+            // Return the event handler.
+            return function () {
+                $("#btnUpdate").click(function () {
+                    //更新表格
+                    filter = getPhaseIdAndMajorId(allPhase, allMajor);
+                    result = updateTable(result.dom, vault, allAlias, filter, roleId);
+                });
+
+                //保存数据
+                $("#btnSubmit").click(function () {
+                    var submitFilter = getPhaseIdAndMajorId(allPhase, allMajor);
+                    if (CC.designplan.SaveData(vault, result.data, allAlias, submitFilter.phaseId, submitFilter.majorId)) {
+                        alert("保存完成！");
+                    }
+                });
+            }
+        }
+    </script>
+    
+    <script type="text/javascript">
+        //初始化选项
+        function initSelectOptions(dom, curr, all) {
+            if (all.length === 0) {
+                dom.hide();
+            } else {
+                for (var m = 0; m < all.length; m++) {
+                    if (all[m].name !== curr.name) {
+                        dom.append('<option>' + all[m].name + '</option>');
+                    } else {
+                        dom.append('<option selected="selected">' + all[m].name + '</option>');
+                    }
+                }
+            }
+        }
+
+        //更新表格
+        function updateTable(dom, vault, allAlias, filter, roleId) {
+            var data = {};
+            try {
+                switch (roleId) {
+                    case 5: //项目经理
+                    case 4: //设总
+                        data = CC.designplan.getDesignPlanHeaderAndData(vault, allAlias, filter.phaseId, filter.majorId, false);
+                        dom = editTable(dom, vault, allAlias, data);
+                        break;
+                    case 3: //专业负责人
+                        $("#majorOptions").attr("disabled", "disabled");
+                        data = CC.designplan.getDesignPlanHeaderAndData(vault, allAlias, filter.phaseId, filter.majorId, false);
+                        dom = editTable(dom, vault, allAlias, data);
+                        break;
+                    case 2: //专业组
+                        $("#majorOptions").attr("disabled", "disabled");
+                        $("#btnSubmit").hide();
+                        data = CC.designplan.getDesignPlanHeaderAndData(vault, allAlias, filter.phaseId, filter.majorId, true);
+                        dom = readOnlyTable(dom, data);
+                        result.data = data;
+                        result.dom = dom;
+                        break;
+                    case 1:
+                        $("#phaseOptions").attr("disabled", "disabled");
+                        $("#majorOptions").attr("disabled", "disabled");
+                        $("#btnSubmit").hide();
+                        $("#btnUpdate").hide();
+                        break;
+                    default:
+                        $("#phaseOptions").attr("disabled", "disabled");
+                        $("#majorOptions").attr("disabled", "disabled");
+                        $("#btnSubmit").hide();
+                        $("#btnUpdate").hide();
+                        alert("用户角色错误！");
+                        break;
+                }
+            } catch (e) {
+                $("#phaseOptions").attr("disabled", "disabled");
+                $("#majorOptions").attr("disabled", "disabled");
+                $("#btnSubmit").hide();
+                $("#btnUpdate").hide();
+            }
+
+            return {data:data, dom:dom};
+        }
+
+        function editTable(dom, vault, allAlias, data) {
+            var rowCount = data.data.length;
+            if (rowCount === 0) {
+                rowCount = 1;
+            }
+
+            data.data.sort(function (x, y) {
+                return x[1].localeCompare(y[1]);
+            });
+
+            if (!$.isEmptyObject(dom)) {
+                dom.destroy();
+            }
+
+            var container = document.getElementById('planTable');
+            var table = new Handsontable(container, {
+                data: data.data,
+                rowHeaders: true,
+                manualColumnResize: true,
+                manualRowResize: true,
+                minSpareRows: 1,
+                colHeaders: data.header,
+                columns: data.columns,
+                startCols: data.header.length,
+                startRows: rowCount,
+                contextMenu: {
+                    items: {
+                        "row_above": { name: '插入一行(在上面)' },
+                        "row_below": { name: '插入一行(在下面)' },
+                        "hsep1": "---------",
+                        "remove_row": { name: '删除当前行' },
+                        "hsep2": "---------",
+                        "undo": { name: '撤销' },
+                        "redo": { name: '重做' }
+                    }
+                },
+                afterChange: function(changes, source) {
+                    if (source !== 'loadData') {
+                        for (var i = 0; i < changes.length; i++) {
+                            CC.designplan.UpdatePropperties(vault, data, allAlias, changes);
+                        }
+                    }
+                }
+            }, false);
+            
+            return table;
+        }
+
+        function readOnlyTable(dom, data) {
+            var rowCount = data.data.length;
+            if (rowCount === 0) {
+                rowCount = 1;
+            }
+
+            data.data.sort(function (x, y) {
+                return x[1].localeCompare(y[1]);
+            });
+
+            if (!$.isEmptyObject(dom)) {
+                dom.destroy();
+            }
+
+            var container = document.getElementById('planTable');
+            var table = new Handsontable(container, {
+                data: data.data,
+                minSpareRows: 1,
+                rowHeaders: true,
+                manualColumnResize: true,
+                manualRowResize: true,
+                colHeaders: data.header,
+                columns: data.columns,
+                startCols: data.header.length,
+                startRows: rowCount,
+                contextMenu: false
+            }, false);
+
+            return table;
+        }
+
+        function getPhaseIdAndMajorId(allPhase, allMajor) {
+            var result = {};
+            result.phaseId = getIdByName(allPhase, $("#phaseOptions").val());
+            result.majorId = getIdByName(allMajor, $("#majorOptions").val());
+            return result;
+        }
+
+        function getIdByName(arr, name) {
+            var id = -1;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].name === name) {
+                    id = arr[i].id;
+                }
+            }
+
+            return id;
+        }
+
+        function position() {
+            //定义弹出层的位置
+            $(".classification").css(
+            { top: ($(window).height() - $(".classification").height()) / 2 }).css(
+            { left: ($(window).width() - $(".classification").width()) / 2 });
+            $(".shade_div").show();
+        }
+
+        $(function () {
+            //表格内容的排版
+            $(".page_rule").mouseover(function () {
+                $(".page_rule_wrap").show();
+            }).mouseout(function () {
+                Time = setTimeout(function () {
+                    $(".page_rule_wrap").hide();
+                }, 1000);
+            });
+            $(".page_rule_wrap").mouseover(function () {
+                clearInterval(Time);
+                $(".page_rule_wrap").show();
+            }).mouseout(function () {
+                $(".page_rule_wrap").hide();
+            });
+            $(".a_close").click(function () {
+                $(".page_rule_wrap").hide();
+            });
+            $(".classification_close").click(function () {
+                $(".classification").hide();
+                $(".shade_div").hide();
+            });
+            $(".a").click(function () {
+                $("#a").show();
+                position();
+            });
+            $(".s").click(function () {
+                $("#s").show();
+                position();
+            });
+            $(".p").click(function () {
+                $("#p").show();
+                position();
+            });
+            $(".m").click(function () {
+                $("#m").show();
+                position();
+            });
+            $(".d").click(function () {
+                $("#d").show();
+                position();
+            });
+            $(".e").click(function () {
+                $("#e").show();
+                position();
+            });
+            $(".t").click(function () {
+                $("#t").show();
+                position();
+            });
+            $(".i").click(function () {
+                $("#i").show();
+                position();
+            });
+            $(".l").click(function () {
+                $("#l").show();
+                position();
+            });
+        });
+
+    </script>
+
+</head>
+<body>
+    <div class="header_pre">
+        <h2 class="h2_title">设计策划详细表</h2>
+        <div class="page_rule">
+            图纸命名规则
+        </div>
+        <div class="page_rule_wrap">
+            <a href="javascript:void(0);" class="a_close">关闭</a>
+            <div class="page_rule_title title">
+                图纸文件命名格式
+            </div>
+            <table class="table_name">
+                <tr>
+                    <td>X</td>
+                    <td>X</td>
+                    <td>XX</td>
+                    <td>XX</td>
+                </tr>
+                <tr>
+                    <td>专业码</td>
+                    <td>子项码</td>
+                    <td>图纸分类码</td>
+                    <td>图纸顺序号</td>
+                </tr>
+            </table>
+            <p>
+                示例：<span>X-X-XX-XX</span>
+            </p>
+            <div class="page_rule_title ">
+                1. 专业码
+            </div>
+            <article>
+                按不同专业采用不同字母标识（1个字母代号）
+            </article>
+            <table class="table_list">
+                <tr>
+                    <th>英文名</th>
+                    <td>C</td>
+                    <td>A</td>
+                    <td>G</td>
+                    <td>S</td>
+                    <td>P</td>
+                    <td>M</td>
+                    <td> D</td>
+                    <td>E</td>
+                    <td>T</td>
+                    <td>I</td>
+                    <td>L</td>
+                    <td>X</td>
+                </tr>
+                <tr>
+                    <th>解释</th>
+                    <td>各专业通用</td>
+                    <td>建筑</td>
+                    <td>总图</td>
+                    <td>结构</td>
+                    <td>给排水</td>
+                    <td>暖通</td>
+                    <td>动力</td>
+                    <td>电气</td>
+                    <td>弱电</td>
+                    <td>室内</td>
+                    <td>景观</td>
+                    <td>其他专业</td>
+                </tr>
+            </table>
+
+            <div class="page_rule_title ">
+                2. 子项码
+            </div>
+            <article>
+                若干工程项目有多个子项，且工程标号一致时，可采用子项码区别；当工程项目没有子项，则本项可省略。
+            </article>
+            <article>
+                子项码按不同子项顺序编号（1 位数字代表，0、1、2……，其中子项码0为总体，1、2、……为子项1、子项2、……）。
+            </article>
+
+            <div class="page_rule_title ">
+                3. 图纸分类码
+            </div>
+            <article>
+                各专业按图纸内容分组编码（2个数字代号）。
+            </article>
+            <div class="clearfix">
+                <ul class="page_rule_ul">
+                    <li>
+                        <a href="javascript:void(0);" class="a" title="点击查看建筑图纸分类码详情">建筑图纸分类码>></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="s" title="点击查看结构图纸分类码详情">结构图纸分类码>></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="p" title="点击查看给排水图纸分类码详情">给排水图纸分类码>></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="m" title="点击查看暖通图纸分类码详情">暖通图纸分类码>></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="d" title="点击查看动力图纸分类码详情">动力图纸分类码>></a>
+                    </li>
+                </ul>
+                <ul class="page_rule_ul">
+                    <li>
+                        <a href="javascript:void(0);" class="e" title="点击查看电气图纸分类码详情">电气图纸分类码>></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="t" title="点击查看弱电图纸分类码详情">弱电图纸分类码>></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="i" title="点击查看室内图纸分类码详情">室内图纸分类码>></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="l" title="点击查看景观图纸分类码详情">景观图纸分类码>></a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 遮罩层 -->
+            <div class="shade_div"></div>
+            <!-- 内容层 -->
+            <div class="classification" id="a">
+                <a href="javascript:void(0);" class="classification_close">关闭</a>
+                <div class="page_rule_title">
+                    建筑图纸分类码
+                </div>
+                <table class="classification_table">
+                    <tr>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                    </tr>
+                    <tr>
+                        <td>00</td>
+                        <td>设计说明</td>
+                        <td>01</td>
+                        <td>总平面图</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>总体设计说明及总体建筑图解说明</td>
+                        <td>03</td>
+                        <td>建筑用料表、电梯参数</td>
+                    </tr>
+                    <tr>
+                        <td>04</td>
+                        <td>防火分区平面图</td>
+                        <td>05</td>
+                        <td>总体交通分析、车库交通流线图</td>
+                    </tr>
+                    <tr>
+                        <td>06</td>
+                        <td>门窗表</td>
+                        <td>07</td>
+                        <td>门窗立面</td>
+                    </tr>
+                    <tr>
+                        <td>08</td>
+                        <td>其他</td>
+                        <td></td>
+                        <td>地下层平面图</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>地上层平面图</td>
+                        <td></td>
+                        <td>平顶平面图</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>立面图</td>
+                        <td></td>
+                        <td>剖面图</td>
+                    </tr>
+                    <tr>
+                        <td>30</td>
+                        <td>地下室剖面图</td>
+                        <td></td>
+                        <td>裙房剖面图</td>
+                    </tr>
+                    <tr>
+                        <td>40</td>
+                        <td>核心简放大平面、剖面图</td>
+                        <td></td>
+                        <td>楼梯详图</td>
+                    </tr>
+                    <tr>
+                        <td>50</td>
+                        <td>车库坡道详图</td>
+                        <td></td>
+                        <td>自动扶梯、客梯详图</td>
+                    </tr>
+                    <tr>
+                        <td>60</td>
+                        <td>卫生间详图</td>
+                        <td>70</td>
+                        <td>平面、墙身等节点详图</td>
+                    </tr>
+                    <tr>
+                        <td>80</td>
+                        <td>特殊空间详图（如剧场、演播厅、录音厅）</td>
+                        <td>85</td>
+                        <td>平顶布置图、管线综合图</td>
+                    </tr>
+                    <tr>
+                        <td>90</td>
+                        <td colspan="3">修改通知单</td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <!-- 结构图纸分类码 -->
+            <div class="classification" id="s">
+                <a href="javascript:void(0);" class="classification_close">关闭</a>
+                <div class="page_rule_title">
+                    结构图纸分类码
+                </div>
+                <table class="classification_table">
+                    <tr>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                    </tr>
+                    <tr>
+                        <td>00</td>
+                        <td>设计说明</td>
+                        <td>10</td>
+                        <td>桩平面及详图</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>基础设计图</td>
+                        <td>20</td>
+                        <td>楼板设计图</td>
+                    </tr>
+                    <tr>
+                        <td>31</td>
+                        <td>梁平面图（包括桁架等水平承重构件）</td>
+                        <td>32</td>
+                        <td>柱平面图</td>
+                    </tr>
+                    <tr>
+                        <td>33</td>
+                        <td>墙平面图</td>
+                        <td>34</td>
+                        <td>留洞平面图（如不单出时，可合并于平面图）</td>
+                    </tr>
+                    <tr>
+                        <td>40</td>
+                        <td>详图（除楼梯和电梯详图以外的各类详图均可用此分类码）</td>
+                        <td>41</td>
+                        <td>楼梯详图</td>
+                    </tr>
+                    <tr>
+                        <td>42</td>
+                        <td>电梯井详图</td>
+                        <td>90</td>
+                        <td>修改通知单</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 给排水图纸分类码 -->
+            <div class="classification" id="p">
+                <a href="javascript:void(0);" class="classification_close">关闭</a>
+                <div class="page_rule_title">
+                    给排水图纸分类码
+                </div>
+                <table class="classification_table">
+                    <tr>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                    </tr>
+                    <tr>
+                        <td>00</td>
+                        <td>设计说明</td>
+                        <td>01</td>
+                        <td>总体图</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>图例（较少图例可并入00设计说明）</td>
+                        <td>03</td>
+                        <td>设备材料表</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>给排水系统图纸（用平面图、透视图在同一张图纸上表示）</td>
+                        <td>11</td>
+                        <td>给排水系统平面图</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>给排水系统透视图、系统图</td>
+                        <td>20</td>
+                        <td>消防系统图纸（用于平面图、透视图在同一张图纸上表示）</td>
+                    </tr>
+                    <tr>
+                        <td>21</td>
+                        <td>消防系统平面图</td>
+                        <td>22</td>
+                        <td>消防系统透视图、系统图</td>
+                    </tr>
+                    <tr>
+                        <td>30</td>
+                        <td>给排水、消防系统图纸（用于平面图、透视图在同一张图纸上表示）</td>
+                        <td>31</td>
+                        <td>给排水、消防系统平面图</td>
+                    </tr>
+                    <tr>
+                        <td>32</td>
+                        <td>给排水、消防系统透视图、系统图</td>
+                        <td>40</td>
+                        <td>详图</td>
+                    </tr>
+                    <tr>
+                        <td>41</td>
+                        <td>详图（卫生间、住宅厨房）</td>
+                        <td>42</td>
+                        <td>详图（机房、水箱）</td>
+                    </tr>
+                    <tr>
+                        <td>50</td>
+                        <td>其他系统图（如游泳池、污水、中水处理等）</td>
+                        <td>90</td>
+                        <td>修改通知单</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 暖通图纸分类码 -->
+            <div class="classification" id="m">
+                <a href="javascript:void(0);" class="classification_close">关闭</a>
+                <div class="page_rule_title">
+                    暖通图纸分类码
+                </div>
+                <table class="classification_table">
+                    <tr>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                    </tr>
+                    <tr>
+                        <td>00</td>
+                        <td>设计说明</td>
+                        <td>01</td>
+                        <td>总体图</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>图例（较少图例可并入00设计说明）</td>
+                        <td>03</td>
+                        <td>设备材料表</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>原理图（风系统、水系统、自控原理图等）</td>
+                        <td>20</td>
+                        <td>平面图</td>
+                    </tr>
+                    <tr>
+                        <td>30</td>
+                        <td>剖面图</td>
+                        <td>40</td>
+                        <td>详图</td>
+                    </tr>
+                    <tr>
+                        <td>50</td>
+                        <td>管道透视图或系统分布图</td>
+                        <td>90</td>
+                        <td>修改通知单</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 动力图纸分类码 -->
+            <div class="classification" id="d">
+                <a href="javascript:void(0);" class="classification_close">关闭</a>
+                <div class="page_rule_title">
+                    动力图纸分类码
+                </div>
+                <table class="classification_table">
+                    <tr>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                        <th>图纸分类码
+                        </th>
+                        <th>解释</th>
+                    </tr>
+                    <tr>
+                        <td>00</td>
+                        <td>设计说明、施工说明</td>
+                        <td>01</td>
+                        <td>总体图</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>图例（较少图例可并入00设计说明）</td>
+                        <td>03</td>
+                        <td>设备材料表</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>系统图</td>
+                        <td>20</td>
+                        <td>平面图</td>
+                    </tr>
+                    <tr>
+                        <td>30</td>
+                        <td>机房放大图及剖面图</td>
+                        <td>40</td>
+                        <td>详图</td>
+                    </tr>
+                    <tr>
+                        <td>50</td>
+                        <td>透视图</td>
+                        <td>90</td>
+                        <td>修改通知单</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 电气图纸分类码 -->
+            <div class="classification" id="e">
+                <a href="javascript:void(0);" class="classification_close">关闭</a>
+                <div class="page_rule_title">
+                    电气图纸分类码
+                </div>
+                <table class="classification_table">
+                    <tr>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                    </tr>
+                    <tr>
+                        <td>00</td>
+                        <td>设计说明</td>
+                        <td>01</td>
+                        <td>总体图</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>图例（较少图例可并入00设计说明）</td>
+                        <td>03</td>
+                        <td>设备材料表</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>变配电系统及干线图</td>
+                        <td>11</td>
+                        <td>配电箱系统及二次原理图</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>空调动力平面图及防雷接地平面图</td>
+                        <td>21</td>
+                        <td>照明平面图</td>
+                    </tr>
+                    <tr>
+                        <td>30</td>
+                        <td>变配电所、发电机平剖面及接地图</td>
+                        <td>40</td>
+                        <td>详图</td>
+                    </tr>
+                    <tr>
+                        <td>50</td>
+                        <td>消防报警</td>
+                        <td>60</td>
+                        <td>楼宇自控</td>
+                    </tr>
+                    <tr>
+                        <td>90</td>
+                        <td colspan="3">修改通知单</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 弱电图纸分类码 -->
+            <div class="classification" id="t">
+                <a href="javascript:void(0);" class="classification_close">关闭</a>
+                <div class="page_rule_title">
+                    弱电图纸分类码
+                </div>
+                <table class="classification_table">
+                    <tr>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                    </tr>
+                    <tr>
+                        <td>00</td>
+                        <td>设计说明</td>
+                        <td>01</td>
+                        <td>总体图</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>图例（较少图例可并入00设计说明）</td>
+                        <td>03</td>
+                        <td>设备材料表</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>弱电系统图</td>
+                        <td>20</td>
+                        <td>弱电平面图</td>
+                    </tr>
+                    <tr>
+                        <td>40</td>
+                        <td>详图</td>
+                        <td>90</td>
+                        <td>修改通知单</td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <!-- 室内图纸分类码 -->
+            <div class="classification" id="i">
+                <a href="javascript:void(0);" class="classification_close">关闭</a>
+                <div class="page_rule_title">
+                    室内图纸分类码
+                </div>
+                <table class="classification_table">
+                    <tr>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                    </tr>
+                    <tr>
+                        <td>00</td>
+                        <td>设计说明、用料表、门窗详图及门窗表</td>
+                        <td>01</td>
+                        <td>一层室内设计图</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>二层室内设计图</td>
+                        <td>03</td>
+                        <td>三层室内设计图</td>
+                    </tr>
+                    <tr>
+                        <td>XX</td>
+                        <td>XX层室内设计图</td>
+                        <td>70</td>
+                        <td>通用节点图</td>
+                    </tr>
+                    <tr>
+                        <td>80</td>
+                        <td>其他补充图纸</td>
+                        <td>90</td>
+                        <td>修改通知单</td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <!-- 景观图纸分类码 -->
+            <div class="classification" id="l">
+                <a href="javascript:void(0);" class="classification_close">关闭</a>
+                <div class="page_rule_title">
+                    景观图纸分类码
+                </div>
+                <table class="classification_table">
+                    <tr>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                        <th>图纸分类码</th>
+                        <th>解释</th>
+                    </tr>
+                    <tr>
+                        <td>00</td>
+                        <td>设计说明、用料表</td>
+                        <td>10</td>
+                        <td>平面布置图</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>平面索引图</td>
+                        <td>20</td>
+                        <td>定位图</td>
+                    </tr>
+                    <tr>
+                        <td>30</td>
+                        <td>竖向图</td>
+                        <td>40</td>
+                        <td>铺装图</td>
+                    </tr>
+                    <tr>
+                        <td>50</td>
+                        <td>种植图</td>
+                        <td>51</td>
+                        <td>苗木图</td>
+                    </tr>
+                    <tr>
+                        <td>60</td>
+                        <td>灯具（音响及信息点）布置图</td>
+                        <td>70</td>
+                        <td>设施小品</td>
+                    </tr>
+                    <tr>
+                        <td>80</td>
+                        <td>剖面、详图及通用节点</td>
+                        <td>90</td>
+                        <td>修改通知单</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="basedInfo">
+        <div class="basedInfo">
+            <span style="font-weight:bold;">项目： </span>
+            <span id="project" style="font-weight:normal;"></span>
+        </div>
+        <div class="basedInfo">
+            <span style="font-weight:bold;">阶段： </span>
+            <select style="width: 80px; height: 23px" size="1" id="phaseOptions"></select>
+        </div>
+        <div class="basedInfo">
+            <span style="font-weight:bold;">专业： </span>
+            <select style="width: 80px; height: 23px" size="1" id="majorOptions"></select>
+        </div>
+    </div>
+    <div class="handsontable" id="planTable"></div>
+    <div class="btn_div">
+        <button id="btnUpdate">更新</button>
+        <button id="btnSubmit">保存</button>
+    </div>
+
+</body>
+</html>

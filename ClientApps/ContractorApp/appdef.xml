@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.m-files.com/schemas/appdef.xsd">
+  <guid>BEA948B2-529B-4932-8268-254C5E66B014</guid>
+  <name>分包商管理</name>
+  <version>1.34</version>
+  <description>分包商管理</description>
+  <publisher>CADSimula</publisher>
+  <copyright>(c) www.simuladesign.com 2016</copyright>
+  <required-mfiles-version>11.1.4310.131</required-mfiles-version>
+  <optional>true</optional>
+  <modules>
+    <module environment="shellui" event-priority="1">
+      <file>scripts\md.js</file>
+      <file>scripts\mf\alias.js</file>
+      <file>scripts\mf\objectOps.js</file>
+       <file>scripts\mf\command.js</file>
+      <file>scripts\knowDocOps.js</file>
+      <file>scripts\doc-category.js</file>
+      <file>main.js</file>
+    </module>
+  </modules>
+  <dashboards>
+    <dashboard id="doccategory">
+      <content>doc-category.htm</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>    
+    <dashboard id="home">
+      <content>root.html</content>
+      <trusted-content>http://www.m-files.com/</trusted-content>
+    </dashboard>
+  </dashboards>
+</application>

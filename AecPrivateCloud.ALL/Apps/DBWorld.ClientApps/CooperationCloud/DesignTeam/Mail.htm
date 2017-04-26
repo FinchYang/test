@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>收件箱</title>
+     
+    <!-- Styles used on the dashboard -->
+    <link href="style/main.css" rel="stylesheet" />
+    <link href="style/mail.css" rel="stylesheet"/>
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.0.custom/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <!-- Helper scripts -->
+    <script type="text/javascript" src="scripts/UIControlLibrary/utilities.js"></script>
+    <script type="text/javascript" src="scripts/UIControlLibrary/localization.js"></script>
+    <script type="text/javascript" src="scripts/home_common.js"></script>
+    <script type="text/javascript" src="scripts/listing_common.js"></script>
+    <script type="text/javascript" src="scripts/mf/vault.js"></script>
+    <script type="text/javascript" src="scripts/md/base.js"></script>
+    <script type="text/javascript" src="scripts/md/mail.js"></script>
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+    <script type="text/javascript" src="scripts/cc/public.js"></script>
+    <script type="text/javascript" src="scripts/cc/core.js"></script>
+    <script type="text/javascript" src="scripts/cc/mail.js"></script>
+    <script type="text/javascript" src="scripts/wsh.js"></script>
+    <script type="text/javascript" src="scripts/mf/client.js"></script>
+ 
+    <script type="text/javascript">
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+            //var cd = dashboard.CustomData;
+            //alert(cd.objsAndProps.Count);
+            // Register a handler to listen the started event. 
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard)); 
+        }
+         
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+
+                var mailId = dashboard.CustomData.emailIdFather;     //父文件夹ID
+                var mailFoloderIds = dashboard.CustomData.viewIds;   //子文件夹ID
+                var mailFolderPaths = dashboard.CustomData.viewsPath;//子文件夹路径
+
+                // Shortcuts.
+                var shellFrame = dashboard.Parent;
+                var vault = shellFrame.ShellUI.Vault;
+                var loc = new localization();
+                var additionalSectionShown = false;
+
+                var projId = dashboard.CustomData.projId;
+                var vaultName = dashboard.CustomData.vaultName;
+                var dbworldPath = dashboard.CustomData.dbworldPath;
+                var exePathSend = dbworldPath + '\\' + 'DBWorld.MailClient.exe';
+
+                $("#btnSendEmail").click(function () {
+                    var type;
+                    var objId;
+                    var selObjVersAndPros = shellFrame.ActiveListing.CurrentSelection.ObjectVersionsAndProperties;
+                   
+                    //判断是否为草稿箱
+                    if (CC.mail.getSelFolderName(vault, selObjVersAndPros) === "草稿箱") {
+                        type = "1";
+                        objId = selObjVersAndPros.Item(1).ObjVer.ID;
+                    } else {
+                        type = "0";
+                        objId = "0";
+                    }
+                    wshUtils.runProgramWithUI(exePathSend, [vaultName, type, objId]);
+                });
+
+                var exePathReceive = MFiles.ApplicationPath + 'mailExe\\' + 'DBWorld.MailReceiver.exe';
+                if (!wshUtils.fileExists(exePathReceive)) {
+                    exePathReceive = dbworldPath + '\\' + 'DBWorld.MailReceiver.exe';
+                }
+                $("#btnReceiveEmail").click(function () {
+                    wshUtils.runProgramWithUI(exePathReceive, [vaultName]);
+                });
+
+                var exePathSettings = MFiles.ApplicationPath + 'mailExe\\' + 'DBWorld.MailConfig.exe';
+                if (!wshUtils.fileExists(exePathSettings)) {
+                    exePathSettings = dbworldPath + '\\' + 'DBWorld.MailConfig.exe';
+                }
+                $("#btnEmailSettings").click(function () {
+                    wshUtils.runProgramWithUI(exePathSettings, [vaultName, projId]); 
+                }); //btnEmailSettings
+
+                $("#btnReplyEmail").click(function () {
+                    var objId;
+                    var selObjVersAndPros = shellFrame.ActiveListing.CurrentSelection.ObjectVersionsAndProperties;
+                    //判断是否为草稿箱
+                    if (CC.mail.getSelFolderName(vault, selObjVersAndPros) != "草稿箱") {
+                        if (selObjVersAndPros.Count == 1) {
+                            objId = selObjVersAndPros.Item(1).ObjVer.ID;
+                            wshUtils.runProgramWithUI(exePathSend, [vaultName, "2", objId]);
+                        }
+                    }
+                });
+
+                $("#btnReplyEmailAll").click(function () {
+                    var objId;
+                    var selObjVersAndPros = shellFrame.ActiveListing.CurrentSelection.ObjectVersionsAndProperties;
+                    //判断是否为草稿箱
+                    if (CC.mail.getSelFolderName(vault, selObjVersAndPros) != "草稿箱") {
+                        if (selObjVersAndPros.Count == 1) {
+                            objId = selObjVersAndPros.Item(1).ObjVer.ID;
+                            wshUtils.runProgramWithUI(exePathSend, [vaultName, "3", objId]);
+                        }
+                    }
+                });
+
+                $("#btnForwardEmail").click(function () {
+                    var objId;
+                    var selObjVersAndPros = shellFrame.ActiveListing.CurrentSelection.ObjectVersionsAndProperties;
+                    //判断是否为草稿箱
+                    if (CC.mail.getSelFolderName(vault, selObjVersAndPros) != "草稿箱") {
+                        if (selObjVersAndPros.Count == 1) {
+                            objId = selObjVersAndPros.Item(1).ObjVer.ID;
+                            wshUtils.runProgramWithUI(exePathSend, [vaultName, "4", objId]);
+                        }
+                    }
+                });
+
+                initializeLayout(dashboard, shellFrame); 
+ 
+                //动态添加HTML标签
+                var ids = publicUtils.InsertHtml(mailFolderPaths.length, "listings", "mf-listing-header mf-listing-new-header");
+
+                //根据路径创建对应Listing 例："邮件系统\\收件箱"
+                for (var i = 0; i < mailFolderPaths.length; i++) {
+                    var listing = createListingForPath(shellFrame, loc, $('#' + ids[i]), mailFolderPaths[i],
+                        function (container, objectsCount) {
+                            // Specify the relative height of this listing.
+                            var heightNumber = 20;
+                            if (objectsCount <= 2)
+                                heightNumber = 15;
+                            if (objectsCount <= 1)
+                                heightNumber = 10;
+                            if (objectsCount > 20)
+                                heightNumber = 30;
+                            container.data("heightNumber", heightNumber);
+                            additionalSectionShown = true;
+                        });
+                    if (listing) CC.SetListingTheme(listing);
+                    listing.Events.Register(MFiles.Event.SelectionChanged, getListingSelectionChangedHandler(shellFrame));
+                }
+       
+                //获取取出metadataAlias.js 中ClassDesignProgress 所有值
+                var temp = CC.mail.GetArray(vault);
+
+                try {
+                    for (var mItem in mailFoloderIds) {
+                        var folderDefs = publicUtils.getFolderDefs(mailId, mailFoloderIds[mItem],"view");
+                        publicUtils.SetListingHeader(folderDefs, shellFrame, temp);
+                    } 
+                } catch (e) {}
+
+                // Listen to the ActiveListingChanged event.
+                shellFrame.Events.Register(MFiles.Event.ActiveListingChanged, getActiveListingChangedHandler(shellFrame));
+
+                // Resize panes.
+                $(window).resize(resizedWithHeight($("#divTool").height()));
+                resizedWithHeight($("#divTool").height())();
+ 
+            };
+        }         
+        
+    </script>
+    
+    <script type="text/javascript">
+        
+        function getListingSelectionChangedHandler(shellFrame) {
+
+            return function (selectedItems) {
+
+                // Currently nothing to do here.
+                var vault = shellFrame.ShellUI.Vault;
+                var selObjVersAndPros = shellFrame.ActiveListing.CurrentSelection.ObjectVersionsAndProperties;
+               
+                //修改“未读”属性为“已读”
+                if (CC.mail.getSelFolderName(vault, selObjVersAndPros) === "收件箱") {
+                    //签出对象
+                    var checkOutVn;
+                    var item = selObjVersAndPros.Item(1);
+                    if (!item.VersionData.ObjectCheckedOut) {
+                        checkOutVn = vault.ObjectOperations.CheckOut(item.ObjVer.ObjID).ObjVer;
+                    } else {
+                        checkOutVn = item.VersionData.ObjVer; 
+                    }
+  
+                    //修改属性
+                    var properties = MF.createObject("PropertyValues");
+                    var property = MF.createObject("PropertyValue");
+                    property.PropertyDef = MF.alias.propertyDef(vault, md.mail.propDefs.PropIsRead);
+                    property.TypedValue.SetValue(MFDatatypeBoolean, true);
+                    properties.Add(-1, property);
+                    checkOutVn = vault.ObjectPropertyOperations.SetProperties(checkOutVn, properties).ObjVer;
+
+                    //签入对象
+                    vault.ObjectOperations.CheckIn(checkOutVn);
+                }
+            }
+        }
+
+    </script>
+     
+</head>
+<body id="pageBody">
+    <div id="divTool" class="contentDiv2">
+        <ol class="list-nav">
+            <li class="list-nav-item" id="btnSendEmail"><img alt="写信" src="images/buttons/写信.png" />&nbsp;写信&nbsp;&nbsp;&nbsp;</li>
+            <li class="list-nav-item" id="btnReceiveEmail"><span class="vr-symbol">|&nbsp;</span><img alt="收信" src="images/buttons/收信.png" />&nbsp;收信&nbsp;&nbsp;&nbsp;</li>
+            <li class="list-nav-item" id="btnReplyEmail"><span class="vr-symbol">|&nbsp;</span><img alt="回复" src="images/buttons/回复.png" />&nbsp;回复&nbsp;&nbsp;&nbsp;</li>
+            <li class="list-nav-item" id="btnReplyEmailAll"><span class="vr-symbol">|&nbsp;</span><img alt="回复全部" src="images/buttons/回复全部.png" />回复全部&nbsp;</li>
+            <li class="list-nav-item" id="btnForwardEmail"><span class="vr-symbol">|&nbsp;</span><img alt="转发" src="images/buttons/转发.png" />&nbsp;转发&nbsp;&nbsp;&nbsp;</li>
+        </ol>
+    </div>
+    <div id="fullareadiv" style="width: 100%; height: 90%; padding: 0px; margin: 0px 0px 0px 0px;  border: 0px;">
+        <div id="listings" class="mf-panel-container" style="width: 100%; height: 100%; padding: 0px;margin: 0px; border: 0px;">
+        </div>
+    </div>
+</body>
+</html>

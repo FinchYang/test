@@ -1,0 +1,84 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+@*<script type="text/javascript">
+    $(function () {
+        $("#btnSubmit").click(function () {
+            if (!$("#ckAgree").prop("checked")) {
+                alert("请阅读《凯德数值条款》");
+                return false;
+            }
+        });
+    });
+</script>
+
+<!-- 当前位置 -->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "Home", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="用户注册">用户注册</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavPartial")
+    <!-- 右边内容 -->
+    <section class="left">
+
+        <div class="secondContent">
+            <div class="loginLeft">
+                <h2 class="loginTitle">
+                    用户注册 Registration
+                    <span class="haveLogin right">
+                        已注册用户请直接登录
+                        @Html.ActionLink("登录", "LogOn")
+                    </span>
+                </h2>
+                <div class="loginStep"></div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @using (Html.BeginForm("Register", "Account", new { @returnUrl = @ViewBag.returnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
+                {
+                    <ul class="formUl">
+                        <li>
+                            @Html.LabelFor(m => m.UserName, new { @class = "formLabel" })
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "formInput" })
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Email, new { @class = "formLabel letterTwo" })
+                            @Html.TextBoxFor(m => m.Email, new { @class = "formInput" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Password, new { @class = "formLabel letterTwo" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "formInput" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "formLabel" })
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "formInput" })
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        </li>
+                        <li>
+                            <label class="formLabel"></label>
+                            <label>
+                                <input type="checkbox" id="ckAgree" checked="checked" />
+                                我已阅读并接受<a href="@Url.Action("Clause", "Account")" title="凯德数值条款" class="Mfile_a_link" target="_blank">《凯德数值条款》</a>
+                            </label>
+                        </li>
+                    </ul>
+
+                    <div class="formKnow">
+                        <!--阅读条款位置-->
+                    </div>
+                    <p>
+                        <input type="submit" value="马上注册" class="subBtn formLoginIn" id="btnSubmit" />
+                    </p>
+                }
+            </div>
+        </div>
+
+    </section>
+
+</div>*@

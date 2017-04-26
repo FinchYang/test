@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>成员工时统计</title>
+
+    <style>
+        #table_font {
+            width: 100px;
+            text-align: center;
+        }
+
+        #divPanl {
+            width: 142px;
+            height: 18px;
+            margin-bottom: 14px;
+        }
+
+        #divTitle {
+            width: 55px;
+            height: 17px;
+            float: left;
+        }
+
+        #divContent {
+            width: 80px;
+            font-size: 11px;
+            float: left;
+            margin: 0 0 0 3px;
+        }
+
+        #divPanlDate {
+            width: 145px;
+            height: 18px;
+            float: left;
+            margin-left: -15px;
+        }
+
+        #divTitleDate {
+            width: 55px;
+            float: left;
+        }
+
+        #startPicker {
+            width: 69px;
+            height: 16px;
+            float: left;
+            margin: 0 0 0 3px;
+        }
+
+        #imgStart {
+            width: 16px;
+            height: 16px;
+            float: left;
+        }
+
+        #endPicker {
+            width: 70px;
+            height: 16px;
+            float: left;
+            margin: 0 0 0 3px;
+        }
+
+        #dateEnd {
+            width: 91px;
+            height: 18px;
+            float: left;
+        }
+
+        #imgEnd {
+            width: 16px;
+            height: 16px;
+            float: left;
+        }
+
+        #lblSymbol {
+            float: left;
+            color: #36A6EC;
+        }
+
+        #updateReport {
+            float: right;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        #divMember {
+            float: left;
+            margin-right: 35px;
+        }
+
+        #chatContent {
+            text-align: center;
+        }
+
+        #rowHead {
+            height: 15px;
+            color: white;
+        }
+    </style>
+
+    <!-- Styles used on the dashboard -->
+    <link rel="stylesheet" href="style/main.css" />
+    <link rel="stylesheet" href="style/report.css" />
+
+    <link rel="stylesheet" href="scripts/jquery-ui-1.11.4.custom/jquery-ui.css" />
+    <link rel="stylesheet" href="style/flatbutton.css" />
+    <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="style/dropdown-checkbox/bootstrap-dropdown-checkbox.css" />
+    <link rel="stylesheet" href="style/bootstrap/bootstrap.min.css">
+
+    <!-- Include the jQuery Core library -->
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.11.4.custom/jquery.datepicker-zh-CN.js"></script>
+
+    <!-- Include the App library -->
+    <script type="text/javascript" src="scripts/chart/Chart.js"></script>
+    <script src="scripts/dropdown-checkbox/bootstrap-dropdown-checkbox.js"></script>
+    <script src="scripts/bootstrap/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="scripts/md/report.js"></script>
+    <script type="text/javascript" src="scripts/md/base.js"></script>
+    <script type="text/javascript" src="scripts/mf/alias.js"></script>
+    <script type="text/javascript" src="scripts/mf/objectOps.js"></script>
+    <script type="text/javascript" src="scripts/cc/reports/projectcostreport.js"></script>
+    <script src="scripts/cc/reports/reportOps.js"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            //日期
+            $("#startPicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showMonthAfterYear: true,
+                dateFormat: "yy-mm-dd",
+                onSelect: function (dateText, inst) {
+                    $("#endPicker").datepicker("option", "minDate", dateText);
+                }
+            });
+
+            $("#endPicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showMonthAfterYear: true,
+                dateFormat: "yy-mm-dd",
+                onSelect: function (dateText, inst) {
+                    $("#startPicker").datepicker("option", "maxDate", dateText);
+                }
+            });
+
+            $("#startPicker").removeAttr("disabled");
+            $("#endPicker").removeAttr("disabled");
+        });
+    </script>
+
+    <script type="text/javascript">
+        "use strict";
+        function OnNewDashboard(dashboard) {
+            /// <summary>Gets called when a new dashboard object is created.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The newly created dashboard.</param>
+
+            // Register a handler to listen the started event.
+            dashboard.Events.Register(MFiles.Event.Started, getDashboardStartedHandler(dashboard));
+        }
+
+        function getDashboardStartedHandler(dashboard) {
+            /// <summary>Returns the event handler to handle the "started" event of a dashboard.</summary>
+            /// <param name="dashboard" type="MFiles.Dashboard">The current dashboard object.</param>
+            /// <returns type="MFiles.Events.OnStarted">The event handler.</returns>
+
+            // Return the event handler.
+            return function () {
+                var vault = dashboard.Vault;
+                var objVn = dashboard.CustomData.objVersion;
+                var props = dashboard.CustomData.properties;
+
+                //所有成员
+                var memberList = [];
+                var members = CC.projectCostReport.searchPorjMmebers(vault);
+                for (var m = 1; m <= members.Count; m++) {
+                    memberList.push(members.item(m));
+                }
+
+                //初始化数据
+                var memberHours = {};
+                var report = reportOps.getHistoryReportData(vault, md.hoursReport.classAlias, props);
+                if (report && report.reportInfo) {
+                    memberHours = JSON.parse(report.reportInfo);
+                    //初始化日期
+                    if (report.deadline) {
+                        $("#startPicker").val(report.startDate.replace(/\//g, "-"));
+                    }
+                    if (report.deadline) {
+                        $("#endPicker").val(report.deadline.replace(/\//g, "-"));
+                    }
+                } else {
+                    memberHours = CC.projectCostReport.getMembersHour(vault, memberList);
+                }
+
+                //初始化下拉选择框
+                var dropData = [];
+                var isChecked = false;
+                for (var i = 0; i < memberList.length; i++) {
+                    for (var j = 0; j < memberHours.length; j++) {
+                        if (memberList[i].ObjVer.ID === memberHours[j].id) {
+                            isChecked = true;
+                        } 
+                    }
+                    dropData.push({ id: memberList[i].ObjVer.ID, label: memberList[i].Title, isChecked: isChecked });
+                }
+                var dropDom = initDropdownCheckBox(dropData);
+
+                var result = CC.projectCostReport.getNameAndHours(memberHours);
+                //初始化矩形图
+                var barDom = initBarChart(result[0], result[1]);
+                //更新表格
+                updateTable(result[0], result[1]);
+
+                //更新报表
+                $("#updateReport").on("click", function () {
+                    //检查日期的有效性
+                    var strStartDate = $("#startPicker").val();
+                    var strEndDate = $("#endPicker").val();
+                    if (!reportOps.isValidDate(strStartDate, '-')
+                        || !reportOps.isValidDate(strEndDate, '-')) {
+                        alert("日期格式不正确！");
+                        return;
+                    }
+
+                    memberList = [];
+                    dropData = dropDom.dropdownCheckbox("checked");
+                    for (var n = 0; n < dropData.length; n++) {
+                        for (var k = 1; k <= members.Count; k++) {
+                            if (dropData[n].id === members.item(k).ObjVer.ID) {
+                                memberList.push(members.item(k));
+                            }
+                        }
+                    }
+
+                    var startDate = strStartDate ? new Date(strStartDate.replace(/\-/g, "/")) : null;
+                    var endDate = strEndDate ? new Date(strEndDate.replace(/\-/g, "/")) : null;
+                    memberHours = CC.projectCostReport.getMembersHour(vault, memberList, startDate, endDate);
+                    result = CC.projectCostReport.getNameAndHours(memberHours);
+
+                    //更新矩形图
+                    barDom = updateBarChart(barDom, result[0], result[1]);
+                    //更新表格
+                    updateTable(result[0], result[1]);
+                    //保存更新信息
+                    saveReportInfo(vault, objVn.ObjVer, memberHours);
+                });
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        //初始化下拉选择框数据
+        function initDropdownCheckBox(dropData) {
+            var dropDown = $('.dropdown-checkbox-task').dropdownCheckbox({
+                data: dropData,
+                autosearch: true,
+                title: "项目成员",
+                hideHeader: false,
+                showNbSelected: true,
+                templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">选择成员 <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
+            });
+
+            return dropDown;
+        }
+
+        //初始化矩形图
+        function initBarChart(barLabels, barData) {
+            var barChartData = {
+                labels: barLabels,
+                datasets: [
+                    {
+                        fillColor: "#39A9F1",
+                        strokeColor: "#39A9F1",
+                        highlightFill: "#39A9F1",
+                        highlightStroke: "#39A9F1",
+                        data: barData
+                    }
+                ]
+            }
+
+            var ctx = $("#canvas").get(0).getContext("2d");
+            var bar = new Chart(ctx).Bar(barChartData, {
+                responsive: true
+            });
+
+            return bar;
+        }
+
+        //更新矩形图
+        function updateBarChart(barDom, barLabels, barData) {
+            barDom.destroy();
+
+            var barChartData = {
+                labels: barLabels,
+                datasets: [
+                    {
+                        fillColor: "#39A9F1",
+                        strokeColor: "#39A9F1",
+                        highlightFill: "#39A9F1",
+                        highlightStroke: "#39A9F1",
+                        data: barData
+                    }
+                ]
+            }
+
+            var ctx = $("#canvas").get(0).getContext("2d");
+            var bar = new Chart(ctx).Bar(barChartData, {
+                responsive: true
+            });
+
+            return bar;
+        }
+
+        //更新表格
+        function updateTable(tabName, tabHours) {
+            var trs = $("#tasktable tbody").children();
+            for (var i = 1; i < trs.length; i++) {
+                trs.eq(i).remove();
+            }
+
+            var totalHours = 0;
+            for (var l = 0; l < tabHours.length; l++) {
+                totalHours += tabHours[l];
+            }
+
+            var tabData = [];
+            for (var j = 0; j < tabName.length; j++) {
+                var per = CC.projectCostReport.getPercent(tabHours[j], totalHours);
+                tabData.push({ name: tabName[j], hours: tabHours[j], percent: per });
+            }
+            var totalPer = CC.projectCostReport.getPercent(totalHours, totalHours);
+            tabData.push({ name: "总计", hours: totalHours, percent: totalPer });
+            
+            for (var k = 0; k < tabData.length; k++) {
+                //在尾行插入新行
+                var newRow = "<tr>"
+                    + "<td style='padding: 0 0 0 10px; text-align: left'>" + tabData[k].name + "</td>"
+                    + "<td style='text-align: center'>" + tabData[k].hours + "</td>"
+                    + "<td style='text-align: center'>" + tabData[k].percent + "</td></tr>";
+                $("#tasktable tbody tr:last").after(newRow);
+            }
+            $("#tasktable tbody tr:last").addClass("last");
+        }
+
+        //保存更新信息
+        function saveReportInfo(vault, objVer, memberHours) {
+            //日期
+            var strStartDate = $("#startPicker").val();
+            var startDate = strStartDate ? new Date(strStartDate.replace(/\-/g, "/")) : null;
+            var strEndDate = $("#endPicker").val();
+            var endDate = strEndDate ? new Date(strEndDate.replace(/\-/g, "/")) : null;
+
+            //图表
+            var reportJson = JSON.stringify(memberHours);
+            var uiData = {
+                "startDate": startDate,
+                "deadline": endDate,
+                "checkedItems": undefined,
+                "reportInfo": reportJson
+            };
+            reportOps.updateReport(vault, md.hoursReport.classAlias, objVer.ID, uiData);
+        }
+
+    </script> 
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <div id="divMember" class="row show-grid">
+                <div id="divPanl" class="divPanl">
+                    <div id="divTitle" class="date-start">项目成员</div>
+                    <div id="divContent" class="dropdown-checkbox-task"></div>
+                </div>
+            </div>
+            <div style="float: left">
+                <div id="divPanlDate" class="divPanl">
+                    <div id="divTitleDate" class="date-start">起止日期</div>
+                    <input type="text" class="text-style" id="startPicker" disabled="disabled">
+                    <img id="imgStart" src="./images/date.png" />
+                </div>
+
+                <label id="lblSymbol">&nbsp;~&nbsp;</label>
+
+                <div id="dateEnd" class="date-end">
+                    <input type="text" class="text-style" id="endPicker" disabled="disabled">
+                    <img id="imgEnd" src="./images/date.png" />
+                </div>
+            </div>
+        </div>
+
+        <div id="chatContent">
+            <div class="btn-update" id="updateReport">更 新 报 表</div>
+            <canvas id="canvas"></canvas>
+        </div>
+
+        <div id="tableContent">
+            <table id="tasktable">
+                <tr id="rowHead">
+                    <th id="table_font">&nbsp;&nbsp;项目成员</th>
+                    <th id="table_font">&nbsp;&nbsp;工作时间</th>
+                    <th id="table_font">&nbsp;&nbsp;项目占比</th> 
+                </tr>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

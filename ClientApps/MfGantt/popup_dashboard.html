@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<script type='text/javascript' src='js/jquery-1.7.2.min.js'></script>
+<script type='text/javascript' src='js/gantt/mfutils.js'></script>
+<script type='text/javascript'>
+
+	var Dashboard, ShellUI, ShellFrame, Vault, Properties, parent;
+	
+    function OnNewDashboard(dashboard) {
+	
+		//Globals
+        Dashboard = dashboard;
+		
+		parent = dashboard.customData.parent
+		dashboard.customData.window = this;
+		
+		ShellUI = parent.ShellUI;
+		ShellFrame = parent.ShellFrame;
+		Vault = parent.Vault;
+	
+	}
+	
+</script>
+<body>
+
+
+<script type="text/javascript" src="firebug-lite/build/firebug-lite-debug.js">
+{
+    overrideConsole: true,
+    startOpened: false,
+    startInNewWindow: false,
+    enableTrace: false,
+	enablePersistence: true
+}
+</script>
+</body>
+</html>

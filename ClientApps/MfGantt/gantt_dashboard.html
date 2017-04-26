@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>M-Files Gantt View</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <link rel='stylesheet' type='text/css' href='css/smoothness/jquery-ui-1.9.0.custom.css' />
+    <link rel='stylesheet' type='text/css' href='css/mflist.css' />
+    <link rel='stylesheet' type='text/css' href='css/gantt.css' />
+    <script type='text/javascript' src='js/jquery-1.8.2.js'></script>
+    <script type='text/javascript' src='js/jquery-ui-1.9.0.custom.js'></script>
+    <script type='text/javascript' src='js/jquery.mousewheel.min.js'></script>
+    <script type='text/javascript' src='js/Base64.js'></script>
+    <script type='text/javascript' src='js/date/Date.js'></script>
+    <script type='text/javascript' src='js/date/date-zh-CN.js'></script>
+    <script type='text/javascript' src='js/raphael.js'></script>
+    <script type='text/javascript' src='js/gantt/mfutils.js'></script>
+    <script type='text/javascript' src='js/gantt/mficon.js'></script>
+    <script type='text/javascript' src='js/gantt/mfsearch.js'></script>
+    <script type='text/javascript' src='js/gantt/mflist.js'></script>
+    <script type='text/javascript' src='js/gantt/gantt.js'></script>
+    <script type='text/javascript' src='js/gantt/mfgantt.js'></script>
+    <script type='text/javascript' src='js/gantt/mfpersist.js'></script>
+    <!-- <script type="text/javascript" src="firebug-lite/build/firebug-lite-debug.js">
+{
+    overrideConsole: true,
+    startOpened: true,
+    startInNewWindow: false,
+    enableTrace: false,
+	enablePersistence: true
+}
+</script> -->
+    <script type='text/javascript'>
+
+        // TODO: Move this to shellui module script (it has the longest lifetime)
+        window.newObject = function() {
+            ///<summary>Dummy function for conf Dashboard, so it can create new objects that will surpass it's lifetime</summary>
+            ///<returns type="Object"></returns>
+            return {};
+        }
+
+        function OnNewDashboard( dashboard ) {
+            ///<summary>Initiates the Gantt chart</summary>
+            ///<param name="dashboard" type="MFiles.Dashbord">The current dashboard object</param>
+
+
+            // initialize JQuery M-Files extensions
+            // (places common variables in $.mf namespace)
+            $.mf.setDashboard( dashboard );
+            $.mf.customData = dashboard.CustomData;
+
+            // initialize our gantt chart wrapper
+            $( "body" ).mfgantt();
+
+        }
+
+    </script>
+    <style type='text/css'>
+        body
+        {
+            padding: 0px;
+            margin: 0px;
+        }
+    </style>
+</head>
+<body>
+</body>
+</html>

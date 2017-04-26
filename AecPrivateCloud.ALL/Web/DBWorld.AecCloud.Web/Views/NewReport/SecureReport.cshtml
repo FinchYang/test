@@ -1,0 +1,169 @@
+﻿@{
+    ViewBag.Title = "安全整改统计";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #sidebar2 {
+        float: right;
+        width: 400px;
+        height: 320px;
+        padding-top: 50px;
+    }
+
+    div#apie {
+        float: left;
+        width: 290px;
+        height: 320px;
+        margin-left: 150px;
+        margin-top: 30px;
+    }
+
+    li {
+        padding-left: .75em !important;
+    }
+</style>
+<!-- 当前位置 -->
+<div id="currentWrap">
+    @Html.ActionLink("首页", "Index", "BIM", null, new { @title = "首页", @name = "anchor" })
+    <span>>></span>
+    <a title="项目中心">项目中心</a>
+</div>
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <input type="hidden" value=@ViewBag.chartdata id="chartdata" />
+    <!-- 左边导航 -->
+    @Html.Partial("_LeftNavBIM")
+    <!-- 右边内容 -->
+    <section class="right">
+        <script src="\Scripts\chart\Chart 2.4.0.js"></script>
+        <div class="section-header"> <div class="corbar"></div> 项目报表 <img src="/Content/Images/mdd/副级导航.png" /> 安全整改统计</div>
+
+        @using (Html.BeginForm("SecureReport", "NewReport", System.Web.Mvc.FormMethod.Get))
+        {
+            <p>
+                @Html.DropDownList("selectSecureClass", "检查类别")
+                @Html.DropDownList("selectLevel", "项目级别")
+                @Html.DropDownList("selectCorporation", "公司")
+                @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { maxlength = 192, placeholder = "请输入项目名称关键字" })
+                <input type="submit" value="筛选" />
+            </p>
+        }
+        <div id="apie">
+            <canvas id="myChart" width="280" height="280"></canvas>
+        </div>
+        <div id="sidebar2"></div>
+        <div>
+            <canvas id="myBar" width="910" height="390"></canvas>
+        </div>
+        <script>
+            var errorbackgroundColor = [];
+            var arrQulified = [];
+
+            var Principal = eval('(' + document.getElementById("chartdata").value + ')');
+            var colors = new Array("blueviolet","black", "silver", "aqua", "orchid", "yellow",  "fuchsia", "orange", "purple", "gray");
+            var htmlStr = "<ul style='list-style:none;'>  ";
+            var all = 0;
+            var labels = [];
+            var data = [];
+            var backgroundColor = [];
+            var hoverBackgroundColor = [];
+            var qualifiedbackgroundColor = [];
+            var borderColor = [];
+            var radom_color = function () {
+                return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+            }
+            for (var l = 0; l < Principal.length; l++) {
+                all += parseInt(Principal[l].Number);
+            }
+            for (var l = 0; l < Principal.length; l++) {
+                var one = parseInt(Principal[l].Number);
+                labels.push(Principal[l].Name);
+                data.push(Principal[l].Number);
+                backgroundColor.push(colors[l]);
+                hoverBackgroundColor.push(radom_color());
+                    errorbackgroundColor.push("red");
+                qualifiedbackgroundColor.push( "greenyellow");
+                borderColor.push("rgba(220,220,220,1)");
+                arrQulified.push(parseInt(Principal[l].QualifiedNumber));
+
+                htmlStr += " <li ><span id='" + Principal[l].Name + "' style='color:" + colors[l] + "; background-color:" + colors[l] + ";' >111</span>" + Principal[l].Name + ": " + (one * 100 / all).toFixed(2) + "%" + "</li>";
+            }
+            var piedata = {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: backgroundColor,
+                    hoverBackgroundColor: hoverBackgroundColor
+                }]
+            };
+            htmlStr += "</ul>";
+            $("#sidebar2").append($(htmlStr));
+
+            Piedefaults = {
+                tooltips: {
+                    display: true,
+                    titleFontSize: 18,//worked
+                    bodyFontSize: 16,//worked
+                },
+                legend: {
+                    display: false,
+                }
+            };
+
+            var ctx = document.getElementById("myChart");
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: piedata,
+                options: Piedefaults
+            });
+
+            var barChartData = {
+                labels: ["安全管理", "高处作业", "基坑工程", "脚手架", "模版支架", "施工机具", "施工用电", "塔式起重", "文明施工", "物料提升"],
+             //   labels: ["安全管理", "高处作业", "基坑工程", "脚手架", "模版支架", "施工机具", "施工用电", "塔式起重机与起重吊装", "文明施工", "物料提升机与施工升降机"],
+                datasets: [
+                     {
+                         label: '总计',
+                         backgroundColor: errorbackgroundColor,
+                         borderColor: borderColor,
+                         data: data,
+                         borderWidth: 2
+                     },
+                    {
+                        label: '合格',
+                        backgroundColor: qualifiedbackgroundColor,
+                        borderColor: borderColor,
+                        borderWidth: 2,
+                        data: arrQulified
+                    }
+                ]
+            }
+
+            var Baroptions = {
+                tooltips: {
+                    display: true,
+                    titleFontSize: 18,//worked
+                    bodyFontSize:16,//worked
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                     //   fontColor: 'rgb(255, 99, 132)',
+                        fontSize:16
+                    }
+                }
+            }
+
+            var ctx = document.getElementById("myBar");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData,
+                options: Baroptions
+            });
+        </script>
+
+     
+    </section>
+</div>
+
+

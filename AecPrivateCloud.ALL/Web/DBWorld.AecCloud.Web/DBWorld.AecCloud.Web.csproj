@@ -1,0 +1,895 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DFE9861B-1F3F-45CF-B35D-8024DF7F890F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DBWorld.AecCloud.Web</RootNamespace>
+    <AssemblyName>DBWorld.AecCloud.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <WebGreaseLibPath>..\..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <NuGetPackageImportStamp>55024578</NuGetPackageImportStamp>
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac">
+      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc">
+      <HintPath>..\..\packages\Autofac.Mvc5.3.3.4\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Owin">
+      <HintPath>..\..\packages\Autofac.Owin.3.1.0\lib\net45\Autofac.Integration.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi">
+      <HintPath>..\..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi.Owin">
+      <HintPath>..\..\packages\Autofac.WebApi2.Owin.3.2.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Interop">
+      <HintPath>..\..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.MFilesAPI, Version=7.0.0.0, Culture=neutral, PublicKeyToken=f1b4733f444f7ad0, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Owin.2.1.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Client">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Client.2.2.1\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Word, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Cookies.3.0.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.OAuth.3.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList">
+      <HintPath>..\..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc">
+      <HintPath>..\..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Cors">
+      <HintPath>..\..\packages\Microsoft.AspNet.Cors.5.2.2\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Cors.5.2.2\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Owin.5.2.2\lib\net45\System.Web.Http.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease">
+      <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.COBieLite, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Docs\Xbim.COBieLite.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.Common">
+      <HintPath>..\..\packages\Xbim.Essentials.3.1.10\lib\net40\Xbim.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.Geometry.Engine.Interop">
+      <HintPath>..\..\packages\Xbim.Geometry.3.1.14\lib\net40\Xbim.Geometry.Engine.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.Ifc.Extensions">
+      <HintPath>..\..\packages\Xbim.Essentials.3.1.10\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.Ifc2x3">
+      <HintPath>..\..\packages\Xbim.Essentials.3.1.10\lib\net40\Xbim.Ifc2x3.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.IO">
+      <HintPath>..\..\packages\Xbim.Essentials.3.1.10\lib\net40\Xbim.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.ModelGeometry.Scene">
+      <HintPath>..\..\packages\Xbim.Geometry.3.1.14\lib\net40\Xbim.ModelGeometry.Scene.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.Properties">
+      <HintPath>..\..\packages\Xbim.PropertySets.3.1.10\lib\net40\Xbim.Properties.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.Tessellator">
+      <HintPath>..\..\packages\Xbim.Geometry.3.1.14\lib\net40\Xbim.Tessellator.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\base.css" />
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\cc\workHour.css" />
+    <Content Include="Content\dropdown-checkbox\bootstrap-dropdown-checkbox.css" />
+    <Content Include="Content\dropdown-checkbox\bootstrap.css" />
+    <Content Include="Content\header.css" />
+    <Content Include="Content\Images\11.jpg" />
+    <Content Include="Content\Images\about\aboutDistrict.png" />
+    <Content Include="Content\Images\about\aboutUsTop1.png" />
+    <Content Include="Content\Images\about\aboutUsTop2.png" />
+    <Content Include="Content\Images\about\aboutUsTop3.png" />
+    <Content Include="Content\Images\about\aboutUsTop4.png" />
+    <Content Include="Content\Images\about\aboutUsTop5.png" />
+    <Content Include="Content\Images\about\book.png" />
+    <Content Include="Content\Images\about\DApp1.png" />
+    <Content Include="Content\Images\about\DApp10.png" />
+    <Content Include="Content\Images\about\DApp11.png" />
+    <Content Include="Content\Images\about\DApp12.png" />
+    <Content Include="Content\Images\about\DApp13.png" />
+    <Content Include="Content\Images\about\DApp14.png" />
+    <Content Include="Content\Images\about\DApp15.png" />
+    <Content Include="Content\Images\about\DApp2.png" />
+    <Content Include="Content\Images\about\DApp3.png" />
+    <Content Include="Content\Images\about\DApp4.png" />
+    <Content Include="Content\Images\about\DApp5.png" />
+    <Content Include="Content\Images\about\DApp6.png" />
+    <Content Include="Content\Images\about\DApp7.png" />
+    <Content Include="Content\Images\about\DApp8.png" />
+    <Content Include="Content\Images\about\DApp9.png" />
+    <Content Include="Content\Images\about\qualifaction.png" />
+    <Content Include="Content\Images\about\registration.png" />
+    <Content Include="Content\Images\asideContentClose.png" />
+    <Content Include="Content\Images\asideContentOpen.png" />
+    <Content Include="Content\Images\asidedown.png" />
+    <Content Include="Content\Images\asideup.png" />
+    <Content Include="Content\Images\bg_control_nav.png" />
+    <Content Include="Content\Images\btnBg.gif" />
+    <Content Include="Content\Images\client\Client1.jpg" />
+    <Content Include="Content\Images\client\Client2.jpg" />
+    <Content Include="Content\Images\client\clientTop1.png" />
+    <Content Include="Content\Images\client\clientTop2.png" />
+    <Content Include="Content\Images\client\clientTop3.png" />
+    <Content Include="Content\Images\client\clientTop4.png" />
+    <Content Include="Content\Images\client\clientTop5.png" />
+    <Content Include="Content\Images\client\client_share.jpg" />
+    <Content Include="Content\Images\client\down-Android-img.png" />
+    <Content Include="Content\Images\client\down-IOS-img.png" />
+    <Content Include="Content\Images\client\index1.png" />
+    <Content Include="Content\Images\client\下载1.png" />
+    <Content Include="Content\Images\client\下载anctp.png" />
+    <Content Include="Content\Images\client\下载biapo.png" />
+    <Content Include="Content\Images\client\下载ios.png" />
+    <Content Include="Content\Images\client\下载ios1.png" />
+    <Content Include="Content\Images\client\下载iphon.png" />
+    <Content Include="Content\Images\client\下载pc.png" />
+    <Content Include="Content\Images\client\下载pc1.png" />
+    <Content Include="Content\Images\client\下载pctup.png" />
+    <Content Include="Content\Images\client\下载安卓.png" />
+    <Content Include="Content\Images\client\下载安卓1.png" />
+    <Content Include="Content\Images\currentHome.png" />
+    <Content Include="Content\Images\date.png" />
+    <Content Include="Content\Images\DBWorld-Logo.png" />
+    <Content Include="Content\Images\DBWorld-Logobig.png" />
+    <Content Include="Content\Images\defaultHead.jpg" />
+    <Content Include="Content\Images\download.png" />
+    <Content Include="Content\Images\downloadimg.gif" />
+    <Content Include="Content\Images\floatShow.png" />
+    <Content Include="Content\Images\float_s.gif" />
+    <Content Include="Content\Images\freeBg.gif" />
+    <Content Include="Content\Images\index1Bg.gif" />
+    <Content Include="Content\Images\index2Bg.gif" />
+    <Content Include="Content\Images\index3Bg.gif" />
+    <Content Include="Content\Images\index4Bg.gif" />
+    <Content Include="Content\Images\index_DBWorld.png" />
+    <Content Include="Content\Images\index_download.png" />
+    <Content Include="Content\Images\index_help.png" />
+    <Content Include="Content\Images\leftAsideBtnBG.png" />
+    <Content Include="Content\Images\leftAsideTitleBg.png" />
+    <Content Include="Content\Images\leftTop.png" />
+    <Content Include="Content\Images\LeftTopBim.png" />
+    <Content Include="Content\Images\liImg.png" />
+    <Content Include="Content\Images\loginName.png" />
+    <Content Include="Content\Images\loginPassword.png" />
+    <Content Include="Content\Images\love.png" />
+    <Content Include="Content\Images\mdd\个人信息修改头像.png" />
+    <Content Include="Content\Images\mdd\个人信息确认.png" />
+    <Content Include="Content\Images\mdd\中建八局登录.png" />
+    <Content Include="Content\Images\mdd\中建八局登录0.png" />
+    <Content Include="Content\Images\mdd\中建八局登录1.png" />
+    <Content Include="Content\Images\mdd\中建八局登录2.png" />
+    <Content Include="Content\Images\mdd\中建八局登录3.png" />
+    <Content Include="Content\Images\mdd\中建八局项目中上传产品.png" />
+    <Content Include="Content\Images\mdd\中建八局首页1.png" />
+    <Content Include="Content\Images\mdd\中建八局首页10.png" />
+    <Content Include="Content\Images\mdd\中建八局首页2.png" />
+    <Content Include="Content\Images\mdd\中建八局首页3.png" />
+    <Content Include="Content\Images\mdd\中建八局首页4.png" />
+    <Content Include="Content\Images\mdd\中建八局首页5.png" />
+    <Content Include="Content\Images\mdd\中建八局首页6.png" />
+    <Content Include="Content\Images\mdd\中建八局首页7.png" />
+    <Content Include="Content\Images\mdd\中建八局首页8.png" />
+    <Content Include="Content\Images\mdd\中建八局首页9.png" />
+    <Content Include="Content\Images\mdd\人员权限.png" />
+    <Content Include="Content\Images\mdd\修改项目状态.png" />
+    <Content Include="Content\Images\mdd\公司.png" />
+    <Content Include="Content\Images\mdd\分包商管理.png" />
+    <Content Include="Content\Images\mdd\创建新项目.png" />
+    <Content Include="Content\Images\mdd\副级导航.png" />
+    <Content Include="Content\Images\mdd\单体减少.png" />
+    <Content Include="Content\Images\mdd\单体增加.png" />
+    <Content Include="Content\Images\mdd\右1.png" />
+    <Content Include="Content\Images\mdd\右2.png" />
+    <Content Include="Content\Images\mdd\合格.png" />
+    <Content Include="Content\Images\mdd\地点.png" />
+    <Content Include="Content\Images\mdd\城市.png" />
+    <Content Include="Content\Images\mdd\安全问题清单1.png" />
+    <Content Include="Content\Images\mdd\安全问题清单2.png" />
+    <Content Include="Content\Images\mdd\安全问题清单3.png" />
+    <Content Include="Content\Images\mdd\密码.png" />
+    <Content Include="Content\Images\mdd\尺寸文件.png" />
+    <Content Include="Content\Images\mdd\工作空间.png" />
+    <Content Include="Content\Images\mdd\左1.png" />
+    <Content Include="Content\Images\mdd\左2.png" />
+    <Content Include="Content\Images\mdd\年份.png" />
+    <Content Include="Content\Images\mdd\待办.png" />
+    <Content Include="Content\Images\mdd\我的账户.png" />
+    <Content Include="Content\Images\mdd\所属单位.png" />
+    <Content Include="Content\Images\mdd\承包专业.png" />
+    <Content Include="Content\Images\mdd\新建项目1.png" />
+    <Content Include="Content\Images\mdd\月份.png" />
+    <Content Include="Content\Images\mdd\检查类别.png" />
+    <Content Include="Content\Images\mdd\消息.png" />
+    <Content Include="Content\Images\mdd\状态级别.png" />
+    <Content Include="Content\Images\mdd\登录.png" />
+    <Content Include="Content\Images\mdd\登录框.png" />
+    <Content Include="Content\Images\mdd\登录背景.png" />
+    <Content Include="Content\Images\mdd\省份.png" />
+    <Content Include="Content\Images\mdd\编辑项目信息.png" />
+    <Content Include="Content\Images\mdd\账户.png" />
+    <Content Include="Content\Images\mdd\进入项目库.png" />
+    <Content Include="Content\Images\mdd\退出.png" />
+    <Content Include="Content\Images\mdd\项目.png" />
+    <Content Include="Content\Images\mdd\项目中心.png" />
+    <Content Include="Content\Images\mdd\项目信息添加成员.png" />
+    <Content Include="Content\Images\mdd\项目报表.png" />
+    <Content Include="Content\Images\mdd\项目类别.png" />
+    <Content Include="Content\Images\mdd\项目级别.png" />
+    <Content Include="Content\Images\model_change.png" />
+    <Content Include="Content\Images\model_empty.png" />
+    <Content Include="Content\Images\model_File.jpg" />
+    <Content Include="Content\Images\model_hide.png" />
+    <Content Include="Content\Images\model_public.png" />
+    <Content Include="Content\Images\model_File.png" />
+    <Content Include="Content\Images\model_search.png" />
+    <Content Include="Content\Images\model_toggle.png" />
+    <Content Include="Content\Images\model_update.png" />
+    <Content Include="Content\Images\Navigations\navLeft.png" />
+    <Content Include="Content\Images\Navigations\navRight.png" />
+    <Content Include="Content\Images\Navigations\next.png" />
+    <Content Include="Content\Images\Navigations\nextInvitate.png" />
+    <Content Include="Content\Images\Navigations\prev.png" />
+    <Content Include="Content\Images\Navigations\prevInvitate.png" />
+    <Content Include="Content\Images\Navigations\select.png" />
+    <Content Include="Content\Images\Navigations\导航图标.png" />
+    <Content Include="Content\Images\navOn_bg.png" />
+    <Content Include="Content\Images\newProjectClose.png" />
+    <Content Include="Content\Images\new\commodityTopHome.png" />
+    <Content Include="Content\Images\new\confirmOverlayBg.png" />
+    <Content Include="Content\Images\new\guideItemGreenHand.png" />
+    <Content Include="Content\Images\new\guideItemPay.png" />
+    <Content Include="Content\Images\new\guideItemTel.png" />
+    <Content Include="Content\Images\new\menuItemIcon.png" />
+    <Content Include="Content\Images\new\next.png" />
+    <Content Include="Content\Images\new\popupClose.png" />
+    <Content Include="Content\Images\new\prev.png" />
+    <Content Include="Content\Images\new\productAnchor.png" />
+    <Content Include="Content\Images\new\productImg3.jpg" />
+    <Content Include="Content\Images\new\productImgBtn.png" />
+    <Content Include="Content\Images\new\productImgBtn2.png" />
+    <Content Include="Content\Images\new\下载-按下.png" />
+    <Content Include="Content\Images\new\下载-默认.png" />
+    <Content Include="Content\Images\new\企业云.png" />
+    <Content Include="Content\Images\new\协同云.png" />
+    <Content Include="Content\Images\new\锁.png" />
+    <Content Include="Content\Images\new\我的云盘.png" />
+    <Content Include="Content\Images\Partners\partner1.jpg" />
+    <Content Include="Content\Images\Partners\partner1.png" />
+    <Content Include="Content\Images\Partners\partner10.png" />
+    <Content Include="Content\Images\Partners\partner11.jpg" />
+    <Content Include="Content\Images\Partners\partner12.jpg" />
+    <Content Include="Content\Images\Partners\partner13.jpg" />
+    <Content Include="Content\Images\Partners\partner14.jpg" />
+    <Content Include="Content\Images\Partners\partner2.png" />
+    <Content Include="Content\Images\Partners\partner3.png" />
+    <Content Include="Content\Images\Partners\partner4.png" />
+    <Content Include="Content\Images\Partners\partner5.png" />
+    <Content Include="Content\Images\Partners\partner6.png" />
+    <Content Include="Content\Images\Partners\partner7.png" />
+    <Content Include="Content\Images\Partners\partner8.png" />
+    <Content Include="Content\Images\Partners\partner9.png" />
+    <Content Include="Content\Images\projects\addCover.png" />
+    <Content Include="Content\Images\projects\addmember.png" />
+    <Content Include="Content\Images\projects\addModelUnit.png" />
+    <Content Include="Content\Images\projects\bimzx.png" />
+    <Content Include="Content\Images\projects\createProject.png" />
+    <Content Include="Content\Images\projects\delModelUnit.png" />
+    <Content Include="Content\Images\projects\projectTemplete.gif" />
+    <Content Include="Content\Images\projects\template1.jpg" />
+    <Content Include="Content\Images\projects\template2.jpg" />
+    <Content Include="Content\Images\projects\template3.jpg" />
+    <Content Include="Content\Images\new\rerurnTop.png" />
+    <Content Include="Content\Images\projects\修改项目状态.png" />
+    <Content Include="Content\Images\search-button-new.png" />
+    <Content Include="Content\Images\secondImgTop.png" />
+    <Content Include="Content\Images\selectUp.png" />
+    <Content Include="Content\Images\softwareBg.png" />
+    <Content Include="Content\Images\new\storeLogo.png" />
+    <Content Include="Content\Images\templates\indexbim.png" />
+    <Content Include="Content\Images\templates\indexcomment.png" />
+    <Content Include="Content\Images\templates\indexImage.png" />
+    <Content Include="Content\Images\tops\hero1.jpg" />
+    <Content Include="Content\Images\tops\hero1.png" />
+    <Content Include="Content\Images\tops\hero2.jpg" />
+    <Content Include="Content\Images\tops\hero2.png" />
+    <Content Include="Content\Images\tops\hero3.jpg" />
+    <Content Include="Content\Images\tops\hero3.png" />
+    <Content Include="Content\Images\tops\hero4.png" />
+    <Content Include="Content\Images\tops\hero5.jpg" />
+    <Content Include="Content\Images\toTop.png" />
+    <Content Include="Content\Images\toTopOn.png" />
+    <Content Include="Content\Images\userImg.gif" />
+    <Content Include="Content\Images\userMore.png" />
+    <Content Include="Content\Images\userPageTop.gif" />
+    <Content Include="Content\Images\users\defaultimage.png" />
+    <Content Include="Content\Images\users\logo.png" />
+    <Content Include="Content\Images\users\password.png" />
+    <Content Include="Content\Images\users\submit.png" />
+    <Content Include="Content\Images\users\submithover.png" />
+    <Content Include="Content\Images\users\username.png" />
+    <Content Include="Content\Images\users\待办.png" />
+    <Content Include="Content\Images\users\消息.png" />
+    <Content Include="Content\Images\users\登录框1.png" />
+    <Content Include="Content\Images\users\登录框2.png" />
+    <Content Include="Content\Images\users\退出.png" />
+    <Content Include="Content\Images\waiting.gif" />
+    <Content Include="Content\Images\new\weChatIcon.jpg" />
+    <Content Include="Content\Images\users\八局二公司.jpg" />
+    <Content Include="Content\Images\users\登录背景.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\jquery-ui-styles\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\jquery-ui-styles\jquery-ui.css" />
+    <Content Include="Content\jquery-ui-styles\jquery-ui.min.css" />
+    <Content Include="Content\layout.css" />
+    <Content Include="Content\model-qa.css" />
+    <Content Include="Content\model-tree.css" />
+    <Content Include="Content\model.css" />
+    <Content Include="Content\nav.css" />
+    <Content Include="Content\CscecNormalize.css" />
+    <Content Include="Content\oldstyles\cscec82.css" />
+    <Content Include="Content\oldstyles\base.css" />
+    <Content Include="Content\oldstyles\BIMClient.css" />
+    <Content Include="Content\oldstyles\BIMMaster.css" />
+    <Content Include="Content\oldstyles\BIMPopup.css" />
+    <Content Include="Content\oldstyles\footer.css" />
+    <Content Include="Content\oldstyles\header.css" />
+    <Content Include="Content\oldstyles\layout.css" />
+    <Content Include="Content\oldstyles\loading.css" />
+    <Content Include="Content\oldstyles\login.css" />
+    <Content Include="Content\oldstyles\second.css" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\product-download.css" />
+    <Content Include="Content\treeview\images\ajax-loader.gif" />
+    <Content Include="Content\treeview\images\file.gif" />
+    <Content Include="Content\treeview\images\folder-closed.gif" />
+    <Content Include="Content\treeview\images\folder.gif" />
+    <Content Include="Content\treeview\images\minus.gif" />
+    <Content Include="Content\treeview\images\plus.gif" />
+    <Content Include="Content\treeview\images\treeview-black-line.gif" />
+    <Content Include="Content\treeview\images\treeview-black.gif" />
+    <Content Include="Content\treeview\images\treeview-default-line.gif" />
+    <Content Include="Content\treeview\images\treeview-default.gif" />
+    <Content Include="Content\treeview\images\treeview-famfamfam-line.gif" />
+    <Content Include="Content\treeview\images\treeview-famfamfam.gif" />
+    <Content Include="Content\treeview\images\treeview-gray-line.gif" />
+    <Content Include="Content\treeview\images\treeview-gray.gif" />
+    <Content Include="Content\treeview\images\treeview-red-line.gif" />
+    <Content Include="Content\treeview\images\treeview-red.gif" />
+    <Content Include="Content\treeview\jquery.treeview.css" />
+    <Content Include="Content\waittingsvg.css" />
+    <Content Include="Content\xbim\xbrowser-styles.css" />
+    <Content Include="Content\xbim\xviewer-styles.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Installer\announce.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Installer\News.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Installer\releasenotes.html" />
+    <Content Include="Installer\VerifyRecord.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Installer\versioninfo.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="packages.config" />
+    <Compile Include="ApiRequests\DomainClient.cs" />
+    <Compile Include="ApiRequests\HttpClientContext.cs" />
+    <Compile Include="ApiRequests\ResponseMessageExtensions.cs" />
+    <Compile Include="ApiRequests\HomeClient.cs" />
+    <Compile Include="Api\BaseApiController.cs" />
+    <Compile Include="Api\CloudController.cs" />
+    <Compile Include="Api\ErrorHandlingApiController.cs" />
+    <Compile Include="Api\FilesController.cs" />
+    <Compile Include="Api\InviteController.cs" />
+    <Compile Include="Api\NoticesController.cs" />
+    <Compile Include="Api\NotifyController.cs" />
+    <Compile Include="Api\ProjectBaseController.cs" />
+    <Compile Include="Api\ProjectController.cs" />
+    <Compile Include="Api\ProjectMembersController.cs" />
+    <Compile Include="Api\VaultController.cs" />
+    <Compile Include="App_Start\AuthUtility.cs" />
+    <Compile Include="App_Start\DBWorldCache.cs" />
+    <Compile Include="App_Start\EfConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="App_Data\vaults.json" />
+    <Content Include="App_Data\vaultserver.json" />
+    <Content Include="Helps\DBWorld邮箱设置指南.pdf" />
+    <Content Include="App_Data\vaultTemplates.json" />
+    <Content Include="App_Data\vaultApps.json" />
+    <Content Include="App_Data\vaultApp_template.json" />
+    <Content Include="App_Data\company.json" />
+    <Content Include="App_Data\department.json" />
+    <Content Include="App_Data\area.json" />
+    <Content Include="App_Data\projectCost.json" />
+    <Content Include="App_Data\projectProgress.json" />
+    <Content Include="appSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="connectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Data\projectlevel.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\projectTimeLimit.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\projects.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\positioninfo.json" />
+    <Content Include="App_Data\personnelcategory.json" />
+    <Content Include="App_Data\cscecrole.json" />
+    <None Include="Properties\PublishProfiles\ZCAecCloud.pubxml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\cc\model-tree3.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.zh-CN.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\browser.js" />
+    <Content Include="Scripts\cc\model-brower.js" />
+    <Content Include="Scripts\cc\model-qa.js" />
+    <Content Include="Scripts\cc\model-tree2.js" />
+    <Content Include="Scripts\cc\model-tree.js" />
+    <Content Include="Scripts\cc\workHour.js" />
+    <Content Include="Scripts\chart\Chart 2.4.0.js" />
+    <Content Include="Scripts\chart\Chart.js" />
+    <Content Include="Scripts\chart\echarts.simple.min.js" />
+    <Content Include="Scripts\chart\legend.js" />
+    <Content Include="Scripts\dropdown-checkbox\bootstrap-dropdown-checkbox.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-icons_222222_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-icons_454545_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-icons_888888_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\jquery-ui.css" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\jquery-ui.min.css" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.css" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\jquery-ui.structure.min.css" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.css" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\jquery-ui.theme.min.css" />
+    <Content Include="Scripts\jquery-ui-1.11.4.custom\jquery.datepicker-zh-CN.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.mousewheel.js" />
+    <Content Include="Scripts\jquery.mousewheel.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.1.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.1.min.js" />
+    <Content Include="Scripts\jquery.treeview\jquery.cookie.js" />
+    <Content Include="Scripts\jquery.treeview\jquery.treeview.edit.js" />
+    <Content Include="Scripts\jquery.treeview\jquery.treeview.js" />
+    <Content Include="Scripts\linq.js" />
+    <Content Include="Scripts\linq.min.js" />
+    <Content Include="Scripts\multiselect\bootstrap.css" />
+    <Content Include="Scripts\multiselect\multiple-select.css" />
+    <Content Include="Scripts\multiselect\multiple-select.js" />
+    <Content Include="Scripts\multiselect\multiple-select.png" />
+    <Content Include="Scripts\oldscripts\BIM.js" />
+    <Content Include="Scripts\oldscripts\BIMIndex.js" />
+    <Content Include="Scripts\oldscripts\BIMProjectDetails.js" />
+    <Content Include="Scripts\oldscripts\commonMethod.js" />
+    <Content Include="Scripts\oldscripts\jquery.flexslider-min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\oldscripts\jquery.form.js" />
+    <Content Include="Scripts\oldscripts\JuqeryCookie.js" />
+    <Content Include="Scripts\oldscripts\kefu.js" />
+    <Content Include="Scripts\oldscripts\Mfile.js" />
+    <Content Include="Scripts\oldscripts\News.js" />
+    <Content Include="Scripts\oldscripts\youdao.js" />
+    <Content Include="Scripts\xbim\gl-matrix.min.js" />
+    <Content Include="Scripts\xbim\webgl-utils.min.js" />
+    <Content Include="Scripts\xbim\xbim-browser.min.js" />
+    <Content Include="Scripts\xbim\xbim-event.js" />
+    <Content Include="Scripts\xbim\xbim-globalvariables.js" />
+    <Content Include="Scripts\xbim\xbim-index.css" />
+    <Content Include="Scripts\xbim\xbim-init.js" />
+    <Content Include="Scripts\xbim\xbim-navigation-cube.min.js" />
+    <Content Include="Scripts\xbim\xbim-navigation-home.min.js" />
+    <Content Include="Scripts\xbim\xbim-search.js" />
+    <Content Include="Scripts\xbim\xbim-viewer.min.bundle.js" />
+    <Content Include="Views\WorkingHour\test.html" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\AecCloudWeb.pubxml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_NavPartial.cshtml" />
+    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Shared\_LeftNavPartial.cshtml" />
+    <Content Include="Views\Manage\Welcome.cshtml" />
+    <Content Include="Views\Manage\UserInfoEdit.cshtml" />
+    <Content Include="Views\Shared\_LeftNavPrivatePartiale.cshtml" />
+    <Content Include="Views\Account\PromptActivateEmail.cshtml" />
+    <Content Include="Views\Manage\Personal.cshtml" />
+    <Content Include="Views\BIM\Index.cshtml" />
+    <Content Include="Views\BIM\CreateProject.cshtml" />
+    <Content Include="Views\BIM\ProjectDetail.cshtml" />
+    <Content Include="Views\Shared\_LeftNavBIM.cshtml" />
+    <Content Include="Views\Manage\UserNews.cshtml" />
+    <Content Include="Views\AECCloudClient\Index.cshtml" />
+    <Content Include="Views\Help\AboutUs.cshtml" />
+    <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Account\InviteLogOn.cshtml" />
+    <Content Include="Views\NewsAnnounce\NewsIndex.cshtml" />
+    <Content Include="Views\NewsAnnounce\NewsDetails.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\Clause.cshtml" />
+    <Content Include="Views\Account\ActiveAccountScuuess.cshtml" />
+    <Content Include="Views\Files\Index.cshtml" />
+    <Content Include="Views\Manage\UserInfo.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_LayoutNew.cshtml" />
+    <Content Include="Views\WorkingHour\Index.cshtml" />
+    <Content Include="Scripts\multiselect\multiple-select.jquery.json" />
+    <Content Include="Views\Model\Show.cshtml" />
+    <Content Include="Views\Manage\UserImage.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\BIM\CreateProjectForFullBackup.cshtml" />
+    <Content Include="Views\IntegratedManagement\PerformanceRate.cshtml" />
+    <Content Include="Views\IntegratedManagement\PerformanceRateUnit.cshtml" />
+    <Content Include="Views\IntegratedManagement\SupervisorMeetingStatistics.cshtml" />
+    <Content Include="Views\IntegratedManagement\ScheduleControlStatistics.cshtml" />
+    <Content Include="Views\Manage\PermissionManagement.cshtml" />
+    <Content Include="Views\NewReport\ThreeControls.cshtml" />
+    <Content Include="Views\NewReport\ThreeControlsAll.cshtml" />
+    <Content Include="Views\NewReport\TimeLimitWarning.cshtml" />
+    <Content Include="Views\NewReport\SecureIssueList.cshtml" />
+    <Content Include="Views\NewReport\CostWarning.cshtml" />
+    <Content Include="Views\NewReport\MessageNotification.cshtml" />
+    <Content Include="Views\NewReport\WorkWaitingList.cshtml" />
+    <Content Include="Views\NewReport\ContractorList.cshtml" />
+    <Content Include="Views\Model\Index.cshtml" />
+    <Content Include="Views\Model\Project.cshtml" />
+    <Content Include="Views\NewReport\SecureReport.cshtml" />
+    <Content Include="Views\Model\ModelList.cshtml" />
+    <Content Include="staticContent.config" />
+    <Content Include="Views\Manage\ErpPmSet.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Site.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Api\AccountController.cs" />
+    <Compile Include="App_Start\AutofacConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\StorageUtility.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AECCloudClientController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BIMController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IntegratedManagementController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ModelController.cs" />
+    <Compile Include="Controllers\NewReportController.cs" />
+    <Compile Include="Controllers\NewsAnnounceController.cs" />
+    <Compile Include="Controllers\WorkingHourController.cs" />
+    <Compile Include="EncipherAndDecrypt.cs" />
+    <Compile Include="Filters\AllowCrossSiteJsonAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Handlers\AuthHandler.cs" />
+    <Compile Include="hubs\hub.cs" />
+    <Compile Include="Impersonator.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DtoExtensions.cs" />
+    <Compile Include="Models\FileModel.cs" />
+    <Compile Include="Models\IntegratedModel.cs" />
+    <Compile Include="Models\PerformaceModel.cs" />
+    <Compile Include="Models\UnitPerformaceModel.cs" />
+    <Compile Include="Models\WorkingHourModels.cs" />
+    <Compile Include="ModelUtility.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\CustomMultipartFormDataStreamProvider.cs" />
+    <Compile Include="Providers\DBWorldOAuthProvider.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Notification\Notification.Core\MfNotification.Core.csproj">
+      <Project>{347ea559-7756-45b3-9e7e-f2c0b5a247aa}</Project>
+      <Name>MfNotification.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\AecCloud.BaseCore\AecCloud.BaseCore.csproj">
+      <Project>{2acc62af-1464-45b8-b449-2fe570a2f4f0}</Project>
+      <Name>AecCloud.BaseCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\AecCloud.Core\AecCloud.Core.csproj">
+      <Project>{3b28d5b4-e0ee-4afa-820e-e204bee40242}</Project>
+      <Name>AecCloud.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\AecCloud.Data\AecCloud.Data.csproj">
+      <Project>{a7f13188-6e8e-442a-8d72-fd16f44570a2}</Project>
+      <Name>AecCloud.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\AecCloud.MFilesCore\AecCloud.MFilesCore.csproj">
+      <Project>{ae429300-c8f6-4895-bd18-0eeb5cf4ca9b}</Project>
+      <Name>AecCloud.MFilesCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\AecCloud.MfilesServices\AecCloud.MfilesServices.csproj">
+      <Project>{9375a5d1-68ae-4fa3-9d77-d15cef359030}</Project>
+      <Name>AecCloud.MfilesServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\AecCloud.Service\AecCloud.Service.csproj">
+      <Project>{20c99a6e-bd21-47e3-967d-36fe496a19e0}</Project>
+      <Name>AecCloud.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\AecCloud.WebAPI.Models\AecCloud.WebAPI.Models.csproj">
+      <Project>{28c33d7e-77b7-4dcb-8b88-bdd55607737c}</Project>
+      <Name>AecCloud.WebAPI.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>45725</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:45725/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。启用“NuGet 程序包还原”可下载这些程序包。有关详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xbim.Geometry.3.1.14\build\net40\Xbim.Geometry.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xbim.Geometry.3.1.14\build\net40\Xbim.Geometry.targets'))" />
+  </Target>
+  <Import Project="..\..\packages\Xbim.Geometry.3.1.14\build\net40\Xbim.Geometry.targets" Condition="Exists('..\..\packages\Xbim.Geometry.3.1.14\build\net40\Xbim.Geometry.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

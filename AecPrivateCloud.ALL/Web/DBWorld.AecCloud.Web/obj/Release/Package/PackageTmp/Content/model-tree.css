@@ -1,0 +1,85 @@
+﻿ /*model-tree-view*/
+    .m-tree-view {
+        margin-top: -7px;
+        margin-left: 0;
+        padding: 0;
+        width:100%;
+        height: 100%;
+        background-color: #008ad2;
+        min-width: 240px;
+        overflow:auto;
+        color: white;
+    }
+    .m-tree-view li {
+        /*vertical-align: middle;*/
+        border: 1px solid rgb(127, 177, 249);
+        border-width: 1px 0 0 0;
+        list-style: none;
+    }
+   
+    .m-tree-view li>div {
+        height: 45px;
+    }
+    .m-tree-view li>div>label {
+        height: 30px;
+        line-height: 30px;
+        margin: 8px 0 7px 5px;
+    }
+     .m-tree-view li>div:hover{
+        background-color: #059be9;
+        /*透明度*/
+        opacity: 0.85;
+        filter: alpha(opacity=85);
+    }
+    .m-tree-view li>div>label:hover {
+        cursor: pointer; 
+    }
+    .m-tree-view li>div>input {
+        width: 14px;
+        height: 14px;
+        margin: 8px 0 7px 0;
+    }
+    .m-tree-view li>div>label>img {
+        margin-top: 10px;
+    }
+    .level-one {
+        margin-left: 0;
+        font-size: 16px;
+    }
+    .level-one>li {
+        padding-left: 20px;
+    }
+    .level-one>li>div>label {
+        width: 90%;
+    }
+    .level-two {
+        margin-left: 25px;
+        font-size: 15px;
+    }
+    .level-two>li {
+        padding-left: 0;
+    }
+    .level-two>li>div>label {
+        width: 89.1%;
+    }
+    
+    .level-three {
+        margin-left: 25px;
+        font-size: 15px;
+    }
+    .level-three>li {
+        padding-left: 0;
+    }
+    .level-three>li>div>label {
+        width: 88.3%;
+    }
+    .model-img {
+        width: 14px;height: 14px;
+        float: right;margin-right: 5px;
+    }
+    .toggle-img {
+        width: 14px;height: 14px;
+        float: right;margin-right: 20px;
+    }
+
+    

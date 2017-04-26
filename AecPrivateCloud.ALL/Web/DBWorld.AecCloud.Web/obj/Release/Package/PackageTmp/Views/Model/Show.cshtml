@@ -1,0 +1,167 @@
+﻿@{
+    Layout = null;
+    var homeUrl = AecCloud.BaseCore.Utility.GetHost(Request.Url);
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>模型浏览</title>
+    <link href="/Content/CscecNormalize.css" rel="stylesheet" />
+    <link href="/Content/jquery-ui-styles/jquery-ui.min.css" rel="stylesheet" />
+    <link href="/Content/xbim/xbrowser-styles.css" rel="stylesheet" />
+    <style>
+        .radio-text {
+            font-size: 0.8em;
+            font-weight: normal;
+            padding: 0px 8px 0px 8px;
+        }
+
+        .radio-text:hover {
+            cursor: pointer;
+        }
+
+        .projectListBtnConfirm{
+            color:black;
+            display:none;
+            z-index: 1000;
+            padding-top:40px;
+            position:absolute;
+            top:50px;
+            right: 80px;
+            text-align:center;
+            width:450px;
+            height:150px;
+            background-image: url(/Content/Images/projects/修改项目状态.png);
+        }
+
+        .projectListBtnConfirm a {
+        color:#fff;
+        margin:0 10px;
+    }
+        .projectListBtnConfirm a:hover {
+            text-decoration:underline;
+        }
+
+        .projectListBtnConfirm p a {
+            width: 100px;
+            height:20px;
+            margin:0;
+            margin-top: 30px;
+            margin-right:20px;
+            padding-top:9px;
+            padding-bottom:5px;
+            -ms-border-radius:4px;
+            border-radius:4px;
+            display: inline-block;
+        }
+
+        .projectListBtnConfirm p a.change-state-ok {
+            background-color: #008ad2;
+            color:white;
+        }
+
+        .projectListBtnConfirm p a.change-state-cancel {
+        background-color: #b5b5b5;
+        color:black;
+    }
+    </style>
+    <script>
+        var viewer = null;
+        var browser = null;
+        var idMapping = null;
+        var currentEntityId = null;
+        var multSels = [];
+    </script>
+    <script src="/Scripts/jquery.js"></script>
+    <script src="/Scripts/jquery-ui.js"></script>
+    <script src="/Scripts/xbim/webgl-utils.min.js"></script>
+    <script src="/Scripts/xbim/gl-matrix.min.js"></script>
+    <script src="/Scripts/xbim/xbim-viewer.min.bundle.js"></script>
+    <script src="/Scripts/xbim/xbim-navigation-cube.min.js"></script>
+    <script src="/Scripts/xbim/xbim-navigation-home.min.js"></script>
+    <script src="/Scripts/xbim/xbim-browser.min.js"></script>
+    <script src="/Scripts/browser.js"></script>
+</head>
+    <body>
+        <input type="hidden" id="homeurl" value=@homeUrl/>
+        <div id="viewer-container">
+            <canvas id="viewer-canvas"></canvas>
+            <div style="position: absolute; right: 20px; top: 5px; padding: 8px 30px 8px 30px;" id="toolbar" class="ui-widget-header ui-corner-all">
+                <input type="radio" id="pan-btn" value="Pan" name="action1" /><span class="radio-text">平移</span>
+                <input type="radio" id="rotate-btn" value="Rotate" name="action1" checked /><span class="radio-text">旋转</span>
+                <input type="radio" id="zoom-btn" value="Zoom" name="action1"/><span class="radio-text">缩放</span>
+                <input type="checkbox" id="multi-select" value="MultiSelect" name="action1" /><span class="radio-text">多选</span>
+            </div>
+            <div style="position: absolute; right: 20px; top: 50px; padding: 5px;" id="toolbar" class="ui-widget-header ui-corner-all">
+                <button id="clip-btn">裁剪</button>
+                <button id="unclip-btn">取消裁剪</button>
+                <button id="reset-btn">重置状态</button>
+
+            </div>
+        </div>
+        <div id="semantic-model-container" class="noselect">
+            <div id="semantic-model">
+                <h3>空间结构</h3><!--Spatial structure-->
+                <div class="no-overflow">
+                    <div id="structure" class="semantic-model-tree"></div>
+                </div>
+                <h3>类型</h3><!-- Asset types-->
+                <div class="no-overflow">
+                    <div id="assetTypes" class="semantic-model-tree"></div>
+                </div>
+                <h3>系统</h3> <!-- Systems-->
+                <div class="no-overflow">
+                    <div id="systems" class="semantic-model-tree"></div>
+                </div>
+                <h3>分区</h3> <!-- Zones--> 
+                <div class="no-overflow">
+                    <div id="zones" class="semantic-model-tree"></div>
+                </div>
+                <h3>联系信息</h3> <!-- Contacts-->
+                <div class="no-overflow">
+                    <div id="contacts" class="semantic-model-tree"></div>
+                </div>
+                <h3>文档</h3> <!-- Documents-->
+                <div class="no-overflow">
+                    <div id="facility-documents" class="semantic-model-tree"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="semantic-descriptive-info-container">
+            <div id="semantic-descriptive-info">
+                <h3 id="attrprop-header">属性和特性 </h3>
+                <div class="no-overflow-y">
+                    <div id="attrprop"></div>
+                </div>
+                <h3>文档</h3>
+                <div class="no-overflow">
+                    <div id="documents"></div>
+                </div>
+                <h3>作业</h3>
+                <div class="no-overflow">
+                    <div id="issues"></div>
+                </div>
+                <h3>任务</h3>
+                <div class="no-overflow">
+                    <div id="assignments"></div>
+                </div>
+            </div>
+        </div>
+        <span class="right" id="btnLocate"><span class="ui-icon ui-icon-pin-s left"></span> 定位</span>
+    <span class="right" id="btnworkflow"><span class="ui-icon ui-icon-pin-s left"></span> 工作流</span>
+    <div class="projectListBtnConfirm">
+        请选择工作流类别：
+        <select id="select-class" value="ClassSecureNoticeDailyCheck">
+            <option value="ClassSecureNoticeDailyCheck">安全日常检查</option>
+            <option value="ClassSecureNoticeWeeklyCheck">安全周检查</option>
+            <option value="ClassSecureNoticeSpecialCheck">安全专项检查</option>
+            <option value="ClassQualityAdjustmentNotice">质量整改通知单</option>
+        </select>
+        <p>
+            <a class="change-state-ok" href="javascript:void(0);" title="确定" name="sure">确定</a>
+            <a class="change-state-cancel" href="javascript:void(0);" title="取消" name="cancel">取消</a>
+        </p>
+    </div>
+    </body>
+</html>

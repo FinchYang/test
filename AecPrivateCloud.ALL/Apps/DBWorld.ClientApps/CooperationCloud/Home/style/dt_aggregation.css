@@ -1,0 +1,36 @@
+﻿/*
+ 信息聚合
+*/
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.module {
+    float: left;
+}
+
+.moduleContent {
+    margin-top: 32px;
+    width: 500px;
+    height: 30px; 
+}
+
+#headTitle {
+    height: 35px;
+}
+
+#moduleImg {
+    width: 32px;
+    height: 32px;
+    float: left;
+}
+
+#moduleTitle {
+    margin-top: 8px;
+    float: left;
+}
+
+.mf-content {
+    
+}

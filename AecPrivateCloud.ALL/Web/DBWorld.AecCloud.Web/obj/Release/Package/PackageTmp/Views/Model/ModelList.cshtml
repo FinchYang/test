@@ -1,0 +1,338 @@
+﻿@{
+    ViewBag.Title = "项目的BIM模型列表";
+    //Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var homeUrl = AecCloud.BaseCore.Utility.GetHost(Request.Url);
+}
+
+@*<link rel="stylesheet" href="~/Content/treeview/jquery.treeview.css" />*@
+<link href="/Content/CscecNormalize.css" rel="stylesheet" />
+<link href="/Content/jquery-ui-styles/jquery-ui.min.css" rel="stylesheet" />
+<link href="/Content/xbim/xbrowser-styles.css" rel="stylesheet" />
+<link href="~/Content/model.css" rel="stylesheet" />
+<link href="~/Content/model-tree.css" rel="stylesheet" />
+<link href="~/Content/model-qa.css" rel="stylesheet" />
+<link href="/Scripts/xbim/xbim-index.css" rel="stylesheet" type="text/css" />
+<script>
+    var viewer = null;
+    var browser = null;
+    var idMapping = null;
+    var idMappings = [];
+    var currentEntityId = null;
+    var multSels = [];
+    var nodeId;
+    var currentEntityIds = null;
+    var ifcIds = null;
+    var ifcId = null;
+</script>
+<script src="../../Scripts/jquery-3.1.1.min.js"></script>
+@*<script src="../../Scripts/jquery-1.10.2.min.js"></script>*@
+@*<script src="../../Scripts/jquery.treeview/jquery.treeview.js"></script>*@
+<script src="/Scripts/linq.js"></script>
+<script src="/Scripts/linq.min.js"></script>
+<script src="/Scripts/jquery-ui.js"></script>
+<script src="/Scripts/xbim/webgl-utils.min.js"></script>
+<script src="/Scripts/xbim/gl-matrix.min.js"></script>
+<script src="/Scripts/xbim/xbim-viewer.min.bundle.js"></script>
+<script src="/Scripts/xbim/xbim-navigation-cube.min.js"></script>
+<script src="/Scripts/xbim/xbim-navigation-home.min.js"></script>
+<script src="/Scripts/xbim/xbim-browser.min.js"></script>
+<!--global variables-->
+<script src="/Scripts/xbim/xbim-globalvariables.js"></script>
+<!--model-->
+<script src="~/Scripts/cc/model-tree3.js"></script>
+<script src="~/Scripts/cc/model-qa.js"></script>
+<script src="~/Scripts/cc/model-brower.js"></script>
+<!--set init-->
+<script src="/Scripts/xbim/xbim-search.js" charset="gbk"></script>
+<script src="/Scripts/xbim/xbim-event.js" charset="gbk"></script>
+<script src="/Scripts/xbim/xbim-init.js"></script>
+<style type="text/css">
+    /*div #viewer-container-toolbar {
+        background: inherit;
+        border-width: 0;
+    }
+
+    #viewer-container-toolbar select {
+         margin: 0 0 0 8px;
+         width: 95px;
+         height: 38px;
+         background-color: #008ad2;
+         color: white;
+         border: rgb(238, 235, 235) 2px solid;
+         font-weight:bold;
+         font-size: 16px;
+         vertical-align: middle;
+         cursor: pointer;
+         outline: none;
+    }*/
+
+    #attrprop-header {
+        height: 35px;
+        top: 5px;
+        padding-left: 15px;
+        vertical-align: middle;
+        background-color: #008ad2;
+        background-image: none;
+        font-size: 15px;
+        font-weight: bold;
+        color: white;
+        cursor: default;
+    }
+
+    #attrprop-header > span {
+        display: none;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        QueryString.Initial();
+        var vGuid = QueryString.GetValue("guid");
+        vGuid = decodeURIComponent(vGuid);
+        var vName = undefined;
+        //var vName = QueryString.GetValue("name");
+        //vName = decodeURIComponent(vName);
+        var typeId = QueryString.GetValue("typeid");
+        var objId = QueryString.GetValue("objid");
+        var ifcGuid = QueryString.GetValue("ifcguid");
+        if (ifcGuid) {
+            ifcGuid = decodeURIComponent(ifcGuid);
+            ifcId = ifcGuid;
+        }
+
+        if (!vGuid) return;
+        //var nodes = getNodes(vGuid);
+        guid_file_Nodes = nodes;
+        //alert(JSON.stringify(nodes));
+        var nodes = getTestNodes();
+        var defaultNode = treeViewEntry(nodes, vGuid, vName, typeId, objId, undefined);//modelCallFn
+
+        loadControls();
+
+        multiSelectChange();
+
+        var wd = $('.model-tree').width() - 36;
+        $('.model-search>input').width(wd);
+        $('#semantic-descriptive-info>.no-overflow-y').css('height', '96%');     
+
+        $(window).resize(function () {
+            wd = $('.model-tree').width() - 36;
+            $('.model-search>input').width(wd);
+            $('#semantic-descriptive-info>div.no-overflow-y').css('height', '96%');
+
+            //重新调整画布位置和大小
+            resizeViewSize();
+        });
+
+        $('.model-search >img').click(function () {
+            //xSearchKeyword
+            var searchkeyword = $('.model-search>input').val().trim();
+            //alert(xSearchKeyword);
+            xbim_showSearchResult();
+            xbim_search_GetAssType(searchkeyword, nodes);
+        });
+
+        //$('#treeWrap').css("display", "none");
+        $('#tableWrap').css("display", "none");
+
+        $('.model-search>img').click(function () {
+            $('#treeWrap').css("display", "none");
+            $('#tableWrap').css("display", "inline-block");
+        });
+        //选中默认项
+        if (defaultNode) {
+            var id = defaultNode.Level + "_" + defaultNode.Type + "_" + defaultNode.ID;
+            $('#' + id + '>div>input').attr('checked', true);
+            //modelCallFn(defaultNode, undefined, ifcGuid);
+            //multiModelCallFn(defaultNode, pastLeafNodes, nowLeafNodes, ifcGuid);
+            multiModelCallFn(defaultNode, [], [], ifcGuid);
+        }
+
+        //问题反馈相关----->
+        //$('.model - tree').css("display", "none");    
+        modelQaEntry(nodes, vGuid, modelQaCallback);
+        modelQaResize();
+        $('.model-question').css("display", "none");
+        //<----------------
+    });
+
+    
+    
+</script>
+
+<!-- 主要内容部分 -->
+<div id="content" class="clearfix">
+    <!-- 当前位置 -->
+    <div id="currentWrap">
+        <div class="corbar"></div> <a href=@Url.Action("Index")>BIM模型中心</a> <img src="/Content/Images/mdd/副级导航.png" />
+        <span>BIM模型列表</span>
+    </div>
+    <!-- 隐藏内容 -->
+    <input type="checkbox" id="multi-select" value="MultiSelect" name="action1" style="display: none;position:absolute;left: 500px" /><span class="radio-text"></span>
+    <input type="hidden" id="homeurl" value=@homeUrl />
+    <input id="CurrentVaultGuid" type="hidden" value=@ViewBag.CurrentVaultGuid />
+    <div id="viewer-container">
+            <canvas id="viewer-canvas"></canvas>
+            @*<div style="position: absolute; right: 20px; top: 5px; padding: 8px 30px 8px 30px;" id="toolbar" class="ui-widget-header ui-corner-all">
+                <input type="radio" id="pan-btn" value="Pan" name="action1" /><span class="radio-text">平移</span>
+                <input type="radio" id="rotate-btn" value="Rotate" name="action1" checked /><span class="radio-text">旋转</span>
+                <input type="radio" id="zoom-btn" value="Zoom" name="action1" /><span class="radio-text">缩放</span>
+                <input type="checkbox" id="multi-select" value="MultiSelect" name="action1" /><span class="radio-text">多选</span>
+            </div>
+            <div style="position: absolute; right: 20px; top: 50px; padding: 5px;" id="toolbar" class="ui-widget-header ui-corner-all">
+                <button id="clip-btn">裁剪</button>
+                <button id="unclip-btn">取消裁剪</button>
+                <button id="reset-btn">重置状态</button>
+            </div>*@
+        </div>
+
+    <!-- 主要内容部分 -->
+    <div id="semantic-model-container">
+        <div class="model-tree">
+            <div id="searchWarp" class="model-search">
+                <input type="text" value="" placeholder="请输入构件名称" />
+                <img src="~/Content/Images/model_search.png" title="查看结果" />
+            </div>
+            @*<div id="treeWrap" style="overflow-y: auto;">
+                    <ul id="directoryTree" class="filetree"></ul>
+                </div>*@
+            <div id="m-tree-view" class="m-tree-view"></div>
+            <div id="tableWrap">
+                <table>
+                    <thead>
+                        @*style="position: fixed;width: 100%;margin-top: -1px;"*@
+                        @*<tr id="topic">
+                                <th>构件构件构件构</th>
+                                <th>单体</th>
+                                <th>楼层</th>
+                                <th>专业</th>
+                            </tr>*@
+                        <tr>
+                            <th>构件</th>
+                            <th>单体</th>
+                            <th>楼层</th>
+                            <th>专业</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="model-question">
+            <div id="qaSearchWarp" class="qa-search">
+                <select id="qa-class">
+                    @*<option value="1">安全日常检查</option>
+                    <option value="2">安全周检查</option>
+                    <option value="3">安全专项检查</option>
+                    <option value="4">质量整改</option>
+                    <option value="5">问题反馈</option>*@
+                </select>
+                <select id="qa-state">
+                    <option value="1">所有</option>
+                    <option value="2">进行中</option>
+                    <option value="3">已结束</option>
+                </select>
+                <img src="~/Content/Images/model_search.png" title="查看结果" />
+            </div>
+            <div id="qaTableWrap">
+                <table class="table table-bordered table-striped">
+                    @*<thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>流程节点</th>
+                            <th>结论</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="1">
+                            <td><a>名称001</a></td>
+                            <td>流程节点001</td>
+                            <td>结论001</td>
+                            <td><img src="~/Content/Images/model_search.png" title="查看文件" /></td>
+                        </tr>
+                        <tr id="2">
+                            <td><a>名称002</a></td>
+                            <td>节点002</td>
+                            <td>结论002</td>
+                            <td><img src="~/Content/Images/model_search.png" title="查看文件" /></td>
+                        </tr>
+                    </tbody>*@
+                </table>
+            </div>
+        </div>
+        <div id="semantic-model" style="display: none;">
+            @*<h3 style="display: none;height: 0;">模型目录</h3>
+                <div style="background-color: #008ad2;">
+                    <input type="text" value="" placeholder="请输入构件名称" style="height: 20px;width: 80%;" />
+                    <img src="~/Content/Images/model_search.png" style="height: 30px;cursor: pointer;" />
+                </div>
+                <div class="no-overflow">
+                    <div id="treeWrap" class="semantic-model-tree">
+                        <ul id="directoryTree" class="filetree" ></ul>
+                    </div>
+                </div>*@
+            <h3>空间结构</h3><!--Spatial structure-->
+            <div class="no-overflow">
+                <div id="structure" class="semantic-model-tree"></div>
+            </div>
+            <h3>类型</h3><!-- Asset types-->
+            <div class="no-overflow">
+                <div id="assetTypes" class="semantic-model-tree"></div>
+            </div>
+            <h3>系统</h3> <!-- Systems-->
+            <div class="no-overflow">
+                <div id="systems" class="semantic-model-tree"></div>
+            </div>
+            <h3>分区</h3> <!-- Zones-->
+            <div class="no-overflow">
+                <div id="zones" class="semantic-model-tree"></div>
+            </div>
+            <h3>联系信息</h3> <!-- Contacts-->
+            <div class="no-overflow">
+                <div id="contacts" class="semantic-model-tree"></div>
+            </div>
+            <h3>文档</h3> <!-- Documents-->
+            <div class="no-overflow">
+                <div id="facility-documents" class="semantic-model-tree"></div>
+            </div>
+        </div>
+    </div>
+    <div id="semantic-descriptive-info-container">
+        <div id="semantic-descriptive-info">
+            <h3 id="attrprop-header">属性和特性 </h3>
+            <div class="no-overflow-y">
+                <div id="attrprop"></div>
+            </div>
+            <div style="display: none;">
+                <h3>文档</h3>
+                <div class="no-overflow">
+                    <div id="documents"></div>
+                </div>
+                <h3>作业</h3>
+                <div class="no-overflow">
+                    <div id="issues"></div>
+                </div>
+                <h3>任务</h3>
+                <div class="no-overflow">
+                    <div id="assignments"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span style="display: none;" class="right" id="btnLocate"><span class="ui-icon ui-icon-pin-s left"></span> 定位</span>
+    <span style="display: none;" class="right" id="btnworkflow"><span class="ui-icon ui-icon-pin-s left"></span> 工作流</span>
+    <div class="projectListBtnConfirm">
+        请选择工作流类别：
+        <select id="select-class" value="ClassIssueFeedback">
+            @*<option value="ClassSecureNoticeDailyCheck">安全日常检查</option>
+                <option value="ClassSecureNoticeWeeklyCheck">安全周检查</option>
+                <option value="ClassSecureNoticeSpecialCheck">安全专项检查</option>
+                <option value="ClassQualityAdjustmentNotice">质量整改通知单</option>*@
+        </select>
+        <p>
+            <a class="change-state-ok" href="javascript:void(0);" title="确定" name="sure">确定</a>
+            <a class="change-state-cancel" href="javascript:void(0);" title="取消" name="cancel">取消</a>
+        </p>
+    </div>
+</div>

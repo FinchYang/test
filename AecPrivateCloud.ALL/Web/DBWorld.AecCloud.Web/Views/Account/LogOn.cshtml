@@ -1,0 +1,210 @@
+﻿@model LoginViewModel
+
+@{
+    ViewBag.Title = "用户登录";
+    Layout = null;
+}
+
+<link href="~/Content/CscecNormalize.css" rel="stylesheet" type="text/css"/>
+<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/bootstrap.css" rel="stylesheet" type="text/css" />
+
+<style>
+    .validation-summary-errors {
+        color: red;
+    }
+    .foot-bottom {
+            position: absolute;
+            bottom: 0px;
+            height: 40px;
+            width: 100%;
+        }
+
+    #login-content {
+        /*width:1200px;
+        height:730px;*/
+        height:100%;
+        -ms-background-size:100%;
+        background-size:100%;
+        background-image: url(/Content/Images/users/登录背景.png);
+        /*margin-left: auto;
+        margin-right: auto;*/
+    }
+
+    .login-logo {
+        /*width:418px;
+        height:52px;
+        
+        background: url(/Content/Images/users/logo.png);*/
+        margin-left: auto;
+        margin-right: auto;
+        margin-top:110px;
+    }
+
+    .login-logo img{
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+
+    .login-header {
+        background-color:#4f9def;
+        width:425px;
+        height:45px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top:70px;
+        margin-bottom:38px;
+        -ms-border-top-left-radius:4px;
+        border-top-left-radius:4px;
+        -ms-border-top-right-radius:4px;
+        border-top-right-radius:4px;
+    }
+
+    .login-header span {
+        text-align: center;
+        position: relative;
+        top:10px;
+        color: white;
+        font-size:20px;
+        font-weight: bold;
+    }
+
+    .login-form {
+        width:425px;
+        height:380px;
+        margin-left:auto;
+        margin-right: auto;
+        margin-top:0;
+        margin-bottom:0;
+        text-align: center;
+        background-color:#ededed;
+        -ms-border-radius:6px;
+        border-radius:6px;
+    }
+
+    .username-list {
+        width:334px;
+        height:51px;
+        background: url(/Content/Images/users/username.png);
+    }
+
+    .password-list {
+        width:334px;
+        height:51px;
+        background: url(/Content/Images/users/password.png);
+    }
+
+    .domain-list {
+        margin-left: -270px;
+    }
+
+    .formInput {
+        margin-left:50px;
+        padding-left:20px;
+        width:285px;
+        height:51px;
+        -ms-border-radius:5px;
+        border-radius:5px;
+        background-color: #dfdfdf;
+        background-color: rgba(233, 233, 233, 0.5);
+        border:none;
+    }
+
+    .formUl li {
+        list-style: none;
+        margin-bottom:18px;
+    }
+    .subBtn {
+        /*background: url(/Content/Images/users/submit.png);*/
+        background-color:#008edd;
+        color: white;
+        width:334px;
+        height:52px;
+        border:0;
+        color: white;
+        font-size:20px;
+        font-weight: bold;
+        -ms-border-radius:6px;
+        border-radius:6px;
+    }
+
+    .subBtn:hover {
+        /*background: url(/Content/Images/users/submithover.png);*/
+        background-color: #0184c9;
+        /*width:334px;
+        height:52px;
+        -ms-border-radius:6px;
+        border-radius:6px;*/
+    }
+
+    #login-footer {
+        margin:0;
+        margin-top:20px;
+    }
+
+    #login-footer #download-client {
+        -ms-border-bottom-left-radius:6px;
+        border-bottom-left-radius:6px;
+        float:left;
+    }
+
+    #login-footer #download-manual {
+        -ms-border-bottom-right-radius:6px;
+        border-bottom-right-radius:6px;
+        float:right;
+    }
+
+    #login-footer a {
+        display: inline-block;
+        width:212px;
+        height:41px;
+        margin:0;
+        padding:0;
+        color:white;
+        padding-top:10px;
+        background-color:#bed1f6;
+    }
+
+    #login-footer a:hover {
+        background: #60a4eb;
+    }
+
+</style>
+<!-- 主要内容部分 -->
+<div id="login-content" class="clearfix">
+    <div class="login-logo">
+        <img src="/Content/Images/users/logo.png">
+    </div>
+    <div class="login-form">
+        <div class="login-header"><span>项目管理BIM云平台</span></div>
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <ul class="formUl">
+                <li class="username-list">
+                    @Html.TextBoxFor(m => m.UsernameOrEmail, new {@class = "formInput", placeholder = "用户名"})
+                    @Html.ValidationMessageFor(m => m.UsernameOrEmail, "", new {@class = "text-danger"})
+                </li>
+                <li class="password-list">
+                    @Html.PasswordFor(m => m.Password, new {@class = "formInput", placeholder = "密码"})
+                    @Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})
+                </li>
+                <li class="domain-list">
+                    @Html.CheckBoxFor(m => m.IsDomainUser, new {@class = "forget"})
+                    @Html.LabelFor(m => m.IsDomainUser, new {@class = "forget"})
+                </li>
+
+            </ul>
+            <p>
+                <input type="submit" value="登录" class="subBtn formLoginIn"/>
+            </p>
+            <div id="login-footer">
+                <a id="download-client" href="/AECCloudClient/Index" target="_blank">安装包下载</a>
+                <a id="download-manual" href="/Installer/用户手册.pdf" target="_blank">用户手册下载</a>
+            </div>
+        }
+    </div>
+
+</div>
+

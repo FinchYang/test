@@ -1,0 +1,155 @@
+﻿body {
+     font-family:Verdana;
+     font-size:14px;
+     margin:0;
+     padding: 20px;
+}
+
+#container {
+    margin:0 auto;
+    width:100%;
+    height: 100%;
+}
+
+#header { 
+    height:100px; 
+    margin-bottom:5px;
+}
+
+#chatContent {
+     height:auto;
+     margin-bottom:5px;
+}
+
+#tableContent {
+    height: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+th, td {
+    border: 1px solid #b5d6e6;
+    font-size: 12px;
+    font-weight: normal;
+    height: 20px;
+}
+
+th {
+    background-color: #007DC6;
+    color: white;
+}
+
+.last {
+    background-color: #e0e0f9;
+}
+
+.dataTime {
+    border: 1px solid #ccc;
+    background: url(../images/calendar.png) no-repeat right 3px #fff;
+    height: 28px;
+    vertical-align: central;
+    width: 100px;
+}
+
+.legend {
+    width: 80px;
+    /*border: 1px solid black;*/
+}
+
+.legend .title {
+    display: block;
+    margin-bottom: 0.5em;
+    line-height: 1.2em;
+    padding: 0 0.3em;
+}
+
+.legend .color-sample {
+    display: block;
+    float: left;
+    width: 1em;
+    height: 1em;
+    border: 2px solid; /* Comment out if you don't want to show the fillColor */
+    -ms-border-radius: 0.5em;
+    border-radius: 0.5em; /* Comment out if you prefer squarish samples */
+    margin-right: 0.5em;
+}
+
+
+/*统计页面*/
+.btn-update {
+    /*更新按钮默认样式*/
+    width: 68px;
+    height: 18px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    background-color: #39A9F1;
+    font-size: 11px;
+    color: white;
+    text-align: center;
+    line-height: 18px;
+}
+
+.btn-update:hover {
+        /*更新按钮鼠标经过样式*/
+        width: 68px;
+        height: 18px;
+        -ms-border-radius: 3px;
+        border-radius: 3px;
+        background-color: #2276BD;
+        font-size: 11px;
+        color: white;
+        text-align: center;
+    }
+
+.btn-update:active {
+        /*更新按钮鼠标点击样式*/
+        width: 68px;
+        height: 18px;
+        -ms-border-radius: 3px;
+        border-radius: 3px;
+        background-color: #2276BD;
+        font-size: 11px;
+        color: #9E9E9E;
+        text-align: center;
+    }
+
+.divPanl {
+    /*更新按钮鼠标点击样式*/
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #B6B6B6;
+}
+
+.date-start {
+    /*开始时间*/
+    color: white;
+    font-size: 11px;
+    text-align: center;
+    background-color: #2476B9;
+    -ms-border-top-left-radius: 3px;
+    border-top-left-radius: 3px;
+    -ms-border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.date-end {
+    /*结束时间*/
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #B6B6B6;
+}
+
+.text-style {
+    /*文本框*/
+    -ms-border-top-left-radius: 3px;
+    border-top-left-radius: 3px;
+    -ms-border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    font-size: 11px;
+    height: auto;
+    border: 0px;
+}
