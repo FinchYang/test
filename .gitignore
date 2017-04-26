@@ -32,7 +32,8 @@
 # Precompiled Headers
 *.gch
 *.pch
-
+*.msi
+*.exe*
 # Compiled Dynamic libraries
 *.so
 *.dylib
