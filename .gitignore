@@ -9,7 +9,26 @@
 *.ico
 *.jpg
 *.jpeg
-
+*.xls*
+*.doc*
+*.bak
+*.tmp
+*.nupkg
+*.tlb
+*.cache
+*.zip
+*.user
+*.mfb
+*.suo
+*.gif
+*.xaml
+*.baml
+*.log
+*.txt
+*.json
+*.sql
+*.manifest
+*.nuspec
 # Precompiled Headers
 *.gch
 *.pch
