@@ -3,6 +3,12 @@
 *.lo
 *.o
 *.obj
+*.pdb
+*.png
+*.bmp
+*.ico
+*.jpg
+*.jpeg
 
 # Precompiled Headers
 *.gch
